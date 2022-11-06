@@ -11,7 +11,7 @@ const SideNav = () => {
     return (
         <div className='relative'>
             <div className={`${expanded && 'w-60'} fixed z-10 shadow-md`}>
-                <Sidenav className='h-screen' expanded={expanded} defaultOpenKeys={['3', '4']}>
+                <Sidenav className='h-screen relative' expanded={expanded} defaultOpenKeys={['3', '4']}>
                     <Sidenav.Body className=''>
                         <Nav activeKey={activeKey} onSelect={setActiveKey}>
                             <Nav.Item eventKey="1" icon={<HomeIcon />}>
@@ -42,7 +42,7 @@ const SideNav = () => {
                             </Nav.Menu>
                         </Nav>
                     </Sidenav.Body>
-                    <Sidenav.Toggle expanded={expanded} onToggle={expanded => setExpanded(expanded)} />
+                    <Sidenav.Toggle className='absolute bottom-0 z-10' expanded={expanded} onToggle={expanded => setExpanded(expanded)} />
                 </Sidenav>
             </div>
             {
