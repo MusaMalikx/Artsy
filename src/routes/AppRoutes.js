@@ -4,8 +4,8 @@ import AuctionItem from "../pages/Auctions/AuctionItem";
 import Auctions from "../pages/Auctions/Auctions";
 import Chat from "../pages/Chat/Chat";
 import Home from "../pages/Home/Home";
+import Proposal from "../pages/Proposal/Proposal";
 import API from "../utils/unsplash";
-
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
 
@@ -28,6 +28,7 @@ const AppRoutes = () => {
         <Route path="chat" element={<Chat data={data} />} />
         <Route path="auctions" element={<Auctions data={data} />} />
         <Route path="auctions/:id" element={<AuctionItem data={data} />} />
+        <Route path="proposal" element={<Proposal />} />
         {/* <Route path="contact" element={<Contact />} />
         <Route path="our-team" element={<OurTeam />}/> */}
       </Route>

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css";
 import AppRoutes from "./routes/AppRoutes";
