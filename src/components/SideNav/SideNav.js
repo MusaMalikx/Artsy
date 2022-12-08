@@ -49,10 +49,17 @@ const SideNav = () => {
                 icon={<Icon as={EditIcon} />}
               >
                  <Nav.Item
-                onClick={() => navigate("/proposal")}
+                onClick={() => navigate("/view/buyer/proposal")}
                 eventKey="3-1"
               >
                 Proposals
+              </Nav.Item>
+
+              <Nav.Item
+                onClick={() => navigate("/add/artwork")}
+                eventKey="3-2"
+              >
+                Add Artwork
               </Nav.Item>
     
               </Nav.Menu>
