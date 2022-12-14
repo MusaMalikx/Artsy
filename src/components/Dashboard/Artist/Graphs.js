@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -10,9 +10,9 @@ import {
   Tooltip,
   LineController,
   BarController,
-} from 'chart.js';
-import { Chart } from 'react-chartjs-2';
-import faker from 'faker';
+} from "chart.js";
+import { Chart } from "react-chartjs-2";
+import faker from "faker";
 
 ChartJS.register(
   LinearScale,
@@ -26,38 +26,50 @@ ChartJS.register(
   BarController
 );
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
 export const data = {
   labels,
   datasets: [
     {
-      type: 'line',
-      label: 'Dataset 1',
-      borderColor: 'rgb(255, 99, 132)',
+      type: "line",
+      label: "Dataset 1",
+      borderColor: "rgb(255, 99, 132)",
       borderWidth: 2,
       fill: false,
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
     },
     {
-      type: 'bar',
-      label: 'Dataset 2',
-      backgroundColor: 'rgb(75, 192, 192)',
+      type: "bar",
+      label: "Dataset 2",
+      backgroundColor: "rgb(75, 192, 192)",
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'white',
+      borderColor: "white",
       borderWidth: 2,
     },
     {
-      type: 'bar',
-      label: 'Dataset 3',
-      backgroundColor: 'rgb(53, 162, 235)',
+      type: "bar",
+      label: "Dataset 3",
+      backgroundColor: "rgb(53, 162, 235)",
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
     },
   ],
 };
 
-const Graphs = () => {
-    return <Chart type='bar' className='rounded-xl bg-white mt-10 p-5 shadow-lg' data={data} />;
-}
+const options = {
+    maintainAspectRatio: false	// Don't maintain w/h ratio
+  }
 
-export default Graphs
+const Graphs = () => {
+  return (
+    <div className="">
+      <Chart
+        type="bar"
+        className="rounded-xl bg-white mt-10 p-3 shadow-lg"
+        data={data}
+      />
+    </div>
+  );
+};
+
+export default Graphs;

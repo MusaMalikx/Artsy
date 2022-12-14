@@ -87,14 +87,23 @@ const Chat = ({ data }) => {
           <div className="flex-grow flex justify-between flex-col border-l border-gray-400 h-[calc(100vh-18vh)] px-5">
             <div className="flex-grow flex flex-col">
               <div className="border rounded-3xl mb-2 p-5 flex items-center">
-                <div className="w-14 h-14 bg-black rounded-full" />
+                <img
+                  src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
+                  alt="profile"
+                  className="w-14 h-14 bg-black rounded-full"
+                />
                 <div className="flex-grow ml-3">
                   <h6>Doe</h6>
                   <p>description</p>
                 </div>
               </div>
-              <div className="border rounded-3xl mb-2 p-5 flex-grow">
-
+              <div className="border rounded-3xl mb-2 p-5 flex-grow overflow-y-scroll">
+                <Sender />
+                <Receiver />
+                <Sender />
+                <Receiver />
+                <Sender />
+                <Receiver />
               </div>
             </div>
             <div>
@@ -109,15 +118,6 @@ const Chat = ({ data }) => {
               </div>
             </div>
           </div>
-          {/* <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2 border px-3 py-2 rounded-3xl">
-            <BsSearch />
-            <input type="text" placeholder="Search" className="outline-none" />
-          </div>
-          <div>
-            <button className="uppercase border border-black px-4 py-2 rounded">Clear chat</button>
-          </div>
-        </div> */}
         </div>
       </div>
     </Layout>
@@ -128,7 +128,7 @@ const ChatItem = ({ setList, chat }) => {
   return (
     <div
       className={`flex items-center py-4 px-2 rounded-lg cursor-pointer ${
-        chat.border ? " border-black border-2" : "border-2 border-white"
+        chat.border ? " border-primary border-2" : "border-2 border-white"
       }`}
       onClick={() =>
         setList((prev) => {
@@ -140,12 +140,78 @@ const ChatItem = ({ setList, chat }) => {
         })
       }
     >
-      <div className="w-14 h-14 bg-black rounded-full" />
+      <img
+        src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
+        alt="profile"
+        className="w-14 h-14 bg-black rounded-full"
+      />
       <div className="flex-grow ml-3">
         <h6>Doe</h6>
         <p>description</p>
       </div>
       <p className="font-bold text-gray-600">09:00 am</p>
+    </div>
+  );
+};
+
+const Receiver = () => {
+  return (
+    <div class="flex items-end justify-end">
+      <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
+        <ReceiverItem text="Are you using sudo?" />
+        <ReceiverItem
+          text="Run this command sudo chown -R `whoami` /Users/
+            username/.npm-global/ then install the package globally without
+            using sudo"
+        />
+      </div>
+      <img
+        src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
+        alt="My profile"
+        class="w-6 h-6 rounded-full order-2"
+      />
+    </div>
+  );
+};
+
+const Sender = () => {
+  return (
+    <div class="flex items-end">
+      <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
+        <SenderItem text="Command was run with root privileges. I'm sure about that." />
+        <SenderItem text="I've update the description so it's more obviously now" />
+        <SenderItem text="FYI https://askubuntu.com/a/700266/510172" />
+        <SenderItem
+          text="Check the line above (it ends with a # so, I'm running it as root )"
+          pre="true"
+          pretext="# npm install -g @vue/devtools"
+        />
+      </div>
+      <img
+        src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
+        alt="My profile"
+        class="w-6 h-6 rounded-full order-1"
+      />
+    </div>
+  );
+};
+
+const ReceiverItem = ({ text }) => {
+  return (
+    <div>
+      <span class="px-4 py-2 rounded-lg inline-block bg-primary text-white ">
+        {text}
+      </span>
+    </div>
+  );
+};
+
+const SenderItem = ({ text, pre, pretext }) => {
+  return (
+    <div>
+      <span class="px-4 py-2 rounded-lg inline-block bg-gray-300 text-gray-600">
+        {text} {pre && <pre>{pretext}</pre>}
+      </span>
     </div>
   );
 };

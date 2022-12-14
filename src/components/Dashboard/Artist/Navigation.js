@@ -30,7 +30,7 @@ const Pop = ({ icon, name }) => {
         </Popover>
       }
     >
-      <IconButton size="lg" className="" icon={icon} circle />
+      <IconButton size="lg" className="shadow-lg border bg-white" icon={icon} circle />
     </Whisper>
   );
 };
