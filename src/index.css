@@ -14,6 +14,20 @@ code {
     monospace;
 }
 
+:root {
+  --secondary: #B2B2B2;
+}
+
+*::-webkit-scrollbar {
+  width: 7px;
+}
+
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--secondary);
+  border-radius: 12px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

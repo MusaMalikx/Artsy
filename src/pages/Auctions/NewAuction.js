@@ -12,7 +12,7 @@ export default function NewAuction() {
     const displayNotification = (event)=>{
         event.preventDefault();
 
-        toaster.push(<Notification type="error" header="Failed to List an Artwork!" duration={3000}></Notification>, {placement: 'bottomEnd' });
+        toaster.push(<Notification type="error" header="Failed to List an Artwork!" duration={3000}></Notification>, {placement: 'topEnd' });
         setTimeout(()=>{
             toaster.clear()
         },3000)
