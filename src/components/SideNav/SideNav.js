@@ -6,8 +6,9 @@ import HomeIcon from "@rsuite/icons/legacy/Home";
 import AuctionIcon from "@rsuite/icons/legacy/Bitbucket";
 import GearCircleIcon from "@rsuite/icons/legacy/GearCircle";
 import { useState } from "react";
-import EditIcon from '@rsuite/icons/Edit';
+import EditIcon from "@rsuite/icons/Edit";
 import { RiAuctionFill } from "react-icons/ri";
+import { BsChatLeftQuote } from "react-icons/bs";
 import { Navigate, useNavigate } from "react-router-dom";
 import Notification from "../Notification/Notification";
 
@@ -39,7 +40,14 @@ const SideNav = () => {
               >
                 Auctions
               </Nav.Item>
-               <Notification />
+              <Nav.Item
+                onClick={() => navigate("/chat")}
+                eventKey="2"
+                icon={<Icon as={BsChatLeftQuote} />}
+              >
+                Chat
+              </Nav.Item>
+              <Notification />
               <Nav.Menu
                 placement="rightStart"
                 eventKey="4"
@@ -58,6 +66,12 @@ const SideNav = () => {
                   eventKey="4-2"
                 >
                   Add Artwork
+                </Nav.Item>
+                <Nav.Item
+                  onClick={() => navigate("/artist/dashboard")}
+                  eventKey="4-3"
+                >
+                  Artist Dashboard
                 </Nav.Item>
               </Nav.Menu>
 
@@ -94,12 +108,10 @@ const SideNav = () => {
           />
         </Sidenav>
       </div>
-      {
-        expanded && (
-          <div className="fixed w-screen h-screen bg-black bg-opacity-50" />
-        )
-      }
-    </div >
+      {expanded && (
+        <div className="fixed w-screen h-screen bg-black bg-opacity-50" />
+      )}
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import AuctionItem from "../pages/Auctions/AuctionItem";
 import Auctions from "../pages/Auctions/Auctions";
 import NewAuction from "../pages/Auctions/NewAuction";
 import Chat from "../pages/Chat/Chat";
+import ArtistDashboard from "../pages/Dashboard/ArtistDashboard";
 import Home from "../pages/Home/Home";
 import BuyerProposal from "../pages/Proposal/BuyerProposal";
 import API from "../utils/unsplash";
@@ -26,6 +27,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/">
         <Route index element={<Home data={data} />} />
+        <Route path="artist/dashboard" element={<ArtistDashboard data={data} />} />
         <Route path="chat" element={<Chat data={data} />} />
         <Route path="auctions" element={<Auctions data={data} />} />
         <Route path="auctions/:id" element={<AuctionItem data={data} />} />
