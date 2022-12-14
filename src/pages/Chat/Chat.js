@@ -97,7 +97,7 @@ const Chat = ({ data }) => {
                   <p>description</p>
                 </div>
               </div>
-              <div className="border rounded-3xl mb-2 p-5 flex-grow overflow-y-scroll">
+              <div className="border rounded-3xl mb-2 p-5 h-[calc(100vh-36vh)] flex-grow overflow-y-scroll">
                 <Sender />
                 <Receiver />
                 <Sender />
