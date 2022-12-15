@@ -1,6 +1,22 @@
 import React from 'react'
 import RegistrationLayout from "../../components/Layouts/RegistrationLayout";
+import {Cursor, useTypewriter} from 'react-simple-typewriter'
+
+
 export default function Login() {
+  const [text,helper] = useTypewriter({
+    words : [
+      "Welcome to Artsy!",
+      "Good to see you again!",
+      "Let's quickly Sign you In!"
+    ],
+    loop : true,
+    delaySpeed : 3000
+  });
+
+
+
+
   return (
     <RegistrationLayout title={"Login"}>
       <section class="h-screen ">
@@ -10,7 +26,7 @@ export default function Login() {
             <p className='pt-2  text-5xl text-yellow-600 font-bold tracking-widest ' >Artsy</p>
           </div>
           <div className='mt-10'>
-            <p className='lg:text-7xl text-5xl text-center text-yellow-900 font-bold px-6'>Good to see you again!</p>
+            <p className='lg:text-7xl text-5xl text-center text-yellow-900 font-bold px-6'>{text} <Cursor cursorColor='#F7AB0A'/> </p>
           </div>
         </div>
         <div class="px-6 py-12 h-full ">
