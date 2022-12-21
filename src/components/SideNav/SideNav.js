@@ -8,7 +8,7 @@ import GearCircleIcon from "@rsuite/icons/legacy/GearCircle";
 import { useState } from "react";
 import EditIcon from "@rsuite/icons/Edit";
 import { RiAuctionFill } from "react-icons/ri";
-import { BsChatLeftQuote } from "react-icons/bs";
+import { BsChatLeftQuote, BsSearch } from "react-icons/bs";
 import { Navigate, useNavigate } from "react-router-dom";
 import Notification from "../Notification/Notification";
 
@@ -47,6 +47,13 @@ const SideNav = () => {
               >
                 Chat
               </Nav.Item>
+              <Nav.Item
+                onClick={() => navigate("/search")}
+                eventKey="2"
+                icon={<Icon as={BsSearch} />}
+              >
+               Search
+              </Nav.Item>
               <Notification />
               <Nav.Menu
                 placement="rightStart"
@@ -72,6 +79,12 @@ const SideNav = () => {
                   eventKey="4-3"
                 >
                   Artist Dashboard
+                </Nav.Item>
+                <Nav.Item
+                  onClick={() => navigate("/artist/auctions")}
+                  eventKey="4-4"
+                >
+                  Artist View Auctions List
                 </Nav.Item>
               </Nav.Menu>
 

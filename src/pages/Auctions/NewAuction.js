@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { DatePicker, Dropdown,useToaster } from 'rsuite';
-import ArtworkImageUploader from '../../components/Image Uploader/ArtworkImageUploader';
+import ArtworkImageUploader from '../../components/ImageUploader/ArtworkImageUploader';
 import Layout from "../../components/Layouts/ArticleLayout";
 import { Notification } from 'rsuite';
 
