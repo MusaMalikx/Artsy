@@ -63,7 +63,7 @@ const Chat = ({ data }) => {
     <Layout title={"Chat"}>
       <div className="h-screen overflow-hidden">
         <div className="pt-10 px-5">
-          <p className="font-semibold font-serif text-2xl lg:text-4xl">Chat</p>
+          <p className="font-semibold   text-2xl lg:text-4xl">Chat</p>
           <hr />
         </div>
         <div className="px-5 flex h-full">

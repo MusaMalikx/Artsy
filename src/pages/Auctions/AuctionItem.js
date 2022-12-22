@@ -13,7 +13,7 @@ const AuctionItem = ({ data }) => {
   return (
     <Layout title={"Auctions"}>
       <div className="py-10 px-5">
-        <p className="font-semibold font-serif text-2xl lg:text-4xl">
+        <p className="font-semibold   text-2xl lg:text-4xl">
           Auction Item
         </p>
         <hr />
@@ -67,7 +67,7 @@ const AuctionItem = ({ data }) => {
       </div>
       <div className="mx-5 py-20 bg-gray-100 border border-gray-400 rounded-lg mb-20 md:my-20">
         <div className="flex justify-center items-center mb-10">
-          <p className="font-semibold font-serif text-2xl">
+          <p className="font-semibold   text-2xl">
             Similar Auctions Items
           </p>
         </div>
