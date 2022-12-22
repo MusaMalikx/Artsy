@@ -4,23 +4,23 @@ import {Cursor, useTypewriter} from 'react-simple-typewriter'
 import { useNavigate } from 'react-router-dom';
 
 
-export default function Login() {
+export default function SignUp() {
   const [text,helper] = useTypewriter({
     words : [
       "Welcome to Artsy!",
       "Good to see you again!",
-      "Let's quickly Sign you In!"
+      "Let's create a new account!"
     ],
     loop : true,
     delaySpeed : 3000
   });
-
   const navigate = useNavigate();
+
 
 
   return (
     <RegistrationLayout title={"Login"}>
-      <section class="h-screen">
+      <section class="h-screen ">
         <div className='font-serif'>
           <div className='flex w-full h-16 justify-center px-6'>
             <img className='pt-2' src="https://www.designfreelogoonline.com/wp-content/uploads/2019/02/00645-Paint-04.png" alt="" />
@@ -33,7 +33,7 @@ export default function Login() {
         <div class="px-6 py-12 h-full ">
           <div class="flex justify-center lg:pt-24 flex-wrap h-full g-6 text-gray-800">
             <div class="md:w-7/12 lg:w-5/12 mb-12 md:mb-0 h-2/4 overflow-hidden relative">
-              <p className='text-6xl font-serif md:text-7xl font-extrabold whitespace-nowrap border-white text-white border-b-4 pb-2 absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 '>SIGN IN</p>
+              <p className='text-6xl font-serif md:text-7xl font-extrabold whitespace-nowrap border-white text-white border-b-4 pb-2 absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 '>SIGN UP</p>
               
               <img
                 src="https://www.canvashi.com/images/ContemporaryArt/Contemporary%20Art%20%20XB10A.jpg"
@@ -52,20 +52,23 @@ export default function Login() {
                     <i className="fa-solid fa-user-pen"></i>
                     <button className='text-sm'>Artist</button>
                   </div>
-                  <div className='border hover:text-primary hover:border-primary flex flex-col  w-16 h-16 cursor-pointer text-center rounded-full pt-4'>
-                    <i className="fa-solid fa-user-tie"></i>
-                    <button className='text-sm'>Admin</button>
-                  </div>
+
                 </div>
 
                 <div class="mb-6">
-                  <input
+                <input
                     type="text"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
+                    placeholder="Full Name"
+                  />
+                </div>
+                <div class="mb-6">
+                  <input
+                    type="email"
                     class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
                     placeholder="Email address"
                   />
                 </div>
-
                 <div class="mb-6">
                   <input
                     type="password"
@@ -73,7 +76,26 @@ export default function Login() {
                     placeholder="Password"
                   />
                 </div>
-
+                <div class="mb-6">
+                <input
+                    minLength={11}
+                    maxLength={11}
+                    min={0}
+                    type="number"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
+                    placeholder="Phone Number"
+                  />
+                </div>
+                <div class="mb-6">
+                <input
+                    minLength={13}
+                    maxLength={13}
+                    min={0}
+                    type="number"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
+                    placeholder="CNIC"
+                  />
+                </div>
                 <div class="flex justify-between items-center mb-6">
                   <div class="form-group form-check">
                     <input
@@ -82,14 +104,10 @@ export default function Login() {
                       id="exampleCheck3"
                     />
                     <label class="form-check-label inline-block text-gray-800" htmlFor="exampleCheck2"
-                    >Remember me</label
+                    >I agree to <span className="text-primary cursor-pointer hover:text-cyan-900 hover:underline">Terms and Agreements</span>  </label
                     >
                   </div>
-                  <a
-                    href="#!"
-                    class="text-primary hover:text-primary focus:text-primary active:text-primary duration-200 transition ease-in-out"
-                  >Forgot Password?</a
-                  >
+                 
                 </div>
 
 
@@ -99,7 +117,7 @@ export default function Login() {
                   data-mdb-ripple="true"
                   data-mdb-ripple-color="light"
                 >
-                  Sign in
+                  Create Account
                 </button>
 
                 <div
@@ -126,7 +144,7 @@ export default function Login() {
                 </a>
 
                 <div className='mt-6 text-center'>
-                  <p onClick={()=>navigate('/signup')} >Need an Account? <a href="#" className='text-primary hover:text-primary focus:text-primary'>Sign Up</a></p>
+                  <p>Already have an Account? <a onClick={()=>navigate('/login')} href="#" className='text-primary hover:text-primary focus:text-primary'>Sign In</a></p>
                 </div>
 
               </form>

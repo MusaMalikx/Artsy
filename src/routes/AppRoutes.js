@@ -11,6 +11,7 @@ import BuyerProposal from "../pages/Proposal/BuyerProposal";
 import Search from "../pages/Search/Search";
 import API from "../utils/unsplash";
 import Login from "../pages/Registration/Login";
+import SignUp from "../pages/Registration/SignUp";
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
 
@@ -41,6 +42,7 @@ const AppRoutes = () => {
         {/* <Route path="contact" element={<Contact />} />
         <Route path="our-team" element={<OurTeam />}/> */}
         <Route path="login" element={<Login/>} />
+        <Route path="signup" element={<SignUp/>} />
       </Route>
 
     </Routes>
