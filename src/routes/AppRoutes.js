@@ -10,7 +10,7 @@ import Home from "../pages/Home/Home";
 import BuyerProposal from "../pages/Proposal/BuyerProposal";
 import Search from "../pages/Search/Search";
 import API from "../utils/unsplash";
-import Login from "../pages/Registration/Login";
+import SignIn from "../pages/Registration/SignIn";
 import SignUp from "../pages/Registration/SignUp";
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
@@ -41,7 +41,7 @@ const AppRoutes = () => {
         <Route path="add/artwork" element={<NewAuction/>} />
         {/* <Route path="contact" element={<Contact />} />
         <Route path="our-team" element={<OurTeam />}/> */}
-        <Route path="login" element={<Login/>} />
+        <Route path="signin" element={<SignIn/>} />
         <Route path="signup" element={<SignUp/>} />
       </Route>
 
