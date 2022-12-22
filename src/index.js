@@ -3,22 +3,23 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-
-// import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
+import { Provider } from 'react-redux';
+import { store } from './redux/app/store';
 import AppRoutes from './routes/AppRoutes';
-// import 'rsuite/styles/index.less'; // or 'rsuite/dist/rsuite.min.css'
+import './index.css';
 import 'rsuite/dist/rsuite.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <AnimatePresence exitBeforeEnter initial={true}>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AnimatePresence>
+    <Provider store={store}>
+      <AnimatePresence exitBeforeEnter initial={true}>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AnimatePresence>
+    </Provider>
   </React.StrictMode>
 );
 

@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import SideNav from '../SideNav/SideNav';
+// import { useSelector } from 'react-redux';
+// import { selectValue } from '../../redux/features/counter/counterReducer';
 
 const variants = {
   hidden: { opacity: 0, x: 0, y: 20 },
@@ -9,6 +11,9 @@ const variants = {
 
 const ArticleLayout = ({ children, title, bool }) => {
   document.title = title + ' | Artsy';
+
+  // const count = useSelector(selectValue);
+  // console.log(count);
 
   return (
     <div>
