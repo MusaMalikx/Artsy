@@ -12,7 +12,7 @@ const RegistrationLayout = ({ children, title }) => {
   return (
     <div>
       <motion.article
-        initial="hidden"
+        // initial="hidden"
         animate="enter"
         exit="exit"
         variants={variants}
