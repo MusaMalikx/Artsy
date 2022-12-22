@@ -1,66 +1,66 @@
-import React, { useState } from "react";
-import Layout from "../../components/Layouts/ArticleLayout";
-import { BsSearch, BsKeyboardFill } from "react-icons/bs";
-import { BiSend } from "react-icons/bi";
+import React, { useState } from 'react';
+import Layout from '../../components/Layouts/ArticleLayout';
+import { BsSearch, BsKeyboardFill } from 'react-icons/bs';
+import { BiSend } from 'react-icons/bi';
 
-const Chat = ({ data }) => {
+const Chat = () => {
   const [list, setList] = useState([
     {
       id: 1,
-      border: true,
+      border: true
     },
     {
       id: 2,
-      border: false,
+      border: false
     },
     {
       id: 3,
-      border: false,
+      border: false
     },
     {
       id: 4,
-      border: false,
+      border: false
     },
     {
       id: 5,
-      border: false,
+      border: false
     },
     {
       id: 6,
-      border: false,
+      border: false
     },
     {
       id: 7,
-      border: false,
+      border: false
     },
     {
       id: 8,
-      border: false,
+      border: false
     },
     {
       id: 9,
-      border: false,
+      border: false
     },
     {
       id: 10,
-      border: false,
+      border: false
     },
     {
       id: 11,
-      border: false,
+      border: false
     },
     {
       id: 12,
-      border: false,
+      border: false
     },
     {
       id: 13,
-      border: false,
-    },
+      border: false
+    }
   ]);
 
   return (
-    <Layout title={"Chat"}>
+    <Layout title={'Chat'}>
       <div className="h-screen overflow-hidden">
         <div className="pt-10 px-5">
           <p className="font-semibold   text-2xl lg:text-4xl">Chat</p>
@@ -71,11 +71,7 @@ const Chat = ({ data }) => {
             <div className="pb-4 bg-white sticky top-0">
               <div className="flex items-center space-x-4 border px-3 py-2 rounded-3xl">
                 <BsSearch />
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="outline-none flex-grow"
-                />
+                <input type="text" placeholder="Search" className="outline-none flex-grow" />
               </div>
             </div>
             <div className="pb-4">
@@ -109,11 +105,7 @@ const Chat = ({ data }) => {
             <div>
               <div className="flex items-center space-x-4 border px-3 py-2 rounded-3xl">
                 <BsKeyboardFill size={20} />
-                <input
-                  type="text"
-                  placeholder="Enter Text"
-                  className="outline-none flex-grow"
-                />
+                <input type="text" placeholder="Enter Text" className="outline-none flex-grow" />
                 <BiSend size={20} />
               </div>
             </div>
@@ -128,7 +120,7 @@ const ChatItem = ({ setList, chat }) => {
   return (
     <div
       className={`flex items-center py-4 px-2 rounded-lg cursor-pointer ${
-        chat.border ? " border-primary border-2" : "border-2 border-white"
+        chat.border ? ' border-primary border-2' : 'border-2 border-white'
       }`}
       onClick={() =>
         setList((prev) => {
@@ -138,8 +130,7 @@ const ChatItem = ({ setList, chat }) => {
             } else return { ...c, border: false };
           });
         })
-      }
-    >
+      }>
       <img
         src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
         alt="profile"
@@ -156,8 +147,8 @@ const ChatItem = ({ setList, chat }) => {
 
 const Receiver = () => {
   return (
-    <div class="flex items-end justify-end">
-      <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
+    <div className="flex items-end justify-end">
+      <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
         <ReceiverItem text="Are you using sudo?" />
         <ReceiverItem
           text="Run this command sudo chown -R `whoami` /Users/
@@ -168,7 +159,7 @@ const Receiver = () => {
       <img
         src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
         alt="My profile"
-        class="w-6 h-6 rounded-full order-2"
+        className="w-6 h-6 rounded-full order-2"
       />
     </div>
   );
@@ -176,8 +167,8 @@ const Receiver = () => {
 
 const Sender = () => {
   return (
-    <div class="flex items-end">
-      <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
+    <div className="flex items-end">
+      <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
         <SenderItem text="Command was run with root privileges. I'm sure about that." />
         <SenderItem text="I've update the description so it's more obviously now" />
         <SenderItem text="FYI https://askubuntu.com/a/700266/510172" />
@@ -190,7 +181,7 @@ const Sender = () => {
       <img
         src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
         alt="My profile"
-        class="w-6 h-6 rounded-full order-1"
+        className="w-6 h-6 rounded-full order-1"
       />
     </div>
   );
@@ -199,9 +190,7 @@ const Sender = () => {
 const ReceiverItem = ({ text }) => {
   return (
     <div>
-      <span class="px-4 py-2 rounded-lg inline-block bg-primary text-white ">
-        {text}
-      </span>
+      <span className="px-4 py-2 rounded-lg inline-block bg-primary text-white ">{text}</span>
     </div>
   );
 };
@@ -209,7 +198,7 @@ const ReceiverItem = ({ text }) => {
 const SenderItem = ({ text, pre, pretext }) => {
   return (
     <div>
-      <span class="px-4 py-2 rounded-lg inline-block bg-gray-300 text-gray-600">
+      <span className="px-4 py-2 rounded-lg inline-block bg-gray-300 text-gray-600">
         {text} {pre && <pre>{pretext}</pre>}
       </span>
     </div>

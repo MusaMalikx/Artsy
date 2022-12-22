@@ -1,10 +1,10 @@
-import React from "react";
-import Graphs from "../../components/Dashboard/Artist/Graphs";
-import Info from "../../components/Dashboard/Artist/Info";
-import Navigation from "../../components/Dashboard/Artist/Navigation";
-import Profile from "../../components/Dashboard/Artist/Profile";
-import Stats from "../../components/Dashboard/Artist/Stats";
-import Layout from "../../components/Layouts/ArticleLayout";
+import React from 'react';
+import Graphs from '../../components/Dashboard/Artist/Graphs';
+import Info from '../../components/Dashboard/Artist/Info';
+import Navigation from '../../components/Dashboard/Artist/Navigation';
+import Profile from '../../components/Dashboard/Artist/Profile';
+import Stats from '../../components/Dashboard/Artist/Stats';
+import Layout from '../../components/Layouts/ArticleLayout';
 
 const ArtistDashboard = () => {
   return (

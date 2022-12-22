@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import HeaderLayout from "../../components/Layouts/HeaderLayout";
-import Layout from "../../components/Layouts/ArticleLayout";
-import SearchBar from "../../components/Search/SearchBar";
-import AuctionCard from "../../components/Auction/AuctionCard";
+import React, { useState } from 'react';
+import HeaderLayout from '../../components/Layouts/HeaderLayout';
+import Layout from '../../components/Layouts/ArticleLayout';
+import SearchBar from '../../components/Search/SearchBar';
+import AuctionCard from '../../components/Auction/AuctionCard';
 
 const Search = ({ data }) => {
   const [search, setSearch] = useState(false);

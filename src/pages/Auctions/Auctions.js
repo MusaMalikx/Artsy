@@ -1,10 +1,10 @@
-import React from "react";
-import AuctionCard from "../../components/Auction/AuctionCard";
-import Layout from "../../components/Layouts/ArticleLayout";
+import React from 'react';
+import AuctionCard from '../../components/Auction/AuctionCard';
+import Layout from '../../components/Layouts/ArticleLayout';
 
 const Auctions = ({ data }) => {
   return (
-    <Layout title={"Auctions"}>
+    <Layout title={'Auctions'}>
       <div className="py-10 px-5">
         <p className="font-semibold   text-2xl lg:text-4xl">Auctions</p>
         <hr />

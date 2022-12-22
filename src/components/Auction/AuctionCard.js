@@ -1,8 +1,8 @@
-import React from "react";
-import { RiAuctionLine } from "react-icons/ri";
-import { AiOutlineHeart } from "react-icons/ai";
-import { BiSearch } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { RiAuctionLine } from 'react-icons/ri';
+import { AiOutlineHeart } from 'react-icons/ai';
+import { BiSearch } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 const AuctionCard = ({ photo }) => {
   const { user, urls } = photo;
@@ -10,10 +10,7 @@ const AuctionCard = ({ photo }) => {
   return (
     <div
       className="mx-auto hover:scale-90 transition-all p-5 mb-10 border hover:border-gray-900 rounded-md"
-      onClick={() =>
-        navigate(`/auctions/${photo.id}`, { state: { user: user, urls: urls } })
-      }
-    >
+      onClick={() => navigate(`/auctions/${photo.id}`, { state: { user: user, urls: urls } })}>
       <div className="flex space-x-4">
         <div className="space-y-2">
           <RiAuctionLine
@@ -21,14 +18,8 @@ const AuctionCard = ({ photo }) => {
             className="border rounded-md p-2 cursor-pointer bg-primary"
             color="white"
           />
-          <AiOutlineHeart
-            size={37}
-            className="border rounded-md p-2 cursor-pointer"
-          />
-          <BiSearch
-            size={37}
-            className="border rounded-md p-2 cursor-pointer"
-          />
+          <AiOutlineHeart size={37} className="border rounded-md p-2 cursor-pointer" />
+          <BiSearch size={37} className="border rounded-md p-2 cursor-pointer" />
         </div>
         <div>
           <img
@@ -40,9 +31,7 @@ const AuctionCard = ({ photo }) => {
         </div>
       </div>
       <div className="flex flex-col my-5 border rounded-md">
-        <p className="text-gray-500 text-center font-semibold mt-2">
-          Time left
-        </p>
+        <p className="text-gray-500 text-center font-semibold mt-2">Time left</p>
         <div className="flex items-center justify-around">
           <div className="w-[1px] h-10 border" />
           <div className="my-3 flex flex-col items-center">
@@ -69,9 +58,7 @@ const AuctionCard = ({ photo }) => {
       </div>
       <hr />
       <div>
-        <p className="font-extrabold text-black text-xl text-center">
-          Le bouquet de Paris
-        </p>
+        <p className="font-extrabold text-black text-xl text-center">Le bouquet de Paris</p>
         <p className="text-center">
           current Bid: <span className="font-bold">$51</span>
         </p>

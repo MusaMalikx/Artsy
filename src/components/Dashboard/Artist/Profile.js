@@ -1,50 +1,49 @@
-import React from "react";
+import React from 'react';
 
 const Profile = () => {
   return (
     <div>
-      <section class="font-medium sticky top-10">
-        <section class="w-64 bg-[#FAF8F1] rounded-2xl px-8 py-6 shadow-lg">
-          <div class="flex items-center justify-between">
-            <span class="text-gray-600 text-sm">2d ago</span>
-            <span class="text-emerald-600">
+      <section className="font-medium sticky top-10">
+        <section className="w-64 bg-[#FAF8F1] rounded-2xl px-8 py-6 shadow-lg">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-600 text-sm">2d ago</span>
+            <span className="text-emerald-600">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
+                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+                stroke="currentColor">
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
                 />
               </svg>
             </span>
           </div>
-          <div class="mt-6 w-fit mx-auto">
+          <div className="mt-6 w-fit mx-auto">
             <img
               src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
-              class="rounded-full w-28 "
+              className="rounded-full w-28 "
               alt="profile"
-              srcset=""
+              srcSet=""
             />
           </div>
 
-          <div class="mt-8 ">
-            <h2 class="text-black font-bold text-2xl tracking-wide">
+          <div className="mt-8 ">
+            <h2 className="text-black font-bold text-2xl tracking-wide">
               Jonathan <br /> Smith
             </h2>
           </div>
-          <p class="text-emerald-600 font-semibold mt-2.5">Active</p>
+          <p className="text-emerald-600 font-semibold mt-2.5">Active</p>
 
-          <div class="h-1 w-full bg-gray-300 mt-8 rounded-full">
-            <div class="h-1 rounded-full w-2/5 bg-red-500 "></div>
+          <div className="h-1 w-full bg-gray-300 mt-8 rounded-full">
+            <div className="h-1 rounded-full w-2/5 bg-red-500 "></div>
           </div>
-          <div class="mt-3 text-white text-sm">
-            <span class="text-gray-600 font-semibold">Storage:</span>
+          <div className="mt-3 text-white text-sm">
+            <span className="text-gray-600 font-semibold">Storage:</span>
             <span>40%</span>
           </div>
         </section>

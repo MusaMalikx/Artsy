@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 // import { Button } from "react-bootstrap";
 // import { Link } from "react-router-dom";
-import Layout from "../../components/Layouts/ArticleLayout";
-import Banner from "../../assets/svgs/banner.svg";
-import AuctionCard from "../../components/Auction/AuctionCard";
+import Layout from '../../components/Layouts/ArticleLayout';
+import Banner from '../../assets/svgs/banner.svg';
+import AuctionCard from '../../components/Auction/AuctionCard';
 const Home = ({ data }) => {
   return (
     <Layout title="Home">
