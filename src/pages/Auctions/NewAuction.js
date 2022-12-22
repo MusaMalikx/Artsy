@@ -20,10 +20,10 @@ export default function NewAuction() {
     return (
         <Layout title={"Add Artwork"}>
             <div className="py-10 px-5">
-                <p className="font-semibold font-serif text-2xl lg:text-4xl">Add Artwork</p>
+                <p className="font-semibold   text-2xl lg:text-4xl">Add Artwork</p>
                 <hr />
             </div>
-            <div className='border-2 font-serif mb-14 w-10/12 mx-auto p-2 flex flex-col md:flex-row rounded-lg'>
+            <div className='border-2   mb-14 w-10/12 mx-auto p-2 flex flex-col md:flex-row rounded-lg'>
                 <form className='flex flex-col w-full px-2 max-w-6xl' action="#">
                     <div className='flex sm:flex-row flex-col gap-3'>
                         <div className='flex flex-col w-full'>

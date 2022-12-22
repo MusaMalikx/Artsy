@@ -3,6 +3,7 @@ import RegistrationLayout from "../../components/Layouts/RegistrationLayout";
 import {Cursor, useTypewriter} from 'react-simple-typewriter'
 import { useNavigate } from 'react-router-dom';
 
+import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
 
 export default function Login() {
   const [text,helper] = useTypewriter({
@@ -21,19 +22,19 @@ export default function Login() {
   return (
     <RegistrationLayout title={"Login"}>
       <section class="h-screen">
-        <div className='font-serif'>
+        <div className=''>
           <div className='flex w-full h-16 justify-center px-6'>
             <img className='pt-2' src="https://www.designfreelogoonline.com/wp-content/uploads/2019/02/00645-Paint-04.png" alt="" />
             <p className='pt-2  text-5xl text-primary font-bold tracking-widest ' >Artsy</p>
           </div>
           <div className='mt-10'>
-            <p className='lg:text-7xl text-5xl text-center text-primary font-bold px-6'>{text} <Cursor /> </p>
+            <p className='lg:text-5xl uppercase tracking-widest text-3xl text-center text-primary font-bold px-6'>{text} <Cursor /> </p>
           </div>
         </div>
-        <div class="px-6 py-12 h-full ">
+        <div class="px-6 py-12 ">
           <div class="flex justify-center lg:pt-24 flex-wrap h-full g-6 text-gray-800">
-            <div class="md:w-7/12 lg:w-5/12 mb-12 md:mb-0 h-2/4 overflow-hidden relative">
-              <p className='text-6xl font-serif md:text-7xl font-extrabold whitespace-nowrap border-white text-white border-b-4 pb-2 absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 '>SIGN IN</p>
+            <div class="md:w-7/12 lg:w-5/12 mb-12 md:mb-0 h-96 overflow-hidden relative">
+              <p className='text-5xl  md:text-7xl font-extrabold whitespace-nowrap border-white text-white border-b-4 pb-2 absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 '>SIGN IN</p>
               
               <img
                 src="https://www.canvashi.com/images/ContemporaryArt/Contemporary%20Art%20%20XB10A.jpg"
@@ -45,15 +46,15 @@ export default function Login() {
               <form>
                 <div class="mb-6 flex w-full justify-center gap-4">
                   <div className='border hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4'>
-                    <i className="fa-solid fa-user "></i>
+                  <FaUserAlt className='w-full'/>
                     <button className='text-sm'>Buyer</button>
                   </div>
                   <div className='border hover:text-primary hover:border-primary flex flex-col  w-16 h-16 cursor-pointer text-center rounded-full pt-4'>
-                    <i className="fa-solid fa-user-pen"></i>
+                  <FaUserEdit className='w-full'/>
                     <button className='text-sm'>Artist</button>
                   </div>
                   <div className='border hover:text-primary hover:border-primary flex flex-col  w-16 h-16 cursor-pointer text-center rounded-full pt-4'>
-                    <i className="fa-solid fa-user-tie"></i>
+                    <FaUserTie  className='w-full'/>
                     <button className='text-sm'>Admin</button>
                   </div>
                 </div>
