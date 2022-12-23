@@ -30,7 +30,7 @@ const AuctionCard = ({ photo }) => {
           />
         </div>
       </div>
-      <div className="flex flex-col my-5 border rounded-md">
+      <div className="flex flex-col my-5 border rounded-md uppercase">
         <p className="text-gray-500 text-center font-semibold mt-2">Time left</p>
         <div className="flex items-center justify-around">
           <div className="w-[1px] h-10 border" />
@@ -57,7 +57,7 @@ const AuctionCard = ({ photo }) => {
         </div>
       </div>
       <hr />
-      <div>
+      <div className="uppercase">
         <p className="font-extrabold text-black text-xl text-center">Le bouquet de Paris</p>
         <p className="text-center">
           current Bid: <span className="font-bold">$51</span>

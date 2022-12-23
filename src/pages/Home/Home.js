@@ -15,7 +15,7 @@ const Home = ({ data }) => {
       </div>
       <div className="container mx-auto">
         <div className="flex justify-center items-center py-20">
-          <p className="font-semibold   text-2xl lg:text-4xl underline underline-offset-8">
+          <p className="font-semibold uppercase   text-2xl lg:text-4xl underline underline-offset-8">
             Latest Auctions
           </p>
         </div>

@@ -12,6 +12,7 @@ import Search from '../pages/Search/Search';
 import API from '../utils/unsplash';
 import SignIn from '../pages/Registration/SignIn';
 import SignUp from '../pages/Registration/SignUp';
+import ArtistProfileDashboard from '../pages/Dashboard/ArtistProfileDashboard';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
 
@@ -43,6 +44,7 @@ const AppRoutes = () => {
         <Route path="our-team" element={<OurTeam />}/> */}
         <Route path="signin" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
+        <Route path="profile" element={<ArtistProfileDashboard data={data} />} />
       </Route>
     </Routes>
   );
