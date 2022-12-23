@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
 import { BsSearch, BsKeyboardFill } from 'react-icons/bs';
 import { BiSend } from 'react-icons/bi';
+import HeaderLayout from '../../components/Layouts/HeaderLayout';
 
 const Chat = () => {
   const [list, setList] = useState([
@@ -62,16 +63,17 @@ const Chat = () => {
   return (
     <Layout title={'Chat'}>
       <div className="h-screen overflow-hidden">
-        <div className="pt-10 px-5">
+        {/* <div className="pt-10 px-5">
           <p className="font-semibold   text-2xl lg:text-4xl">Chat</p>
           <hr />
-        </div>
+        </div> */}
+        <HeaderLayout title="Chat" />
         <div className="px-5 flex h-full">
           <div className="w-96 mx-5 overflow-y-scroll scrollbar-hide relative">
             <div className="pb-4 bg-white sticky top-0">
               <div className="flex items-center space-x-4 border px-3 py-2 rounded-3xl">
                 <BsSearch />
-                <input type="text" placeholder="Search" className="outline-none flex-grow" />
+                <input placeholder="Search" className="border-0 text-sm outline-0 flex-grow" />
               </div>
             </div>
             <div className="pb-4">
@@ -105,7 +107,10 @@ const Chat = () => {
             <div>
               <div className="flex items-center space-x-4 border px-3 py-2 rounded-3xl">
                 <BsKeyboardFill size={20} />
-                <input type="text" placeholder="Enter Text" className="outline-none flex-grow" />
+                <input
+                  className="flex-grow border-0 text-sm outline-0"
+                  placeholder="Enter Message"
+                />
                 <BiSend size={20} />
               </div>
             </div>
