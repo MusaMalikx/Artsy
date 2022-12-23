@@ -13,6 +13,7 @@ import API from '../utils/unsplash';
 import SignIn from '../pages/Registration/SignIn';
 import SignUp from '../pages/Registration/SignUp';
 import ArtistProfileDashboard from '../pages/Dashboard/ArtistProfileDashboard';
+import Bids from '../pages/Bids/Bids';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
 
@@ -35,6 +36,7 @@ const AppRoutes = () => {
         <Route path="artist/dashboard" element={<ArtistDashboard data={data} />} />
         <Route path="artist/auctions" element={<ArtistAuctionList />} />
         <Route path="chat" element={<Chat data={data} />} />
+        <Route path="bids" element={<Bids data={data} />} />
         <Route path="search" element={<Search data={data} />} />
         <Route path="auctions" element={<Auctions data={data} />} />
         <Route path="auctions/:id" element={<AuctionItem data={data} />} />
