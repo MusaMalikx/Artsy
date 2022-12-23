@@ -40,7 +40,7 @@ const AuctionTableItem = () => {
     <>
       <tr
         tabIndex="0"
-        className="focus:outline-none h-16 border border-gray-100 rounded hover:scale-90 transition-all">
+        className="focus:outline-none h-16 border border-gray-100 rounded hover:scale-95 transition-all">
         <td>
           <div className="ml-5">
             {/* // ? Checkbox */}

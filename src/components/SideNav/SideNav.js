@@ -7,7 +7,7 @@ import { useState } from 'react';
 import EditIcon from '@rsuite/icons/Edit';
 import { RiAuctionFill } from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
-import { BsChatLeftQuote, BsSearch } from 'react-icons/bs';
+import { BsBadge3D, BsChatLeftQuote, BsSearch } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import Notification from '../Modals/Notification';
 
@@ -41,6 +41,12 @@ const SideNav = () => {
                 eventKey="4"
                 icon={<Icon as={BsChatLeftQuote} />}>
                 Chat
+              </Nav.Item>
+              <Nav.Item
+                onClick={() => navigate('/bids')}
+                eventKey="4"
+                icon={<Icon as={BsBadge3D} />}>
+                Bids
               </Nav.Item>
               <Nav.Item
                 onClick={() => navigate('/search')}

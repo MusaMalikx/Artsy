@@ -6,7 +6,7 @@ import AuctionCard from '../../components/Auction/AuctionCard';
 
 const Search = ({ data }) => {
   const [search, setSearch] = useState(false);
-
+  console.log(search);
   return (
     <Layout title="Seacrh">
       <HeaderLayout title="Search" />

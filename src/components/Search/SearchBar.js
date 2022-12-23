@@ -3,7 +3,7 @@ import React from 'react';
 const SearchBar = ({ search }) => {
   return (
     <div>
-      <form className="flex items-center max-w-2xl mx-auto">
+      <div className="flex items-center max-w-2xl mx-auto">
         <label htmlFor="voice-search" className="sr-only rounded-l-xl">
           Search
         </label>
@@ -43,7 +43,7 @@ const SearchBar = ({ search }) => {
           </button>
         </div>
         <button
-          onClick={() => search.setSearch(!search.search)}
+          onClick={() => search(true)}
           className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-primary border border-primary hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary">
           <svg
             aria-hidden="true"
@@ -60,7 +60,7 @@ const SearchBar = ({ search }) => {
           </svg>
           Search
         </button>
-      </form>
+      </div>
     </div>
   );
 };
