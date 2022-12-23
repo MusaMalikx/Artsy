@@ -6,11 +6,14 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
+//import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
+
 
 export default function Login() {
   const [
@@ -34,6 +37,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const signInWithGoogle = () => {
+    //dispatch(loginStart());        for redux part
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
@@ -41,33 +45,94 @@ export default function Login() {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
-        const use = result.user;
+        const data = result.user;
 
-        await API.get('/').then((res) => console.log(res.data));
+        if(user.buyer){
+          await API.post('/api/auth/user/google', {
+            displayName: result.user.displayName,
+            email: result.user.email,
+          })          
+          .then((res) => {
+            console.log(res);
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+        }
+        else if(user.artist){
+          //await API.get('/').then((res) => console.log(res.data));
+          await API.post('/api/auth/artist/google', {
+            displayName: result.user.displayName,
+            email: result.user.email,
+          })          
+          .then((res) => {
+            console.log(res);
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
 
-        console.log(token, use);
-        // ...
+
+        }
+        else if(user.admin){
+          // I think we should not allow admin to login through Google only email and password
+        }
+
+
+        // console.log(token, data);
       })
       .catch((error) => {
+        //dispatch(loginFailure());          for redux part
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.customData.email;
+        
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
-        console.log(errorCode, errorMessage, email, credential);
+        console.log(errorCode, errorMessage, credential);
       });
   };
 
-  const signInWithEmailAndPass = () => {
+  const signInWithEmailAndPass = (e) => {
+    e.preventDefault();
+
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        console.log(user);
+        const data = userCredential.user;
+        if(user.buyer) {
+
+          await API.post('/api/auth/user/signin', {
+            email: userCredential.user.email,
+          })          
+          .then((res) => {
+            console.log(res);
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+
+        }
+        else if(user.artist) {
+          await API.post('/api/auth/artist/signin', {
+            email: userCredential.user.email,
+          })          
+          .then((res) => {
+            console.log(res);
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+        }
+        else if(user.admin) {
+          await API.post('/api/auth/admin/signin', {
+            email: userCredential.user.email,
+          })          
+          .then((res) => {
+            console.log(res);
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+        }
         // ...
       })
       .catch((error) => {
@@ -75,6 +140,7 @@ export default function Login() {
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
       });
+
   };
 
   return (
