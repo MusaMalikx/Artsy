@@ -7,15 +7,14 @@ const Bids = ({ data }) => {
   return (
     <Layout title="Bids">
       <HeaderLayout title="Bids" />
-      <div className="flex flex-col lg:flex-row h-[41.25rem]">
-        <div className="flex-grow flex justify-center">
-          <div className="w-[35rem] bg-gray-100 overflow-y-scroll h-[30rem] lg:h-full">
-            {data?.map((photo) => (
-              <BidItem key={photo.id} photo={photo} />
-            ))}
-          </div>
+      <div className="flex-grow flex justify-center mb-5">
+        <div className="max-w-5xl w-full bg-gray-100 h-fit px-10 py-6 rounded-xl">
+          {data?.map((photo) => (
+            <BidItem key={photo.id} photo={photo} />
+          ))}
         </div>
-        <div className="w-96 bg-primary text-white rounded-r-xl lg:rounded-r-none rounded-l-xl p-5 flex mx-auto my-10 flex-col">
+      </div>
+      {/* <div className="w-96 bg-primary text-white rounded-r-xl lg:rounded-r-none rounded-l-xl p-5 flex mx-auto my-10 flex-col">
           <div className="flex-grow">
             <p className="lg:text-4xl text-3xl font-black leading-9">Summary</p>
             <div className="flex items-center justify-between pt-16">
@@ -40,30 +39,32 @@ const Bids = ({ data }) => {
               Checkout
             </button>
           </div>
-        </div>
-      </div>
+        </div> */}
     </Layout>
   );
 };
 
 const BidItem = ({ photo }) => {
   return (
-    <div className="flex border-t border-gray-50 bg-white m-5 rounded-xl p-5 transition-all hover:scale-95">
+    <div className="flex flex-col sm:flex-row items-center space-y-3 border-t shadow-md border-gray-50 bg-white m-5 rounded-xl p-5 transition-all hover:scale-95">
       <div
         className="w-32 h-16 bg-center bg-cover"
         style={{
           backgroundImage: `url('${photo.urls.thumb}')`
         }}></div>
-      <div className="ml-5 flex justify-between items-center w-full">
+      <div className="ml-5 flex flex-col sm:flex-row text-center sm:text-start sm:justify-between sm:items-center w-full">
         <div>
           <p>NAme</p>
           <h1 className="text-gray-700 text-base font-light">
             Current Bid : <span className="font-bold text-red-500 "> $51</span>
           </h1>
         </div>
-        <h1 className="text-gray-700 text-base font-light">
-          Your Bid : <span className="font-bold text-green-500 "> $51</span>
-        </h1>
+        <div>
+          <h1 className="text-gray-700 text-base font-light">
+            Your Bid : <span className="font-bold text-green-500 "> $51</span>
+          </h1>
+          <p className="text-md mb-0 font-mono text-green-600">21:21:00</p>
+        </div>
       </div>
     </div>
   );
