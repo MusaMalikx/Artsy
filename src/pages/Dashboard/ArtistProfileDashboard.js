@@ -4,7 +4,7 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
 import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
 import BuyerReview from '../../components/Modals/BuyerReview';
-import { Animation } from 'rsuite';
+import { motion } from 'framer-motion';
 export default function ArtistProfileDashboard({ data }) {
   const [openReview, setOpenReview] = useState(false);
   return (
@@ -106,13 +106,16 @@ export default function ArtistProfileDashboard({ data }) {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      <Animation.Slide in={true} placement={'left'}>
-                        <div>
-                          {data?.map((photo) => (
-                            <ProfileAuctionCard key={photo.id} photo={photo} />
-                          ))}
-                        </div>
-                      </Animation.Slide>
+                      {data?.map((photo) => (
+                        <motion.div
+                          key={photo.id}
+                          animate={{ x: [-2000, 350, 0] }}
+                          transition={{ duration: 1.5, delay: 0 }}>
+                          <ProfileAuctionCard key={photo.id} photo={photo} />
+                        </motion.div>
+                      ))}
+
+                      <div></div>
                     </div>
                   </div>
                 </div>

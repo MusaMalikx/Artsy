@@ -14,6 +14,9 @@ import SignIn from '../pages/Registration/SignIn';
 import SignUp from '../pages/Registration/SignUp';
 import ArtistProfileDashboard from '../pages/Dashboard/ArtistProfileDashboard';
 import Bids from '../pages/Bids/Bids';
+import BuyerCreatedProposal from '../pages/Proposal/BuyerCreatedProposal';
+import ArtistProposal from '../pages/Proposal/ArtistProposal';
+import BuyerAcceptedProposal from '../pages/Proposal/BuyerAcceptedProposal';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
 
@@ -41,6 +44,9 @@ const AppRoutes = () => {
         <Route path="auctions" element={<Auctions data={data} />} />
         <Route path="auctions/:id" element={<AuctionItem data={data} />} />
         <Route path="view/buyer/proposal" element={<BuyerProposal />} />
+        <Route path="view/artist/proposal" element={<ArtistProposal />} />
+        <Route path="view/created/proposal" element={<BuyerCreatedProposal />} />
+        <Route path="view/accepted/proposal" element={<BuyerAcceptedProposal />} />
         <Route path="add/artwork" element={<NewAuction />} />
         {/* <Route path="contact" element={<Contact />} />
         <Route path="our-team" element={<OurTeam />}/> */}
