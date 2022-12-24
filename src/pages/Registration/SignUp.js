@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
 import { FaUserAlt, FaUserEdit } from 'react-icons/fa';
+import firebaseApp from '../../utils/firebase';
+import API from '../../api/server';
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
+import { async } from '@firebase/util';
 
 export default function SignUp() {
   const [
@@ -14,6 +23,140 @@ export default function SignUp() {
     delaySpeed: 3000
   });
   const navigate = useNavigate();
+
+  const [user, setUser] = useState({
+    buyer: true,
+    artist: false
+  });
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [phonenumber, setPhonenumber] = useState('');
+  const [cnicfield, setCnicfield] = useState('');
+
+  const clearInputs = () => {
+    setEmail('');
+    setPassword('');
+    setName('');
+    setPhonenumber('');
+    setCnicfield('');
+  }
+
+
+  const signUpwithEmail = async (e) => {
+    e.preventDefault();
+    let url = '/api/auth/user/check';
+    if(user.buyer) {
+      url = '/api/auth/user/check';
+    }
+    else if(user.artist) {
+      url = '/api/auth/artist/check';
+    }
+    
+    await API.post(url , {
+      phonenumber: phonenumber,
+      cnic: cnicfield
+    })
+    .then(
+      res => {
+        console.log(res);
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email, password)
+          .then(async (userCredential) => {
+            // Signed in
+            const data = userCredential.user;
+            if(user.buyer) {
+    
+              await API.post('/api/auth/user/signup', {
+                email: userCredential.user.email,
+                name: name,
+                phonenumber: phonenumber,
+                cnic: cnicfield
+              })          
+              .then((res) => {
+                console.log(res);
+                //navigate("/SignIn");
+              })
+              .catch(err =>
+                console.log(err)
+            );
+    
+            }
+            else if(user.artist) {
+              await API.post('/api/auth/artist/signup', {
+                email: userCredential.user.email,
+                name: name,
+                phonenumber: phonenumber,
+                cnic: cnicfield
+              })          
+              .then((res) => {
+                console.log(res);
+                //navigate("/SignIn");
+              });
+            }
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+          });
+      }
+    ).catch((err) => {
+      console.log(err);
+    })
+
+  };
+
+  const signInWithGoogle = () => {
+    //dispatch(loginStart());        for redux part
+    const auth = getAuth(firebaseApp);
+    signInWithPopup(auth, new GoogleAuthProvider())
+      .then(async (result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const data = result.user;
+
+        if(user.buyer){
+          await API.post('/api/auth/user/google', {
+            displayName: result.user.displayName,
+            email: result.user.email,
+          })          
+          .then((res) => {
+            console.log(res);
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+        }
+        else if(user.artist){
+          //await API.get('/').then((res) => console.log(res.data));
+          await API.post('/api/auth/artist/google', {
+            displayName: result.user.displayName,
+            email: result.user.email,
+          })          
+          .then((res) => {
+            console.log(res);
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+        }
+
+
+        // console.log(token, data);
+      })
+      .catch((error) => {
+        //dispatch(loginFailure());          for redux part
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(errorCode, errorMessage, credential);
+      });
+  };
 
   return (
     <RegistrationLayout title={'Login'}>
@@ -49,13 +192,21 @@ export default function SignUp() {
             <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
               <form>
                 <div className="mb-6 flex w-full justify-center gap-4">
-                  <div className="border hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4">
+                  <div
+                    className={`border ${
+                      user.buyer && 'text-primary border-primary'
+                    } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
+                    onClick={() => setUser({ buyer: true })}>
                     <FaUserAlt className="w-full" />
-                    <button className="text-sm">Buyer</button>
+                    <p className="text-sm">Buyer</p>
                   </div>
-                  <div className="border hover:text-primary hover:border-primary flex flex-col  w-16 h-16 cursor-pointer text-center rounded-full pt-4">
+                  <div
+                    className={`border ${
+                      user.artist && 'text-primary border-primary'
+                    } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
+                    onClick={() => setUser({ artist: true })}>
                     <FaUserEdit className="w-full" />
-                    <button className="text-sm">Artist</button>
+                    <p className="text-sm">Artist</p>
                   </div>
                 </div>
 
@@ -64,6 +215,7 @@ export default function SignUp() {
                     type="text"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
                     placeholder="Full Name"
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
@@ -71,6 +223,7 @@ export default function SignUp() {
                     type="email"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
                     placeholder="Email address"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
@@ -78,26 +231,23 @@ export default function SignUp() {
                     type="password"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
                     placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
                   <input
-                    minLength={11}
-                    maxLength={11}
-                    min={0}
-                    type="number"
+                    type="text"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
                     placeholder="Phone Number"
+                    onChange={(e) => setPhonenumber(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
                   <input
-                    minLength={13}
-                    maxLength={13}
-                    min={0}
-                    type="number"
+                    type="text"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-primary focus:outline-none"
                     placeholder="CNIC"
+                    onChange={(e) => setCnicfield(e.target.value)}
                   />
                 </div>
                 <div className="flex justify-between items-center mb-6">
@@ -119,6 +269,7 @@ export default function SignUp() {
                 </div>
 
                 <button
+                  onClick={signUpwithEmail}
                   type="submit"
                   className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
                   data-mdb-ripple="true"
@@ -130,7 +281,8 @@ export default function SignUp() {
                   <p className="text-center font-semibold mx-4 mb-0">OR</p>
                 </div>
 
-                <a
+                <p
+                  onClick={signInWithGoogle}
                   className="px-7 py-3 border border-slate-300 text-slate-400 font-medium text-sm leading-snug uppercase rounded-lg shadow-md focus:no-underline hover:text-slate-600 focus:text-slate-600 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out hover:no-underline w-full flex justify-center items-center mb-3"
                   href="#!"
                   role="button"
@@ -156,7 +308,7 @@ export default function SignUp() {
                       d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
                   </svg>
                   Continue with Google
-                </a>
+                </p>
 
                 <div className="mt-6 text-center">
                   <p onClick={() => navigate('/signin')}>
