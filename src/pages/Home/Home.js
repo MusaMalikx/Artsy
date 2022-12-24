@@ -2,17 +2,19 @@ import React from 'react';
 // import { Button } from "react-bootstrap";
 // import { Link } from "react-router-dom";
 import Layout from '../../components/Layouts/ArticleLayout';
-import Banner from '../../assets/svgs/banner.svg';
+// import Banner from '../../assets/svgs/banner.svg';
 import AuctionCard from '../../components/Auction/AuctionCard';
+import Carousel from '../../components/Carousel/Carousel';
 const Home = ({ data }) => {
   return (
     <Layout title="Home">
       {/* <div className="flex flex-col justify-center items-center min-h-screen my-auto text-2xl space-y-2">
         Artsy Homepage
       </div> */}
-      <div className="">
+      {/* <div className="">
         <img src={Banner} alt="banner" />
-      </div>
+      </div> */}
+      <Carousel />
       <div className="container mx-auto">
         <div className="flex justify-center items-center py-20">
           <p className="font-semibold uppercase   text-2xl lg:text-4xl underline underline-offset-8">
