@@ -69,7 +69,10 @@ const SideNav = () => {
                 </Nav.Item>
                 {<BuyerProposal isOpen={openField} setIsOpen={setOpenField} />}
                 <Nav.Item onClick={() => navigate('/view/created/proposal')} eventKey="6-2">
-                  View Proposals
+                  View Created Proposals
+                </Nav.Item>
+                <Nav.Item onClick={() => navigate('/view/accepted/proposal')} eventKey="6-3">
+                  View Accepted Proposals
                 </Nav.Item>
               </Nav.Menu>
 

@@ -1,33 +1,22 @@
 import React from 'react';
 import { useState } from 'react';
 import { DatePicker, Dropdown, useToaster } from 'rsuite';
-import ArtworkImageUploader from '../../components/ImageUploader/ArtworkImageUploader';
+import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
+import Toaster from '../../components/Common/Toaster';
 import Layout from '../../components/Layouts/ArticleLayout';
-import { Notification } from 'rsuite';
+import HeaderLayout from '../../components/Layouts/HeaderLayout';
 
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
+
   const displayNotification = (event) => {
     event.preventDefault();
-
-    toaster.push(
-      <Notification
-        type="error"
-        header="Failed to List an Artwork!"
-        duration={3000}></Notification>,
-      { placement: 'topEnd' }
-    );
-    setTimeout(() => {
-      toaster.clear();
-    }, 3000);
+    Toaster(toaster, 'error', 'Failed to List an Artwork');
   };
   return (
     <Layout title={'Add Artwork'}>
-      <div className="py-10 px-5">
-        <p className="font-semibold   text-2xl lg:text-4xl">Add Artwork</p>
-        <hr />
-      </div>
+      <HeaderLayout title="Add Artwork" />
       <div className="border-2   mb-14 w-10/12 mx-auto p-2 flex flex-col md:flex-row rounded-lg">
         <form className="flex flex-col w-full px-2 max-w-6xl" action="#">
           <div className="flex sm:flex-row flex-col gap-3">
@@ -36,7 +25,7 @@ export default function NewAuction() {
                 Title
               </label>
               <input
-                className="focus:outline-none border px-2 py-3 rounded-lg"
+                className="focus:outline-none border px-2 py-1 text-base rounded"
                 type="text"
                 name="title-artwork"
                 placeholder="Ocean Coast"
@@ -51,7 +40,7 @@ export default function NewAuction() {
                 Base Bid
               </label>
               <input
-                className="focus:outline-none border px-2 py-3 rounded-lg"
+                className="focus:outline-none border px-2 py-1 text-base rounded"
                 type="number"
                 name="bid-artwork"
                 placeholder="4000"
@@ -126,6 +115,15 @@ export default function NewAuction() {
         </form>
         <ArtworkImageUploader />
       </div>
+      {/* {showToaster ? (
+        <Toaster
+          typeOf={'success'}
+          showToaster={setShowToaster}
+          Message={'Failed to List an Artwork'}
+        />
+      ) : (
+        ''
+      )} */}
     </Layout>
   );
 }
