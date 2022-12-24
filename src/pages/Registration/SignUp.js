@@ -9,9 +9,8 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  createUserWithEmailAndPassword,
+  createUserWithEmailAndPassword
 } from 'firebase/auth';
-import { async } from '@firebase/util';
 
 export default function SignUp() {
   const [
@@ -35,62 +34,53 @@ export default function SignUp() {
   const [phonenumber, setPhonenumber] = useState('');
   const [cnicfield, setCnicfield] = useState('');
 
-  const clearInputs = () => {
-    setEmail('');
-    setPassword('');
-    setName('');
-    setPhonenumber('');
-    setCnicfield('');
-  }
-
+  // const clearInputs = () => {
+  //   setEmail('');
+  //   setPassword('');
+  //   setName('');
+  //   setPhonenumber('');
+  //   setCnicfield('');
+  // };
 
   const signUpwithEmail = async (e) => {
     e.preventDefault();
     let url = '/api/auth/user/check';
-    if(user.buyer) {
+    if (user.buyer) {
       url = '/api/auth/user/check';
-    }
-    else if(user.artist) {
+    } else if (user.artist) {
       url = '/api/auth/artist/check';
     }
-    
-    await API.post(url , {
+
+    await API.post(url, {
       phonenumber: phonenumber,
       cnic: cnicfield
     })
-    .then(
-      res => {
+      .then((res) => {
         console.log(res);
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
           .then(async (userCredential) => {
             // Signed in
-            const data = userCredential.user;
-            if(user.buyer) {
-    
+            // const data = userCredential.user;
+            if (user.buyer) {
               await API.post('/api/auth/user/signup', {
                 email: userCredential.user.email,
                 name: name,
                 phonenumber: phonenumber,
                 cnic: cnicfield
-              })          
-              .then((res) => {
-                console.log(res);
-                //navigate("/SignIn");
               })
-              .catch(err =>
-                console.log(err)
-            );
-    
-            }
-            else if(user.artist) {
+                .then((res) => {
+                  console.log(res);
+                  //navigate("/SignIn");
+                })
+                .catch((err) => console.log(err));
+            } else if (user.artist) {
               await API.post('/api/auth/artist/signup', {
                 email: userCredential.user.email,
                 name: name,
                 phonenumber: phonenumber,
                 cnic: cnicfield
-              })          
-              .then((res) => {
+              }).then((res) => {
                 console.log(res);
                 //navigate("/SignIn");
               });
@@ -102,11 +92,10 @@ export default function SignUp() {
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
           });
-      }
-    ).catch((err) => {
-      console.log(err);
-    })
-
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const signInWithGoogle = () => {
@@ -115,35 +104,32 @@ export default function SignUp() {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const data = result.user;
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
 
-        if(user.buyer){
+        // // The signed-in user info.
+        // const data = result.user;
+
+        if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
-            email: result.user.email,
-          })          
-          .then((res) => {
+            email: result.user.email
+          }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
-        }
-        else if(user.artist){
+        } else if (user.artist) {
           //await API.get('/').then((res) => console.log(res.data));
           await API.post('/api/auth/artist/google', {
             displayName: result.user.displayName,
-            email: result.user.email,
-          })          
-          .then((res) => {
+            email: result.user.email
+          }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
         }
-
 
         // console.log(token, data);
       })

@@ -6,14 +6,12 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from 'firebase/auth';
 import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
-
 
 export default function Login() {
   const [
@@ -42,40 +40,34 @@ export default function Login() {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const data = result.user;
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
 
-        if(user.buyer){
+        // The signed-in user info.
+        // const data = result.user;
+
+        if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
-            email: result.user.email,
-          })          
-          .then((res) => {
+            email: result.user.email
+          }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
-        }
-        else if(user.artist){
+        } else if (user.artist) {
           //await API.get('/').then((res) => console.log(res.data));
           await API.post('/api/auth/artist/google', {
             displayName: result.user.displayName,
-            email: result.user.email,
-          })          
-          .then((res) => {
+            email: result.user.email
+          }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
-
-
-        }
-        else if(user.admin){
+        } else if (user.admin) {
           // I think we should not allow admin to login through Google only email and password
         }
-
 
         // console.log(token, data);
       })
@@ -85,7 +77,7 @@ export default function Login() {
         const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
-        
+
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
@@ -100,34 +92,27 @@ export default function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
-        const data = userCredential.user;
-        if(user.buyer) {
-
+        // const data = userCredential.user;
+        if (user.buyer) {
           await API.post('/api/auth/user/signin', {
-            email: userCredential.user.email,
-          })          
-          .then((res) => {
+            email: userCredential.user.email
+          }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
-
-        }
-        else if(user.artist) {
+        } else if (user.artist) {
           await API.post('/api/auth/artist/signin', {
-            email: userCredential.user.email,
-          })          
-          .then((res) => {
+            email: userCredential.user.email
+          }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
-        }
-        else if(user.admin) {
+        } else if (user.admin) {
           await API.post('/api/auth/admin/signin', {
-            email: userCredential.user.email,
-          })          
-          .then((res) => {
+            email: userCredential.user.email
+          }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
@@ -140,7 +125,6 @@ export default function Login() {
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
       });
-
   };
 
   return (
