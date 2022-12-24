@@ -20,7 +20,7 @@ export default function ProfileAuctionCard({ photo }) {
               Current Bid : <span className="font-bold text-red-500 "> $51</span>
             </h1>
             <button className="px-3 py-2 bg-primary text-white text-xs font-bold uppercase rounded focus:outline-none active:bg-cyan-700">
-              Place a bid
+              View Artwork
             </button>
           </div>
         </div>

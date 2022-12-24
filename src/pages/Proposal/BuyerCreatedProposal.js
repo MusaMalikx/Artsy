@@ -1,17 +1,17 @@
 import React from 'react';
-import AuctionTable from '../../components/Auction/AuctionTable';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
+import ProposalTable from '../../components/Proposal/ProposalTable';
 
-const ArtistAuctionList = () => {
+const BuyerCreatedProposal = () => {
   return (
     <Layout title="Listed Auctions">
-      <HeaderLayout title="Artist Listed Auctions" />
+      <HeaderLayout title="Previously Generated Proposals" />
       <div>
-        <AuctionTable />
+        <ProposalTable />
       </div>
     </Layout>
   );
 };
 
-export default ArtistAuctionList;
+export default BuyerCreatedProposal;

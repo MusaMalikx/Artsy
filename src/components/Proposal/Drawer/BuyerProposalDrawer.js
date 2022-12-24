@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Drawer } from 'rsuite';
-
+import ArtistProposal from '../../Modals/ArtistProposal';
 export default function ProposalDrawer({ setOpen }) {
+  const [openField, setOpenField] = useState(false);
   const text =
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius molestiae accusamus distinctio atque consequuntur tempora dolore veniam aut accusantium pariatur temporibus fugiat illum, quis nobis fugit beatae soluta numquam unde!';
   return (
@@ -13,13 +14,13 @@ export default function ProposalDrawer({ setOpen }) {
               <div className=" rounded-full relative w-40 overflow-hidden">
                 <img
                   className=" w-full h-full object-cover "
-                  src="https://scontent.flhe3-2.fna.fbcdn.net/v/t1.6435-1/131339402_2890381564525861_3935956292302524806_n.jpg?stp=dst-jpg_p200x200&_nc_cat=110&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeHVbrQLjq9EiBwlLc66MXPa8KROrODhYeHwpE6s4OFh4SQlKw33W2x34a3ethtToZ8mB0K10n--DLRhBsuzzNHo&_nc_ohc=sgWbe9MBLPsAX94Xehw&_nc_ht=scontent.flhe3-2.fna&oh=00_AfBMw6x3JJ3bgvc0-JszwqiGx4dvOvP69PSgh8WO66Wasw&oe=63B923C8"
+                  src="https://www.skintransform.co.uk/wp-content/uploads/2016/10/Men-Face4.jpg"
                   alt=""
                 />
               </div>
               <div className="font-bold text-center justify-between w-full">
-                <p className="text-green-500 text-xl">Abdullah The Prodigy</p>
-                <p className="font-light">Faisalabad, Punjab, Pakistan</p>
+                <p className="text-green-500 text-xl">John D. Moore</p>
+                <p className="font-light">Lahore, Punjab, Pakistan</p>
                 <p className=" underline cursor-pointer hover:text-slate-500 ">View Profile</p>
               </div>
             </div>
@@ -31,9 +32,12 @@ export default function ProposalDrawer({ setOpen }) {
               <p className="text-lg font-bold mt-6">Description</p>
               <p className="text-justify">{text}</p>
             </div>
-            <button className="mt-10 w-full focus:outline-none border py-3 rounded-lg bg-black text-white font-bold ">
+            <button
+              onClick={() => setOpenField(true)}
+              className="mt-10 w-full focus:outline-none border py-3 rounded-lg bg-primary hover:bg-cyan-700 text-white font-bold ">
               Bid Now
             </button>
+            {<ArtistProposal isOpen={openField} setIsOpen={setOpenField} />}
           </div>
         </Drawer.Body>
       </Drawer>

@@ -2,7 +2,7 @@ import React from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 export default function ReviewDescription() {
   return (
-    <div className="flex my-3 md:flex-row flex-col justify-center items-center gap-2 p-4 border bg-white shadow-md hover:shodow-lg rounded-2xl">
+    <div className="flex my-3 mr-3 md:flex-row flex-col justify-center items-center gap-2 p-4 border bg-white shadow-md hover:shodow-lg rounded-2xl">
       <div className="w-24 h-20 overflow-hidden rounded-full ">
         <img
           className="w-full h-full object-cover"
