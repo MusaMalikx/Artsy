@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import Footer from '../Footer/Footer';
 import SideNav from '../SideNav/SideNav';
 // import { useSelector } from 'react-redux';
@@ -13,6 +14,10 @@ const variants = {
 const ArticleLayout = ({ children, title, bool }) => {
   document.title = title + ' | Artsy';
 
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  }, []);
   // const count = useSelector(selectValue);
   // console.log(count);
 

@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
-import { AiFillStar, AiOutlineStar, AiFillFlag } from 'react-icons/ai';
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
 import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
 import BuyerReview from '../../components/Modals/BuyerReview';
 import { motion } from 'framer-motion';
-import ProfileReport from '../../components/Modals/ProfileReport';
-export default function ArtistProfileDashboard({ data }) {
+import { Dropdown, IconButton, Popover, Whisper } from 'rsuite';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+import BuyerProposal from '../../components/Modals/BuyerProposal';
+export default function BuyerProfileDashboard() {
+  const navigate = useNavigate();
   const [openReview, setOpenReview] = useState(false);
-  const [openReport, setOpenReport] = useState(false);
+
   return (
     <Layout title="Profile">
       <main className="profile-page">
@@ -36,7 +40,7 @@ export default function ArtistProfileDashboard({ data }) {
                     <div className="relative w-full text-center flex justify-center">
                       <img
                         alt="..."
-                        src="https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg"
+                        src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
                       />
                     </div>
@@ -69,7 +73,8 @@ export default function ArtistProfileDashboard({ data }) {
                       <div>
                         <button
                           className="bg-primary active:bg-cyan-700 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
-                          type="button">
+                          type="button"
+                          onClick={() => navigate('/chat')}>
                           <RiMessage2Fill className="inline text-lg mr-2" />
                           Message
                         </button>
@@ -77,7 +82,10 @@ export default function ArtistProfileDashboard({ data }) {
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                    <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                    <div className="flex items-center justify-center py-4 lg:pt-4 pt-8">
+                      <div className="mr-4">
+                        <Drop />
+                      </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           22
@@ -90,15 +98,6 @@ export default function ArtistProfileDashboard({ data }) {
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Closed</span>
                       </div>
-                      <div
-                        onClick={() => setOpenReport(true)}
-                        className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
-                        <span className="text-xl font-bold block uppercase tracking-wide mb-2">
-                          <AiFillFlag className="w-full" />
-                        </span>
-                        <span className="text-sm ">Report</span>
-                      </div>
-                      {<ProfileReport open={openReport} setOpen={setOpenReport} />}
                     </div>
                   </div>
                 </div>
@@ -111,7 +110,7 @@ export default function ArtistProfileDashboard({ data }) {
                     Lahore, Pakistan
                   </div>
                 </div>
-                <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
+                {/* <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                   <div>
                     <p className="text-4xl font-bold">Live Auctions</p>
                   </div>
@@ -129,7 +128,7 @@ export default function ArtistProfileDashboard({ data }) {
                       <div></div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -138,3 +137,25 @@ export default function ArtistProfileDashboard({ data }) {
     </Layout>
   );
 }
+
+const renderIconButton = (props, ref) => {
+  return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
+};
+
+const Drop = () => {
+  const navigate = useNavigate();
+  const [openField, setOpenField] = useState(false);
+  return (
+    <Dropdown renderToggle={renderIconButton}>
+      <Dropdown.Item onClick={() => navigate('/bids')}>Bids</Dropdown.Item>
+      <Dropdown.Item onClick={() => setOpenField(true)}>Add Proposals</Dropdown.Item>
+      {<BuyerProposal isOpen={openField} setIsOpen={setOpenField} />}
+      <Dropdown.Item onClick={() => navigate('/view/buyer/created/proposal')}>
+        Created Proposals
+      </Dropdown.Item>
+      <Dropdown.Item onClick={() => navigate('/view/buyer/accepted/proposal')}>
+        Accepted Proposals
+      </Dropdown.Item>
+    </Dropdown>
+  );
+};

@@ -13,7 +13,7 @@ import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
-export default function Login({ user, setUser }) {
+export default function Login({ user, setUser, setSignedIn }) {
   const [
     text
     //, helper
@@ -127,6 +127,17 @@ export default function Login({ user, setUser }) {
       });
   };
 
+  const signedIn = () => {
+    if (user.buyer) {
+      setSignedIn(true);
+      navigate('/');
+    } else if (user.artist) {
+      setSignedIn(true);
+    } else if (user.admin) {
+      setSignedIn(true);
+    }
+  };
+
   return (
     <RegistrationLayout title={'Login'}>
       <section className="h-screen">
@@ -226,7 +237,7 @@ export default function Login({ user, setUser }) {
                 </div>
 
                 <button
-                  onClick={() => navigate('/')}
+                  onClick={signedIn}
                   // onClick={signInWithEmailAndPass}
                   type="submit"
                   className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
