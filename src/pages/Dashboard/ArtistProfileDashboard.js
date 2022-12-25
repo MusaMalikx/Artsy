@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import { AiFillStar, AiOutlineStar, AiFillFlag } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
 import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
 import BuyerReview from '../../components/Modals/BuyerReview';
 import { motion } from 'framer-motion';
+import ProfileReport from '../../components/Modals/ProfileReport';
 export default function ArtistProfileDashboard({ data }) {
   const [openReview, setOpenReview] = useState(false);
+  const [openReport, setOpenReport] = useState(false);
   return (
     <Layout title="Listed Auctions">
       <main className="profile-page">
@@ -88,6 +90,15 @@ export default function ArtistProfileDashboard({ data }) {
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Closed</span>
                       </div>
+                      <div
+                        onClick={() => setOpenReport(true)}
+                        className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
+                        <span className="text-xl font-bold block uppercase tracking-wide mb-2">
+                          <AiFillFlag className="w-full" />
+                        </span>
+                        <span className="text-sm ">Report</span>
+                      </div>
+                      {<ProfileReport open={openReport} setOpen={setOpenReport} />}
                     </div>
                   </div>
                 </div>

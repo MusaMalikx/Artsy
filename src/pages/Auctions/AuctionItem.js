@@ -24,6 +24,7 @@ const AuctionItem = ({ data }) => {
               </p>
               <p className="text-xl font-mono text-green-600">21:21:00</p>
             </div>
+            <p className='text-base '>Made by <span className='font-bold underline cursor-pointer'>Chris Johnson</span> </p>
             <p className="text-lg font-semibold">{user.bio}</p>
             <p className=" font-sans">
               Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a

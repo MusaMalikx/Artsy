@@ -122,7 +122,7 @@ const AddMoney = ({ open, handleClose }) => {
       open={open}
       onClose={handleClose}
       size="xs"
-      style={{ marginRight: '230px', marginTop: '50px' }}>
+      >
       <img src={cardPng} alt="card" />
       <main className="px-4">
         <h1 className="text-xl font-semibold text-gray-700 text-center">Adding Money from Card</h1>
