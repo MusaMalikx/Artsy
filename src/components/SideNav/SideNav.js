@@ -28,29 +28,35 @@ const SideNav = () => {
                 Home
               </Nav.Item>
               <Nav.Item
-                onClick={() => navigate('/profile')}
-                eventKey="2"
-                icon={<Icon as={CgProfile} />}>
-                Profile
-              </Nav.Item>
-              <Nav.Item
                 onClick={() => navigate('/auctions')}
-                eventKey="3"
+                eventKey="2"
                 icon={<Icon as={RiAuctionFill} />}>
                 Auctions
               </Nav.Item>
               <Nav.Item
+                onClick={() => navigate('/buyer/profile')}
+                eventKey="3"
+                icon={<Icon as={CgProfile} />}>
+                Buyer Profile
+              </Nav.Item>
+              <Nav.Item
+                onClick={() => navigate('/artist/profile')}
+                eventKey="3"
+                icon={<Icon as={CgProfile} />}>
+                Artist Profile
+              </Nav.Item>
+              {/* <Nav.Item
                 onClick={() => navigate('/chat')}
                 eventKey="4"
                 icon={<Icon as={BsChatLeftQuote} />}>
                 Chat
-              </Nav.Item>
-              <Nav.Item
+              </Nav.Item> */}
+              {/* <Nav.Item
                 onClick={() => navigate('/bids')}
                 eventKey="4"
                 icon={<Icon as={BsBadge3D} />}>
                 Bids
-              </Nav.Item>
+              </Nav.Item> */}
               <Nav.Item
                 onClick={() => navigate('/search')}
                 eventKey="5"
@@ -59,7 +65,7 @@ const SideNav = () => {
               </Nav.Item>
               <Notification />
 
-              <Nav.Menu
+              {/* <Nav.Menu
                 placement="rightStart"
                 eventKey="6"
                 title="Buyer"
@@ -74,7 +80,7 @@ const SideNav = () => {
                 <Nav.Item onClick={() => navigate('/view/accepted/proposal')} eventKey="6-3">
                   View Accepted Proposals
                 </Nav.Item>
-              </Nav.Menu>
+              </Nav.Menu> */}
 
               <Nav.Menu
                 placement="rightStart"
@@ -96,7 +102,7 @@ const SideNav = () => {
                 </Nav.Item>
               </Nav.Menu>
 
-              <Nav.Menu placement="rightStart" eventKey="8" title="Advanced" icon={<MagicIcon />}>
+              {/* <Nav.Menu placement="rightStart" eventKey="8" title="Advanced" icon={<MagicIcon />}>
                 <Nav.Item eventKey="8-1">Geo</Nav.Item>
                 <Nav.Item eventKey="8-2">Devices</Nav.Item>
                 <Nav.Item eventKey="8-3">Loyalty</Nav.Item>
@@ -114,7 +120,7 @@ const SideNav = () => {
                   <Nav.Item eventKey="9-5-1">Action Name</Nav.Item>
                   <Nav.Item eventKey="9-5-2">Action Params</Nav.Item>
                 </Nav.Menu>
-              </Nav.Menu>
+              </Nav.Menu> */}
             </Nav>
           </Sidenav.Body>
           <Sidenav.Toggle expanded={expanded} onToggle={(expanded) => setExpanded(expanded)} />
