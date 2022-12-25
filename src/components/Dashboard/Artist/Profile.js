@@ -1,6 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'rsuite';
+import { logout } from '../../../redux/features/userReducer';
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <div>
       <section className="font-medium sticky top-10">
@@ -45,6 +51,16 @@ const Profile = () => {
           <div className="mt-3 text-white text-sm">
             <span className="text-gray-600 font-semibold">Storage:</span>
             <span>40%</span>
+          </div>
+          <div
+            className="flex justify-end mt-5 w-full"
+            onClick={() => {
+              navigate('/signin');
+              dispatch(logout());
+            }}>
+            <Button color="red" appearance="primary">
+              Logout
+            </Button>
           </div>
         </section>
       </section>

@@ -5,15 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import {
   getAuth,
   signInWithPopup,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword
+  GoogleAuthProvider
+  // signInWithEmailAndPassword
 } from 'firebase/auth';
 import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser, setUser } from '../../redux/features/userReducer';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
-export default function Login({ user, setUser, setSignedIn }) {
+export default function Login() {
   const [
     text
     //, helper
@@ -23,14 +25,12 @@ export default function Login({ user, setUser, setSignedIn }) {
     delaySpeed: 3000
   });
 
-  // const [user, setUser] = useState({
-  //   buyer: true,
-  //   artist: false,
-  //   admin: false
-  // });
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  console.log(email, password);
 
   const navigate = useNavigate();
 
@@ -85,56 +85,58 @@ export default function Login({ user, setUser, setSignedIn }) {
       });
   };
 
-  const signInWithEmailAndPass = (e) => {
-    e.preventDefault();
+  // const signInWithEmailAndPass = (e) => {
+  //   e.preventDefault();
 
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed in
-        // const data = userCredential.user;
-        if (user.buyer) {
-          await API.post('/api/auth/user/signin', {
-            email: userCredential.user.email
-          }).then((res) => {
-            console.log(res);
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
-        } else if (user.artist) {
-          await API.post('/api/auth/artist/signin', {
-            email: userCredential.user.email
-          }).then((res) => {
-            console.log(res);
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
-        } else if (user.admin) {
-          await API.post('/api/auth/admin/signin', {
-            email: userCredential.user.email
-          }).then((res) => {
-            console.log(res);
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
-        }
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
-  };
+  //   const auth = getAuth();
+  //   signInWithEmailAndPassword(auth, email, password)
+  //     .then(async (userCredential) => {
+  //       // Signed in
+  //       // const data = userCredential.user;
+  //       if (user.buyer) {
+  //         await API.post('/api/auth/user/signin', {
+  //           email: userCredential.user.email
+  //         }).then((res) => {
+  //           console.log(res);
+  //           //dispatch(loginSuccess(res.data));    for redux part
+  //           //navigate("/");
+  //         });
+  //       } else if (user.artist) {
+  //         await API.post('/api/auth/artist/signin', {
+  //           email: userCredential.user.email
+  //         }).then((res) => {
+  //           console.log(res);
+  //           //dispatch(loginSuccess(res.data));    for redux part
+  //           //navigate("/");
+  //         });
+  //       } else if (user.admin) {
+  //         await API.post('/api/auth/admin/signin', {
+  //           email: userCredential.user.email
+  //         }).then((res) => {
+  //           console.log(res);
+  //           //dispatch(loginSuccess(res.data));    for redux part
+  //           //navigate("/");
+  //         });
+  //       }
+  //       // ...
+  //     })
+  //     .catch((error) => {
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       console.log(errorCode, errorMessage);
+  //     });
+  // };
 
   const signedIn = () => {
     if (user.buyer) {
-      setSignedIn(true);
+      // setSignedIn(true);
       navigate('/');
     } else if (user.artist) {
-      setSignedIn(true);
+      // setSignedIn(true);
+      navigate('/');
     } else if (user.admin) {
-      setSignedIn(true);
+      navigate('/admin/dashboard');
+      // setSignedIn(true);
     }
   };
 
@@ -176,7 +178,7 @@ export default function Login({ user, setUser, setSignedIn }) {
                     className={`border ${
                       user.buyer && 'text-primary border-primary'
                     } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
-                    onClick={() => setUser({ buyer: true })}>
+                    onClick={() => dispatch(setUser({ buyer: true }))}>
                     <FaUserAlt className="w-full" />
                     <p className="text-sm">Buyer</p>
                   </div>
@@ -184,7 +186,7 @@ export default function Login({ user, setUser, setSignedIn }) {
                     className={`border ${
                       user.artist && 'text-primary border-primary'
                     } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
-                    onClick={() => setUser({ artist: true })}>
+                    onClick={() => dispatch(setUser({ artist: true }))}>
                     <FaUserEdit className="w-full" />
                     <p className="text-sm">Artist</p>
                   </div>
@@ -192,7 +194,7 @@ export default function Login({ user, setUser, setSignedIn }) {
                     className={`border ${
                       user.admin && 'text-primary border-primary'
                     } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
-                    onClick={() => setUser({ admin: true })}>
+                    onClick={() => dispatch(setUser({ admin: true }))}>
                     <FaUserTie className="w-full" />
                     <p className="text-sm">Admin</p>
                   </div>

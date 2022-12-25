@@ -5,7 +5,7 @@ import AuctionItem from '../pages/Auctions/AuctionItem';
 import Auctions from '../pages/Auctions/Auctions';
 import NewAuction from '../pages/Auctions/NewAuction';
 import Chat from '../pages/Chat/Chat';
-import ArtistDashboard from '../pages/Dashboard/ArtistDashboard';
+import AdminDashboard from '../pages/Dashboard/AdminDashboard';
 import Home from '../pages/Home/Home';
 import BuyerProposal from '../pages/Proposal/BuyerProposal';
 import Search from '../pages/Search/Search';
@@ -18,17 +18,21 @@ import BuyerCreatedProposal from '../pages/Proposal/BuyerCreatedProposal';
 import ArtistProposal from '../pages/Proposal/ArtistProposal';
 import BuyerAcceptedProposal from '../pages/Proposal/BuyerAcceptedProposal';
 import BuyerProfileDashboard from '../pages/Dashboard/BuyerProfileDashboard';
+import { useSelector } from 'react-redux';
+import { selectSignedIn, selectUser } from '../redux/features/userReducer';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
-  const [user, setUser] = useState({
-    admin: false,
-    buyer: false,
-    artist: false
-  });
-
+  // const [user, setUser] = useState({
+  //   admin: false,
+  //   buyer: false,
+  //   artist: false
+  // });
+  const user = useSelector(selectUser);
+  const signedIn = useSelector(selectSignedIn);
+  // console.log(user);
   // const signedIn = useState(false)
 
-  const [signedIn, setSignedIn] = useState(false);
+  // const [signedIn, setSignedIn] = useState(false);
 
   // const [user, setUser] = useState(null);
 
@@ -51,16 +55,16 @@ const AppRoutes = () => {
       {signedIn ? (
         <Route path="/">
           <Route index element={<Home data={data} />} />
-          <Route path="artist/dashboard" element={<ArtistDashboard data={data} />} />
-          <Route path="artist/auctions" element={<ArtistAuctionList />} />
           <Route path="chat" element={<Chat data={data} />} />
           <Route path="search" element={<Search data={data} />} />
           <Route path="auctions" element={<Auctions data={data} />} />
           <Route path="auctions/:id" element={<AuctionItem data={data} />} />
+          {user.admin && <Route path="admin/dashboard" element={<AdminDashboard data={data} />} />}
           {user.artist && (
             <>
               <Route path="view/artist/proposal" element={<ArtistProposal />} />
               <Route path="add/artwork" element={<NewAuction />} />
+              <Route path="artist/auctions" element={<ArtistAuctionList />} />
               <Route path="artist/profile" element={<ArtistProfileDashboard data={data} />} />
             </>
           )}
@@ -73,17 +77,12 @@ const AppRoutes = () => {
               <Route path="view/buyer/accepted/proposal" element={<BuyerAcceptedProposal />} />
             </>
           )}
-          {/* <Route path="contact" element={<Contact />} />
-        <Route path="our-team" element={<OurTeam />}/> */}
         </Route>
       ) : (
         <Route path="/" element={<Navigate to="/signin" replace />} />
       )}
       <Route path="/">
-        <Route
-          path="signin"
-          element={<SignIn user={user} setUser={setUser} setSignedIn={setSignedIn} />}
-        />
+        <Route path="signin" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
       </Route>
     </Routes>

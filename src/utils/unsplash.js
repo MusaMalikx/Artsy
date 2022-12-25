@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { createApi } from 'unsplash-js';
 
 const API = createApi({

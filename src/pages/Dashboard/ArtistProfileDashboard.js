@@ -6,7 +6,14 @@ import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
 import BuyerReview from '../../components/Modals/BuyerReview';
 import { motion } from 'framer-motion';
 import ProfileReport from '../../components/Modals/ProfileReport';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/features/userReducer';
+import { Button, Dropdown, IconButton } from 'rsuite';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 export default function ArtistProfileDashboard({ data }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   return (
@@ -20,6 +27,16 @@ export default function ArtistProfileDashboard({ data }) {
                 "url('https://img.freepik.com/free-photo/blue-oil-paint-strokes-textured-background_53876-98328.jpg?w=2000')"
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
+            <div
+              className="flex justify-end m-5"
+              onClick={() => {
+                navigate('/signin');
+                dispatch(logout());
+              }}>
+              <Button color="red" appearance="primary">
+                Logout
+              </Button>
+            </div>
           </div>
           <div
             className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
@@ -68,6 +85,7 @@ export default function ArtistProfileDashboard({ data }) {
                       </div>
                       <div>
                         <button
+                          onClick={() => navigate('/chat')}
                           className="bg-primary active:bg-cyan-700 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button">
                           <RiMessage2Fill className="inline text-lg mr-2" />
@@ -77,7 +95,10 @@ export default function ArtistProfileDashboard({ data }) {
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                    <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                    <div className="flex items-center justify-center py-4 lg:pt-4 pt-8">
+                      <div className="mr-4">
+                        <Drop />
+                      </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           22
@@ -125,7 +146,6 @@ export default function ArtistProfileDashboard({ data }) {
                           <ProfileAuctionCard key={photo.id} photo={photo} />
                         </motion.div>
                       ))}
-
                       <div></div>
                     </div>
                   </div>
@@ -138,3 +158,20 @@ export default function ArtistProfileDashboard({ data }) {
     </Layout>
   );
 }
+
+const renderIconButton = (props, ref) => {
+  return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
+};
+
+const Drop = () => {
+  const navigate = useNavigate();
+  return (
+    <Dropdown renderToggle={renderIconButton}>
+      <Dropdown.Item onClick={() => navigate('/add/artwork')}>Add Artwork</Dropdown.Item>
+      <Dropdown.Item onClick={() => navigate('/artist/auctions')}>Listed Auctions</Dropdown.Item>
+      <Dropdown.Item onClick={() => navigate('/view/artist/proposal')}>
+        Generated Proposals
+      </Dropdown.Item>
+    </Dropdown>
+  );
+};

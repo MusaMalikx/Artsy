@@ -1,11 +1,11 @@
 import React from 'react';
-// import { Button } from "react-bootstrap";
-// import { Link } from "react-router-dom";
 import Layout from '../../components/Layouts/ArticleLayout';
-// import Banner from '../../assets/svgs/banner.svg';
 import AuctionCard from '../../components/Auction/AuctionCard';
 import Carousel from '../../components/Carousel/Carousel';
 const Home = ({ data }) => {
+  // const user = useSelector(selectUser);
+  // console.log(user);
+
   return (
     <Layout title="Home">
       {/* <div className="flex flex-col justify-center items-center min-h-screen my-auto text-2xl space-y-2">
@@ -25,12 +25,6 @@ const Home = ({ data }) => {
           {data?.map((photo) => (
             <AuctionCard key={photo.id} photo={photo} />
           ))}
-          {/* <AuctionCard />
-          <AuctionCard />
-          <AuctionCard />
-          <AuctionCard />
-          <AuctionCard />
-          <AuctionCard /> */}
         </div>
       </div>
     </Layout>

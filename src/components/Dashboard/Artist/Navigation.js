@@ -118,11 +118,7 @@ const WalletModel = ({ open, handleClose }) => {
 
 const AddMoney = ({ open, handleClose }) => {
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      size="xs"
-      >
+    <Modal open={open} onClose={handleClose} size="xs">
       <img src={cardPng} alt="card" />
       <main className="px-4">
         <h1 className="text-xl font-semibold text-gray-700 text-center">Adding Money from Card</h1>
