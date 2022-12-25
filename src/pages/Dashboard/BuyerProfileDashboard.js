@@ -15,6 +15,8 @@ export default function BuyerProfileDashboard() {
   const dispatch = useDispatch();
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
+  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
+
   return (
     <Layout title="Profile">
       <main className="profile-page">
@@ -29,6 +31,8 @@ export default function BuyerProfileDashboard() {
             <div
               className="flex justify-end m-5"
               onClick={() => {
+                localStorage.setItem('auth', JSON.stringify(null));
+                setAuth(JSON.parse(localStorage.getItem('auth')));
                 navigate('/signin');
                 dispatch(logout());
               }}>
@@ -130,7 +134,7 @@ export default function BuyerProfileDashboard() {
                 </div>
                 <div className="text-center">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    Ahmed
+                    {auth ? auth.user.name : 'Ahmed'}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>

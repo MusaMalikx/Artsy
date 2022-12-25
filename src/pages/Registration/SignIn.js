@@ -53,6 +53,8 @@ export default function Login() {
             email: result.user.email
           }).then((res) => {
             console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
@@ -64,6 +66,8 @@ export default function Login() {
             email: result.user.email
           }).then((res) => {
             console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             // navigate("/");
           });
