@@ -1,64 +1,82 @@
-import React, { useState } from 'react';
+/* eslint-disable no-undef */
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
 import { BsSearch, BsKeyboardFill } from 'react-icons/bs';
 import { BiSend } from 'react-icons/bi';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
+import API from '../../utils/unsplash';
 
 const Chat = () => {
-  const [list, setList] = useState([
-    {
-      id: 1,
-      border: true
-    },
-    {
-      id: 2,
-      border: false
-    },
-    {
-      id: 3,
-      border: false
-    },
-    {
-      id: 4,
-      border: false
-    },
-    {
-      id: 5,
-      border: false
-    },
-    {
-      id: 6,
-      border: false
-    },
-    {
-      id: 7,
-      border: false
-    },
-    {
-      id: 8,
-      border: false
-    },
-    {
-      id: 9,
-      border: false
-    },
-    {
-      id: 10,
-      border: false
-    },
-    {
-      id: 11,
-      border: false
-    },
-    {
-      id: 12,
-      border: false
-    },
-    {
-      id: 13,
-      border: false
-    }
-  ]);
+  // const [list, setList] = useState([
+  //   {
+  //     id: 1,
+  //     border: true
+  //   },
+  //   {
+  //     id: 2,
+  //     border: false
+  //   },
+  //   {
+  //     id: 3,
+  //     border: false
+  //   },
+  //   {
+  //     id: 4,
+  //     border: false
+  //   },
+  //   {
+  //     id: 5,
+  //     border: false
+  //   },
+  //   {
+  //     id: 6,
+  //     border: false
+  //   },
+  //   {
+  //     id: 7,
+  //     border: false
+  //   },
+  //   {
+  //     id: 8,
+  //     border: false
+  //   },
+  //   {
+  //     id: 9,
+  //     border: false
+  //   },
+  //   {
+  //     id: 10,
+  //     border: false
+  //   },
+  //   {
+  //     id: 11,
+  //     border: false
+  //   },
+  //   {
+  //     id: 12,
+  //     border: false
+  //   },
+  //   {
+  //     id: 13,
+  //     border: false
+  //   }
+  // ]);
+
+  const [data, setPeopleResponse] = useState(null);
+
+  useEffect(() => {
+    API.search
+      .getPhotos({ query: 'gentlemen women' })
+      .then((res) => {
+        setPeopleResponse(res.response.results);
+        // console.log(res.response.results);
+      })
+      .catch(() => {
+        console.log('something went wrong!');
+      });
+    // if (user.admin || user.buyer || user.artist) setSignIn(true);
+    // else setSignIn(false);
+  }, []);
 
   return (
     <Layout title={'Chat'}>
@@ -77,8 +95,9 @@ const Chat = () => {
               </div>
             </div>
             <div className="pb-4 h-[76vh] overflow-y-scroll">
-              {list.map((chat) => (
-                <ChatItem key={chat.id} setList={setList} chat={chat} />
+              {data?.map((d) => (
+                <ChatItem key={d.id} chat={d} />
+                // <ChatItem key={d.id} setList={setList} chat={d} />
               ))}
             </div>
           </div>
@@ -121,29 +140,26 @@ const Chat = () => {
   );
 };
 
-const ChatItem = ({ setList, chat }) => {
+const ChatItem = ({ chat }) => {
   return (
     <div
       className={`flex items-center py-4 px-2 rounded-lg cursor-pointer ${
         chat.border ? ' border-primary border-2' : 'border-2 border-white'
       }`}
-      onClick={() =>
-        setList((prev) => {
-          return prev.map((c) => {
-            if (c.id === chat.id) {
-              return { ...c, border: true };
-            } else return { ...c, border: false };
-          });
-        })
-      }>
-      <img
-        src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
-        alt="profile"
-        className="w-14 h-14 bg-black rounded-full"
-      />
+      // onClick={() =>
+      //   setList((prev) => {
+      //     return prev.map((c) => {
+      //       if (c.id === chat.id) {
+      //         return { ...c, border: true };
+      //       } else return { ...c, border: false };
+      //     });
+      //   })
+      // }
+    >
+      <img src={chat.urls.regular} alt="profile" className="w-14 h-14 bg-black rounded-full" />
       <div className="flex-grow ml-3">
-        <h6>Doe</h6>
-        <p>description</p>
+        <h6>{chat.user.name}</h6>
+        <p>{chat.alt_description.substring(0, 30)}...</p>
       </div>
       <p className="font-bold text-gray-600">09:00 am</p>
     </div>

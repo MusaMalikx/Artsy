@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import AuctionCard from '../../components/Auction/AuctionCard';
 import Layout from '../../components/Layouts/ArticleLayout';
+import { selectUser } from '../../redux/features/userReducer';
 
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
   const { user, urls } = state;
+  const us = useSelector(selectUser);
 
   const [quantity, setQuantity] = useState(0);
   console.log(quantity);
@@ -43,23 +46,27 @@ const AuctionItem = ({ data }) => {
                 <span>51</span>
               </div>
             </div>
-            <div>
-              <input
-                className="border text-xl px-10 py-2 rounded-xl outline-gray-400 px-auto"
-                onChange={(e) =>
-                  setQuantity(parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 0)
-                }
-                type="number"
-                // value={quantity}
-              />
-            </div>
-            <button className="bg-black text-white w-fit px-10 rounded-2xl py-1 font-extrabold">
-              Place Bid
-            </button>
+            {us.buyer && (
+              <>
+                <div>
+                  <input
+                    className="border text-xl px-10 py-2 rounded-xl outline-gray-400 px-auto"
+                    onChange={(e) =>
+                      setQuantity(parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 0)
+                    }
+                    type="number"
+                    // value={quantity}
+                  />
+                </div>
+                <button className="bg-black text-white w-fit px-10 rounded-2xl py-1 font-extrabold">
+                  Place Bid
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
-      <div className="mx-5 py-20 bg-gray-100 border border-gray-400 rounded-lg mb-20 md:my-20">
+      <div className="mx-5 py-10 bg-gray-100 border border-gray-400 rounded-lg mb-20 md:my-20">
         <div className="flex justify-center items-center mb-10">
           <p className="font-semibold   text-2xl">Similar Auctions Items</p>
         </div>
