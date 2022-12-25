@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Footer from '../Footer/Footer';
 import SideNav from '../SideNav/SideNav';
 // import { useSelector } from 'react-redux';
 // import { selectValue } from '../../redux/features/counter/counterReducer';
@@ -28,7 +29,10 @@ const ArticleLayout = ({ children, title, bool }) => {
           <div className="flex flex-col">
             <SideNav />
           </div>
-          <div className={`flex-grow ml-14 ${bool && 'container'}`}>{children}</div>
+          <div className={`flex-grow ml-14 ${bool && 'container'}`}>
+            {children}
+            <Footer />
+          </div>
         </div>
       </motion.article>
     </div>
