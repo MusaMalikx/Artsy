@@ -65,6 +65,7 @@ export default function SignUp() {
             if (user.buyer) {
               await API.post('/api/auth/user/signup', {
                 email: userCredential.user.email,
+                firebaseid: userCredential.user.uid,
                 name: name,
                 phonenumber: phonenumber,
                 cnic: cnicfield
@@ -77,6 +78,7 @@ export default function SignUp() {
             } else if (user.artist) {
               await API.post('/api/auth/artist/signup', {
                 email: userCredential.user.email,
+                firebaseid: userCredential.user.uid,
                 name: name,
                 phonenumber: phonenumber,
                 cnic: cnicfield
@@ -113,6 +115,7 @@ export default function SignUp() {
         if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
+            firebaseid: result.user.uid,
             email: result.user.email
           }).then((res) => {
             console.log(res);
@@ -123,6 +126,7 @@ export default function SignUp() {
           //await API.get('/').then((res) => console.log(res.data));
           await API.post('/api/auth/artist/google', {
             displayName: result.user.displayName,
+            firebaseid: result.user.uid,
             email: result.user.email
           }).then((res) => {
             console.log(res);
