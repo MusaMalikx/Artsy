@@ -13,7 +13,7 @@ import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
-export default function Login() {
+export default function Login({ user, setUser }) {
   const [
     text
     //, helper
@@ -23,11 +23,11 @@ export default function Login() {
     delaySpeed: 3000
   });
 
-  const [user, setUser] = useState({
-    buyer: true,
-    artist: false,
-    admin: false
-  });
+  // const [user, setUser] = useState({
+  //   buyer: true,
+  //   artist: false,
+  //   admin: false
+  // });
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +63,7 @@ export default function Login() {
           }).then((res) => {
             console.log(res);
             //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
+            // navigate("/");
           });
         } else if (user.admin) {
           // I think we should not allow admin to login through Google only email and password
@@ -226,7 +226,8 @@ export default function Login() {
                 </div>
 
                 <button
-                  onClick={signInWithEmailAndPass}
+                  onClick={() => navigate('/')}
+                  // onClick={signInWithEmailAndPass}
                   type="submit"
                   className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
                   data-mdb-ripple="true"
