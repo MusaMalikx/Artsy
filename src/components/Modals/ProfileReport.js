@@ -23,7 +23,7 @@ export default function ProfileReport({ open, setOpen }) {
       </Modal.Header>
       <Modal.Body>
         <p className="text-lg font-bold mb-3">What went wrong?</p>
-        <form action='#'>
+        <form action="#">
           <div className="flex flex-col w-full">
             <div className="flex ">
               <Checkbox className="w-1/2"> Fake Profile</Checkbox>
@@ -44,8 +44,12 @@ export default function ProfileReport({ open, setOpen }) {
               name="report-desc"
               className="h-40 rounded-lg bg-gray-50 border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"></textarea>
           </div>
-          <div className='text-center mt-4'>
-            <button onClick={submitReport} className="bg-primary active:bg-cyan-800 py-1 px-3 rounded focus:outline-none text-white font-bold text-base">Submit</button>
+          <div className="text-center mt-4">
+            <button
+              onClick={submitReport}
+              className="bg-primary active:bg-cyan-800 py-1 px-3 rounded focus:outline-none text-white font-bold text-base">
+              Submit
+            </button>
           </div>
         </form>
       </Modal.Body>

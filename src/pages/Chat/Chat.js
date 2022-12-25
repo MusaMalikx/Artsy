@@ -62,7 +62,7 @@ const Chat = () => {
 
   return (
     <Layout title={'Chat'}>
-      <div className="h-screen overflow-hidden">
+      <div className="h-screen overflow-hidden mb-10">
         {/* <div className="pt-10 px-5">
           <p className="font-semibold   text-2xl lg:text-4xl">Chat</p>
           <hr />
@@ -76,7 +76,7 @@ const Chat = () => {
                 <input placeholder="Search" className="border-0 text-sm outline-0 flex-grow" />
               </div>
             </div>
-            <div className="pb-4">
+            <div className="pb-4 h-[76vh] overflow-y-scroll">
               {list.map((chat) => (
                 <ChatItem key={chat.id} setList={setList} chat={chat} />
               ))}

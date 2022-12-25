@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import { AiFillFlag, AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
-import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
-import BuyerReview from '../../components/Modals/BuyerReview';
-import { motion } from 'framer-motion';
-import { Dropdown, IconButton, Popover, Whisper } from 'rsuite';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import BuyerProposal from '../../components/Modals/BuyerProposal';
+import ProfileReport from '../../components/Modals/ProfileReport';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/features/userReducer';
+import { Button, Dropdown, IconButton } from 'rsuite';
+import BuyerReview from '../../components/Modals/BuyerReview';
 export default function BuyerProfileDashboard() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [openReview, setOpenReview] = useState(false);
-
+  const [openReport, setOpenReport] = useState(false);
   return (
     <Layout title="Profile">
       <main className="profile-page">
@@ -24,6 +26,16 @@ export default function BuyerProfileDashboard() {
                 "url('https://img.freepik.com/free-photo/blue-oil-paint-strokes-textured-background_53876-98328.jpg?w=2000')"
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
+            <div
+              className="flex justify-end m-5"
+              onClick={() => {
+                navigate('/signin');
+                dispatch(logout());
+              }}>
+              <Button color="red" appearance="primary">
+                Logout
+              </Button>
+            </div>
           </div>
           <div
             className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
@@ -39,10 +51,16 @@ export default function BuyerProfileDashboard() {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
                       <img
+                        src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
+                        className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
+                        alt="profile"
+                        srcSet=""
+                      />
+                      {/* <img
                         alt="..."
                         src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -98,37 +116,27 @@ export default function BuyerProfileDashboard() {
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Closed</span>
                       </div>
+                      <div
+                        onClick={() => setOpenReport(true)}
+                        className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
+                        <span className="text-xl font-bold block uppercase tracking-wide mb-2">
+                          <AiFillFlag className="w-full" />
+                        </span>
+                        <span className="text-sm ">Report</span>
+                      </div>
+                      {<ProfileReport open={openReport} setOpen={setOpenReport} />}
                     </div>
                   </div>
                 </div>
                 <div className="text-center">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    Musa Malik
+                    Ahmed
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
                     Lahore, Pakistan
                   </div>
                 </div>
-                {/* <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                  <div>
-                    <p className="text-4xl font-bold">Live Auctions</p>
-                  </div>
-                  <div className="flex flex-wrap justify-center">
-                    <div className="w-full lg:w-9/12 px-4">
-                      {data?.map((photo) => (
-                        <motion.div
-                          key={photo.id}
-                          animate={{ x: [-2000, 350, 0] }}
-                          transition={{ duration: 1.5, delay: 0 }}>
-                          <ProfileAuctionCard key={photo.id} photo={photo} />
-                        </motion.div>
-                      ))}
-
-                      <div></div>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
