@@ -49,6 +49,7 @@ export default function Login() {
         if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
+            firebaseid: result.user.uid,
             email: result.user.email
           }).then((res) => {
             console.log(res);
@@ -59,6 +60,7 @@ export default function Login() {
           //await API.get('/').then((res) => console.log(res.data));
           await API.post('/api/auth/artist/google', {
             displayName: result.user.displayName,
+            firebaseid: result.user.uid,
             email: result.user.email
           }).then((res) => {
             console.log(res);
