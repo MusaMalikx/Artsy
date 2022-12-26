@@ -20,7 +20,7 @@ export default function AutomateBid({ open, setOpen }) {
             </p>
           </div>
 
-          <form onSubmit={(e)=>e.preventDefault()} action="#" className="flex flex-col">
+          <form onSubmit={(e) => e.preventDefault()} action="#" className="flex flex-col">
             <label className="text-base font-bold py-2" htmlFor="max-bid">
               Max Amount
             </label>
@@ -39,8 +39,10 @@ export default function AutomateBid({ open, setOpen }) {
               min={1}
               name="increment"
             />
-            <div className='text-center'>
-              <button className="focus:outline-none mt-4 border w-1/4 py-2 rounded-lg bg-primary active:bg-cyan-800 text-base font-bold text-white">Save</button>
+            <div className="text-center">
+              <button className="focus:outline-none mt-4 border w-1/4 py-2 rounded-lg bg-primary active:bg-cyan-800 text-base font-bold text-white">
+                Save
+              </button>
             </div>
           </form>
         </div>
