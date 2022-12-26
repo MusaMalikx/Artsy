@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
 import AuctionCard from '../../components/Auction/AuctionCard';
 import Carousel from '../../components/Carousel/Carousel';
+import displayBanner from '../../assets/images/display.png';
 const Home = ({ data }) => {
   // const user = useSelector(selectUser);
   // console.log(user);
@@ -11,9 +12,9 @@ const Home = ({ data }) => {
       {/* <div className="flex flex-col justify-center items-center min-h-screen my-auto text-2xl space-y-2">
         Artsy Homepage
       </div> */}
-      {/* <div className="">
-        <img src={Banner} alt="banner" />
-      </div> */}
+      <div className="">
+        <img src={displayBanner} className="max-h-96" alt="banner" />
+      </div>
       <Carousel />
       <div className="container mx-auto">
         <div className="flex justify-center items-center py-20">
