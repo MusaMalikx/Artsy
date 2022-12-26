@@ -9,9 +9,14 @@ import { useNavigate } from 'react-router-dom';
 import Notification from '../Modals/Notification';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/userReducer';
+import Wallet from '../Modals/Wallet';
+import { BiWallet } from 'react-icons/bi';
 
 const SideNav = () => {
   const user = useSelector(selectUser);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   // console.log(user);
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
@@ -38,10 +43,14 @@ const SideNav = () => {
                 Search
               </Nav.Item>
               <Notification />
+              <Nav.Item onClick={handleOpen} eventKey="4" icon={<Icon as={BiWallet} />}>
+                Wallet
+              </Nav.Item>
+              <Wallet open={open} handleClose={handleClose} />
               {user.buyer && (
                 <Nav.Item
                   onClick={() => navigate('/buyer/profile')}
-                  eventKey="4"
+                  eventKey="5"
                   icon={<Icon as={CgProfile} />}>
                   Buyer Profile
                 </Nav.Item>
@@ -49,7 +58,7 @@ const SideNav = () => {
               {user.artist && (
                 <Nav.Item
                   onClick={() => navigate('/artist/profile')}
-                  eventKey="4"
+                  eventKey="5"
                   icon={<Icon as={CgProfile} />}>
                   Artist Profile
                 </Nav.Item>
