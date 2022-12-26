@@ -12,7 +12,7 @@ import { selectUser } from '../../redux/features/userReducer';
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
-  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
+  const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [title, setTitle] = useState('');
   const [baseprice, setBaseprice] = useState('');
   const [startdate, setStartdate] = useState('');
@@ -22,55 +22,62 @@ export default function NewAuction() {
 
   const AddArtwork = async (e) => {
     e.preventDefault();
-    console.log("Endate: ",enddate);
-    console.log("Base price: ",baseprice);
-    console.log("startdate: ",startdate);
-    console.log("description: ",description);
-    console.log("title: ",title);
+    console.log('Endate: ', enddate);
+    console.log('Base price: ', baseprice);
+    console.log('startdate: ', startdate);
+    console.log('description: ', description);
+    console.log('title: ', title);
 
-    if(user.artist && auth ) {
-      await API.post('/api/artworks/check', {
-        title: title,
-        baseprice: baseprice,
-        description: description
-      }, 
-      {
-        headers: {
-          token: 'Bearer ' + auth.token
-        }
-      }).then(async (res) => {
-        console.log(res);
-        await API.post('/api/artworks/add', {
+    if (user.artist && auth) {
+      await API.post(
+        '/api/artworks/check',
+        {
           title: title,
           baseprice: baseprice,
-          description: description,
-          startdate: startdate,
-          enddate: enddate,
-          category: category
-        }, 
+          description: description
+        },
         {
-        headers: {
+          headers: {
             token: 'Bearer ' + auth.token
           }
-        }).then(res => {
+        }
+      )
+        .then(async (res) => {
           console.log(res);
-          Toaster(toaster, 'success', 'Artwork Successfully Added');
-
+          await API.post(
+            '/api/artworks/add',
+            {
+              title: title,
+              baseprice: baseprice,
+              description: description,
+              startdate: startdate,
+              enddate: enddate,
+              category: category
+            },
+            {
+              headers: {
+                token: 'Bearer ' + auth.token
+              }
+            }
+          )
+            .then((res) => {
+              console.log(res);
+              Toaster(toaster, 'success', 'Artwork Successfully Added');
+            })
+            .catch((err) => {
+              console.log(err);
+              Toaster(toaster, 'error', err.response.data.message);
+            });
+          //navigate('/');
         })
         .catch((err) => {
           console.log(err);
           Toaster(toaster, 'error', err.response.data.message);
         });
-        //navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-        Toaster(toaster, 'error', err.response.data.message);
-      });
-    }else {
+    } else {
       Toaster(toaster, 'error', 'Please Signin using Google');
     }
-  }
+  };
 
   // const displayNotification = (event) => {
   //   event.preventDefault();
@@ -98,12 +105,18 @@ export default function NewAuction() {
                 type="text"
                 name="title-artwork"
                 placeholder="Ocean Coast"
-                onChange = {(e) => {setTitle(e.target.value)}}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
               />
               <label className=" text-lg font-bold my-2" htmlFor="start-date">
                 Start Date
               </label>
-              <DatePicker onChange = {(e) => {setStartdate(e.toDateString())}} />
+              <DatePicker
+                onChange={(e) => {
+                  setStartdate(e.toDateString());
+                }}
+              />
             </div>
             <div className="flex flex-col w-full">
               <label className=" text-lg font-bold my-2" htmlFor="bid-artwork">
@@ -114,12 +127,18 @@ export default function NewAuction() {
                 type="text"
                 name="bid-artwork"
                 placeholder="4000"
-                onChange = {(e) => {setBaseprice(e.target.value)}}
+                onChange={(e) => {
+                  setBaseprice(e.target.value);
+                }}
               />
               <label className=" text-lg font-bold my-2" htmlFor="end-date">
                 End Date
               </label>
-              <DatePicker onChange = {(e) => {setEnddate(e.toDateString())}} />
+              <DatePicker
+                onChange={(e) => {
+                  setEnddate(e.toDateString());
+                }}
+              />
             </div>
           </div>
           <label className="text-lg font-bold my-2" htmlFor="bid-artwork">
@@ -174,12 +193,14 @@ export default function NewAuction() {
             Description
           </label>
           <textarea
-            onChange = {(e) => {setDescription(e.target.value)}}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
             rows={5}
             className="focus:outline-none border px-2 py-3 rounded-lg"
             placeholder="A distinct artwork depicting the last scenary before the sunset&#10;Material Used - Pastels&#10;Packing - Will be wrapped in bubble sheet "
             name="desc-artwork"></textarea>
-            
+
           <button
             onClick={AddArtwork}
             className="focus:outline-none bg-black text-white mx-auto my-5 px-2 py-3 w-4/12 font-bold ">
