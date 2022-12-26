@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
 import { AiFillFlag, AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import { motion } from 'framer-motion';
 import { RiMessage2Fill } from 'react-icons/ri';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +11,8 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
 import BuyerReview from '../../components/Modals/BuyerReview';
-export default function BuyerProfileDashboard() {
+import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCard';
+export default function BuyerProfileDashboard({ data }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openReview, setOpenReview] = useState(false);
@@ -108,13 +110,13 @@ export default function BuyerProfileDashboard() {
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           22
                         </span>
-                        <span className="text-sm text-blueGray-400">Auctions Live</span>
+                        <span className="text-sm text-blueGray-400">Live Bidding</span>
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           10
                         </span>
-                        <span className="text-sm text-blueGray-400">Auctions Closed</span>
+                        <span className="text-sm text-blueGray-400">Auctions Won</span>
                       </div>
                       <div
                         onClick={() => setOpenReport(true)}
@@ -130,11 +132,29 @@ export default function BuyerProfileDashboard() {
                 </div>
                 <div className="text-center">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    Ahmed
+                    Jessie Carlson
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
                     Lahore, Pakistan
+                  </div>
+                </div>
+                <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
+                  <div>
+                    <p className="text-4xl font-bold">Won Auctions</p>
+                  </div>
+                  <div className="flex flex-wrap justify-center">
+                    <div className="w-full lg:w-9/12 px-4">
+                      {data?.map((photo) => (
+                        <motion.div
+                          key={photo.id}
+                          animate={{ x: [-2000, 350, 0] }}
+                          transition={{ duration: 1.5, delay: 0 }}>
+                          <ProfileWonAuctionCard key={photo.id} photo={photo} />
+                        </motion.div>
+                      ))}
+                      <div></div>
+                    </div>
                   </div>
                 </div>
               </div>

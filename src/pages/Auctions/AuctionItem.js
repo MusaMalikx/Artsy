@@ -3,15 +3,21 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import AuctionCard from '../../components/Auction/AuctionCard';
 import Layout from '../../components/Layouts/ArticleLayout';
+import AutomateBid from '../../components/Modals/AutomateBid';
 import { selectUser } from '../../redux/features/userReducer';
 
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
   const { user, urls } = state;
   const us = useSelector(selectUser);
-
+  const [openAutoBid, setOpenAutoBid] = useState(false);
   const [quantity, setQuantity] = useState(0);
   console.log(quantity);
+
+  const placeAutoBid = (e) => {
+    e.preventDefault();
+    setOpenAutoBid(true);
+  };
 
   return (
     <Layout title={'Auctions'}>
@@ -40,17 +46,23 @@ const AuctionItem = ({ data }) => {
               source.
             </p>
             <div className="flex text-lg">
-              <p className="mr-1 font-mono">Current Bid:</p>
+              <p className="mr-1 font-mono">Highest Bid:</p>
               <div className="font-bold text-green-800">
                 <span className="mr-0.5">$</span>
                 <span>51</span>
+              </div>
+            </div>
+            <div className="flex text-lg">
+              <p className="mr-1 font-mono">Highest Bidder:</p>
+              <div className="font-bold text-green-800">
+                <span className="mr-0.5">Muhammad Ahmed</span>
               </div>
             </div>
             {us.buyer && (
               <>
                 <div>
                   <input
-                    className="border text-xl px-10 py-2 rounded-xl outline-gray-400 px-auto"
+                    className="border text-xl w-4/12 px-10 py-2 rounded-xl outline-gray-400 px-auto"
                     onChange={(e) =>
                       setQuantity(parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 0)
                     }
@@ -58,9 +70,18 @@ const AuctionItem = ({ data }) => {
                     // value={quantity}
                   />
                 </div>
-                <button className="bg-black text-white w-fit px-10 rounded-2xl py-1 font-extrabold">
-                  Place Bid
-                </button>
+                <div className="flex items-center gap-16">
+                  <button className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1 font-extrabold">
+                    Place Bid
+                  </button>
+                  <p className="font-bold">OR</p>
+                  <button
+                    onClick={placeAutoBid}
+                    className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1 font-extrabold">
+                    Automated Bid
+                  </button>
+                  {<AutomateBid open={openAutoBid} setOpen={setOpenAutoBid} />}
+                </div>
               </>
             )}
           </div>
