@@ -70,14 +70,14 @@ const AuctionItem = ({ data }) => {
                     // value={quantity}
                   />
                 </div>
-                <div className="flex items-center gap-16">
-                  <button className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1 font-extrabold">
+                <div className="flex items-center gap-6">
+                  <button className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold">
                     Place Bid
                   </button>
                   <p className="font-bold">OR</p>
                   <button
                     onClick={placeAutoBid}
-                    className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1 font-extrabold">
+                    className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold">
                     Automated Bid
                   </button>
                   {<AutomateBid open={openAutoBid} setOpen={setOpenAutoBid} />}
