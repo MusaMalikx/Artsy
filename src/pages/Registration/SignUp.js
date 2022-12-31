@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaUserAlt, FaUserEdit } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser, setUser } from '../../redux/features/userReducer';
 import {
   getAuth,
   signInWithPopup,
@@ -22,11 +24,13 @@ export default function SignUp() {
     delaySpeed: 3000
   });
   const navigate = useNavigate();
-
-  const [user, setUser] = useState({
-    buyer: true,
-    artist: false
-  });
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  
+  // const [user, setUser] = useState({
+  //   buyer: true,
+  //   artist: false
+  // });
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -72,7 +76,7 @@ export default function SignUp() {
               })
                 .then((res) => {
                   console.log(res);
-                  //navigate("/SignIn");
+                  navigate("/SignIn");
                 })
                 .catch((err) => console.log(err));
             } else if (user.artist) {
@@ -84,7 +88,7 @@ export default function SignUp() {
                 cnic: cnicfield
               }).then((res) => {
                 console.log(res);
-                //navigate("/SignIn");
+                navigate("/SignIn");
               });
             }
             // ...
@@ -116,9 +120,11 @@ export default function SignUp() {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
-            email: result.user.email
+            email: result.user.email,
           }).then((res) => {
             console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
@@ -130,6 +136,8 @@ export default function SignUp() {
             email: result.user.email
           }).then((res) => {
             console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
@@ -186,7 +194,7 @@ export default function SignUp() {
                     className={`border ${
                       user.buyer && 'text-primary border-primary'
                     } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
-                    onClick={() => setUser({ buyer: true })}>
+                    onClick={() => dispatch(setUser({ buyer: true }))}>
                     <FaUserAlt className="w-full" />
                     <p className="text-sm">Buyer</p>
                   </div>
@@ -194,7 +202,7 @@ export default function SignUp() {
                     className={`border ${
                       user.artist && 'text-primary border-primary'
                     } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
-                    onClick={() => setUser({ artist: true })}>
+                    onClick={() => dispatch(setUser({ artist: true }))}>
                     <FaUserEdit className="w-full" />
                     <p className="text-sm">Artist</p>
                   </div>
