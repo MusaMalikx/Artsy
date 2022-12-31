@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   getAuth,
   signInWithPopup,
-  GoogleAuthProvider
-  // signInWithEmailAndPassword
+  GoogleAuthProvider,
+  signInWithEmailAndPassword
 } from 'firebase/auth';
 import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
@@ -30,7 +30,6 @@ export default function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  console.log(email, password);
 
   const navigate = useNavigate();
 
@@ -53,6 +52,8 @@ export default function Login() {
             email: result.user.email
           }).then((res) => {
             console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
@@ -64,6 +65,8 @@ export default function Login() {
             email: result.user.email
           }).then((res) => {
             console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             // navigate("/");
           });
@@ -87,60 +90,67 @@ export default function Login() {
       });
   };
 
-  // const signInWithEmailAndPass = (e) => {
-  //   e.preventDefault();
+  const signInWithEmailAndPass = (e) => {
+    e.preventDefault();
 
-  //   const auth = getAuth();
-  //   signInWithEmailAndPassword(auth, email, password)
-  //     .then(async (userCredential) => {
-  //       // Signed in
-  //       // const data = userCredential.user;
-  //       if (user.buyer) {
-  //         await API.post('/api/auth/user/signin', {
-  //           email: userCredential.user.email
-  //         }).then((res) => {
-  //           console.log(res);
-  //           //dispatch(loginSuccess(res.data));    for redux part
-  //           //navigate("/");
-  //         });
-  //       } else if (user.artist) {
-  //         await API.post('/api/auth/artist/signin', {
-  //           email: userCredential.user.email
-  //         }).then((res) => {
-  //           console.log(res);
-  //           //dispatch(loginSuccess(res.data));    for redux part
-  //           //navigate("/");
-  //         });
-  //       } else if (user.admin) {
-  //         await API.post('/api/auth/admin/signin', {
-  //           email: userCredential.user.email
-  //         }).then((res) => {
-  //           console.log(res);
-  //           //dispatch(loginSuccess(res.data));    for redux part
-  //           //navigate("/");
-  //         });
-  //       }
-  //       // ...
-  //     })
-  //     .catch((error) => {
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       console.log(errorCode, errorMessage);
-  //     });
-  // };
-
-  const signedIn = () => {
-    if (user.buyer) {
-      // setSignedIn(true);
-      navigate('/');
-    } else if (user.artist) {
-      // setSignedIn(true);
-      navigate('/');
-    } else if (user.admin) {
-      navigate('/admin/dashboard');
-      // setSignedIn(true);
-    }
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        // const data = userCredential.user;
+        if (user.buyer) {
+          await API.post('/api/auth/user/signin', {
+            email: userCredential.user.email
+          }).then((res) => {
+            console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+        } else if (user.artist) {
+          await API.post('/api/auth/artist/signin', {
+            email: userCredential.user.email
+          }).then((res) => {
+            console.log(res);
+            localStorage.setItem('auth', JSON.stringify(res.data));
+            navigate('/');
+            //dispatch(loginSuccess(res.data));    for redux part
+            //navigate("/");
+          });
+        } else if (user.admin) {
+          //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually 
+          // await API.post('/api/auth/admin/signin', {
+          //   email: userCredential.user.email
+          // }).then((res) => {
+          //   console.log(res);
+          //   navigate('/admin/dashboard');
+          //   //dispatch(loginSuccess(res.data));    for redux part
+          //   //navigate("/");
+          // });
+          navigate('/admin/dashboard');
+        }
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
+
+  // const signedIn = () => {
+  //   if (user.buyer) {
+  //     // setSignedIn(true);
+  //     navigate('/');
+  //   } else if (user.artist) {
+  //     // setSignedIn(true);
+  //     navigate('/');
+  //   } else if (user.admin) {
+  //     navigate('/admin/dashboard');
+  //     // setSignedIn(true);
+  //   }
+  // };
 
   return (
     <RegistrationLayout title={'Login'}>
@@ -241,8 +251,8 @@ export default function Login() {
                 </div>
 
                 <button
-                  onClick={signedIn}
-                  // onClick={signInWithEmailAndPass}
+                  // onClick={signedIn}
+                  onClick={signInWithEmailAndPass}
                   type="submit"
                   className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
                   data-mdb-ripple="true"
