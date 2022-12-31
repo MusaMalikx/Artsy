@@ -20,6 +20,7 @@ import BuyerAcceptedProposal from '../pages/Proposal/BuyerAcceptedProposal';
 import BuyerProfileDashboard from '../pages/Dashboard/BuyerProfileDashboard';
 import { useSelector } from 'react-redux';
 import { selectSignedIn, selectUser } from '../redux/features/userReducer';
+import Reports from '../pages/Admin/Reports';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
   // const [user, setUser] = useState({
@@ -59,13 +60,18 @@ const AppRoutes = () => {
           <Route path="search" element={<Search data={data} />} />
           <Route path="auctions" element={<Auctions data={data} />} />
           <Route path="auctions/:id" element={<AuctionItem data={data} />} />
-          {user.admin && <Route path="admin/dashboard" element={<AdminDashboard data={data} />} />}
+          {user.admin && (
+            <>
+              <Route path="admin/dashboard" element={<AdminDashboard data={data} />} />
+              <Route path="view/reports" element={<Reports />} />
+            </>
+          )}
           {user.artist && (
             <>
-              <Route path="view/artist/proposal" element={<ArtistProposal />} />
               <Route path="add/artwork" element={<NewAuction />} />
               <Route path="artist/auctions" element={<ArtistAuctionList />} />
               <Route path="artist/profile" element={<ArtistProfileDashboard data={data} />} />
+              <Route path="view/buyer/proposal" element={<BuyerProposal data={data} />} />
             </>
           )}
           {user.buyer && (
@@ -74,6 +80,7 @@ const AppRoutes = () => {
               <Route path="view/buyer/proposal" element={<BuyerProposal />} />
               <Route path="buyer/profile" element={<BuyerProfileDashboard data={data} />} />
               <Route path="view/buyer/created/proposal" element={<BuyerCreatedProposal />} />
+              <Route path="view/artist/proposal" element={<ArtistProposal />} />
               <Route path="view/buyer/accepted/proposal" element={<BuyerAcceptedProposal />} />
             </>
           )}

@@ -6,9 +6,9 @@ import { FaFacebookF } from 'react-icons/fa';
 const Footer = () => {
   return (
     <div className="bg-primary relative z-10">
-      <div className="lg:px-40 py-20 flex justify-around flex-col-reverse md:flex-row">
-        <div className="max-w-lg">
-          <h2 className="text-white font-bold h2 uppercase tracking-widest">
+      <div className="lg:px-40 py-5 flex text-center md:text-left justify-around flex-col-reverse md:flex-row">
+        <div className="md:max-w-lg w-full">
+          <h2 className="text-white font-bold text-2xl uppercase tracking-widest">
             Get your auctions today
           </h2>
           <button
@@ -18,7 +18,7 @@ const Footer = () => {
             Get in touch
           </button>
           <div className="flex justify-between flex-col md:flex-row">
-            <div className="space-y-5 mt-8 text-[12px] uppercase text-white font-[500]">
+            <div className="space-y-3 mt-4 text-[12px] uppercase text-white font-[500]">
               <p className="hover:underline underline-offset-1 cursor-pointer">Company</p>
               <p className="hover:underline underline-offset-1 cursor-pointer">About Auctions</p>
               <p className="hover:underline underline-offset-1 cursor-pointer">Our Services</p>
@@ -27,7 +27,7 @@ const Footer = () => {
               <p className="hover:underline underline-offset-1 cursor-pointer">Auction Packages</p>
               <p className="hover:underline underline-offset-1 cursor-pointer">Sample Auctions</p>
             </div>
-            <div className="space-y-5 mt-8 text-[12px] uppercase text-white font-[500]">
+            <div className="space-y-3 mt-4 text-[12px] uppercase text-white font-[500]">
               <p className="hover:underline underline-offset-1 cursor-pointer">Quick Links</p>
               <p
                 className="hover:underline underline-offset-1 cursor-pointer"
@@ -55,18 +55,18 @@ const Footer = () => {
         </div>
         <div className="mb-10">
           {/* <img src="" alt="icon" width={100} height={50} /> */}
-          <div className="flex flex-wrap gap-3 mt-10 text-primary">
+          <div className="flex justify-center md:justify-end flex-wrap gap-3 mt-10 text-primary">
             <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <AiOutlineInstagram size={20} />
+              <AiOutlineInstagram size={15} />
             </div>
             <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <FaFacebookF size={20} />
+              <FaFacebookF size={15} />
             </div>
             <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <BsTwitter size={20} />
+              <BsTwitter size={15} />
             </div>
             <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <BsWhatsapp size={20} />
+              <BsWhatsapp size={15} />
             </div>
           </div>
         </div>

@@ -169,8 +169,8 @@ const Drop = () => {
     <Dropdown renderToggle={renderIconButton}>
       <Dropdown.Item onClick={() => navigate('/add/artwork')}>Add Artwork</Dropdown.Item>
       <Dropdown.Item onClick={() => navigate('/artist/auctions')}>Listed Auctions</Dropdown.Item>
-      <Dropdown.Item onClick={() => navigate('/view/artist/proposal')}>
-        Generated Proposals
+      <Dropdown.Item onClick={() => navigate('/view/buyer/proposal')}>
+        Buyer Proposals
       </Dropdown.Item>
     </Dropdown>
   );
