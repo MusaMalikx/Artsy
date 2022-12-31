@@ -8760,10 +8760,10 @@ rsuite-table@^5.8.1:
     lodash "^4.17.21"
     react-is "^17.0.2"
 
-rsuite@^5.22.0:
-  version "5.23.3"
-  resolved "https://registry.npmjs.org/rsuite/-/rsuite-5.23.3.tgz"
-  integrity sha512-f8vj3tmRjDJhYyNNAmnh1/eFQmLXN0rsZX2rhzgUFSi9xcGsAhVzkw8jO60Gup3jYiEsBgzi9pBY7HjpQtII0A==
+rsuite@^5.24.0:
+  version "5.24.0"
+  resolved "https://registry.npmjs.org/rsuite/-/rsuite-5.24.0.tgz"
+  integrity sha512-xsp01F3HomwMsgGC9k8PCGpiwJElTHAG/0ksq/NqLGQaXjTREJcUev+lc742ZfOVdoKHpPGjWdWgLG4GALwMpw==
   dependencies:
     "@babel/runtime" "^7.20.1"
     "@juggle/resize-observer" "^3.4.0"
