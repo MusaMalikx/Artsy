@@ -13,7 +13,7 @@ const Home = ({ data }) => {
         Artsy Homepage
       </div> */}
       <div className="">
-        <img src={displayBanner} className="max-h-96" alt="banner" />
+        <img src={displayBanner} className="max-h-96 w-full" alt="banner" />
       </div>
       <Carousel />
       <div className="container mx-auto">
