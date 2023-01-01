@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import Navigation from '../Dashboard/Artist/Navigation';
+import Navigation from '../Dashboard/Admin/Navigation';
 
 const variants = {
   hidden: { opacity: 0, x: 0, y: 20 },

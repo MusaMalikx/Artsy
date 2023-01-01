@@ -1,9 +1,9 @@
 import React from 'react';
-import Graphs from '../../components/Dashboard/Artist/Graphs';
-import Info from '../../components/Dashboard/Artist/Info';
-import Navigation from '../../components/Dashboard/Artist/Navigation';
-import Profile from '../../components/Dashboard/Artist/Profile';
-import Stats from '../../components/Dashboard/Artist/Stats';
+import Graphs from '../../components/Dashboard/Admin/Graphs';
+import Info from '../../components/Dashboard/Admin/Info';
+import Navigation from '../../components/Dashboard/Admin/Navigation';
+import Profile from '../../components/Dashboard/Admin/Profile';
+import Stats from '../../components/Dashboard/Admin/Stats';
 
 const AdminDashboard = () => {
   return (

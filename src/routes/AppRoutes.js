@@ -21,6 +21,10 @@ import BuyerProfileDashboard from '../pages/Dashboard/BuyerProfileDashboard';
 import { useSelector } from 'react-redux';
 import { selectSignedIn, selectUser } from '../redux/features/userReducer';
 import Reports from '../pages/Admin/Reports';
+import AuctionsList from '../pages/Admin/AuctionsList';
+import AuctionListItem from '../pages/Admin/AuctionListItem';
+import AdminChat from '../pages/Admin/AdminChat';
+import AdminUsers from '../pages/Admin/AdminUsers';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
   // const [user, setUser] = useState({
@@ -56,14 +60,22 @@ const AppRoutes = () => {
       {signedIn ? (
         <Route path="/">
           <Route index element={<Home data={data} />} />
-          <Route path="chat" element={<Chat data={data} />} />
-          <Route path="search" element={<Search data={data} />} />
-          <Route path="auctions" element={<Auctions data={data} />} />
-          <Route path="auctions/:id" element={<AuctionItem data={data} />} />
           {user.admin && (
             <>
               <Route path="admin/dashboard" element={<AdminDashboard data={data} />} />
-              <Route path="view/reports" element={<Reports />} />
+              <Route path="admin/chat" element={<AdminChat data={data} />} />
+              <Route path="admin/users" element={<AdminUsers data={data} />} />
+              <Route path="admin/view/reports" element={<Reports />} />
+              <Route path="admin/view/auctions" element={<AuctionsList data={data} />} />
+              <Route path="admin/view/auctions/:id" element={<AuctionListItem data={data} />} />
+            </>
+          )}
+          {(user.artist || user.buyer) && (
+            <>
+              <Route path="chat" element={<Chat data={data} />} />
+              <Route path="search" element={<Search data={data} />} />
+              <Route path="auctions" element={<Auctions data={data} />} />
+              <Route path="auctions/:id" element={<AuctionItem data={data} />} />
             </>
           )}
           {user.artist && (

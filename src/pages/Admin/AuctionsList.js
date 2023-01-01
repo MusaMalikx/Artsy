@@ -1,10 +1,10 @@
 import React from 'react';
 import { SelectPicker } from 'rsuite';
 import AuctionCard from '../../components/Auction/AuctionCard';
-import Layout from '../../components/Layouts/ArticleLayout';
+import AdminLayout from '../../components/Layouts/AdminLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 
-const Auctions = ({ data }) => {
+const AuctionsList = ({ data }) => {
   const dat = [
     'Modern',
     'Religious',
@@ -14,10 +14,9 @@ const Auctions = ({ data }) => {
     'Grapfitti',
     'Sculpture'
   ].map((item) => ({ label: item, value: item }));
-
   return (
-    <Layout title={'Auctions'}>
-      <HeaderLayout title={'Auctions'} />
+    <AdminLayout title="Auctions">
+      <HeaderLayout title="Listed Auctions" />
       <div className="container mx-auto">
         <div className="flex justify-center items-center my-10">
           <SelectPicker
@@ -33,8 +32,8 @@ const Auctions = ({ data }) => {
           ))}
         </div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 };
 
-export default Auctions;
+export default AuctionsList;

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import AuctionCard from '../../components/Auction/AuctionCard';
-import Layout from '../../components/Layouts/ArticleLayout';
+import AdminLayout from '../../components/Layouts/AdminLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import AutomateBid from '../../components/Modals/AutomateBid';
 import { selectUser } from '../../redux/features/userReducer';
 
-const AuctionItem = ({ data }) => {
+const AuctionListItem = ({ data }) => {
   const { state } = useLocation();
   const { user, urls } = state;
   const us = useSelector(selectUser);
@@ -21,7 +21,7 @@ const AuctionItem = ({ data }) => {
   };
 
   return (
-    <Layout title={'Auctions'}>
+    <AdminLayout title={'Auctions'}>
       <HeaderLayout title="Auction Item" />
       <div className="py-10 px-5">
         <div className="flex flex-col lg:flex-row mt-20">
@@ -97,8 +97,8 @@ const AuctionItem = ({ data }) => {
           ))}
         </div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 };
 
-export default AuctionItem;
+export default AuctionListItem;
