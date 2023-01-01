@@ -13,6 +13,8 @@ import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUser } from '../../redux/features/userReducer';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
 export default function Login() {
@@ -27,7 +29,7 @@ export default function Login() {
 
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-
+  const toaster = useToaster();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -72,6 +74,7 @@ export default function Login() {
           });
         } else if (user.admin) {
           // I think we should not allow admin to login through Google only email and password
+          navigate('/admin/dashboard');
         }
 
         // console.log(token, data);
@@ -81,12 +84,19 @@ export default function Login() {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-
-        // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
         console.log(errorCode, errorMessage, credential);
+        if (error.response) {
+          if (
+            error.response.data.message === 'Email already exists For a Buyer!' ||
+            error.response.data.message === 'Email already exists For an Artist!'
+          ) {
+            Toaster(toaster, 'error', 'Gmail account not found for user');
+          }
+        } else {
+          Toaster(toaster, 'error', errorMessage);
+        }
       });
   };
 
@@ -133,9 +143,20 @@ export default function Login() {
         // ...
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        console.log(errorMessage);
+        if (
+          errorMessage === 'Firebase: Error (auth/user-not-found).' ||
+          errorMessage === 'Firebase: Error (auth/wrong-password).'
+        ) {
+          Toaster(toaster, 'error', 'Incorrect Email or Password!');
+        } else if (error.response) {
+          if (error.response.data.message === 'User not found!') {
+            Toaster(toaster, 'error', 'Incorrect Email or Password!');
+          }
+        } else {
+          Toaster(toaster, 'error', errorMessage);
+        }
       });
   };
 
@@ -249,7 +270,6 @@ export default function Login() {
                     Forgot Password?
                   </a>
                 </div>
-
                 <button
                   // onClick={signedIn}
                   onClick={signInWithEmailAndPass}

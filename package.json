@@ -20,7 +20,7 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "react-simple-typewriter": "^5.0.1",
-    "rsuite": "^5.22.0",
+    "rsuite": "^5.24.0",
     "tailwind-scrollbar-hide": "^1.1.7",
     "unsplash-js": "^7.0.15",
     "web-vitals": "^2.1.0"

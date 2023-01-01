@@ -13,6 +13,8 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword
 } from 'firebase/auth';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
 
 export default function SignUp() {
   const [
@@ -26,6 +28,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const toaster = useToaster();
 
   // const [user, setUser] = useState({
   //   buyer: true,
@@ -61,46 +64,75 @@ export default function SignUp() {
     })
       .then((res) => {
         console.log(res);
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
-          .then(async (userCredential) => {
-            // Signed in
-            // const data = userCredential.user;
-            if (user.buyer) {
-              await API.post('/api/auth/user/signup', {
-                email: userCredential.user.email,
-                firebaseid: userCredential.user.uid,
-                name: name,
-                phonenumber: phonenumber,
-                cnic: cnicfield
-              })
-                .then((res) => {
+        if (name != '' && email != '' && password != '') {
+          const auth = getAuth();
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(async (userCredential) => {
+              // Signed in
+              // const data = userCredential.user;
+              if (user.buyer) {
+                await API.post('/api/auth/user/signup', {
+                  email: userCredential.user.email,
+                  firebaseid: userCredential.user.uid,
+                  name: name,
+                  phonenumber: phonenumber,
+                  cnic: cnicfield
+                })
+                  .then((res) => {
+                    console.log(res);
+                    navigate('/SignIn');
+                  })
+                  .catch((err) => console.log(err));
+              } else if (user.artist) {
+                await API.post('/api/auth/artist/signup', {
+                  email: userCredential.user.email,
+                  firebaseid: userCredential.user.uid,
+                  name: name,
+                  phonenumber: phonenumber,
+                  cnic: cnicfield
+                }).then((res) => {
                   console.log(res);
                   navigate('/SignIn');
-                })
-                .catch((err) => console.log(err));
-            } else if (user.artist) {
-              await API.post('/api/auth/artist/signup', {
-                email: userCredential.user.email,
-                firebaseid: userCredential.user.uid,
-                name: name,
-                phonenumber: phonenumber,
-                cnic: cnicfield
-              }).then((res) => {
-                console.log(res);
-                navigate('/SignIn');
-              });
-            }
-            // ...
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
-          });
+                });
+              }
+              // ...
+            })
+            .catch((error) => {
+              // const errorCode = error.code;
+              const errorMessage = error.message;
+              console.log(errorMessage);
+              if (errorMessage === 'Firebase: Error (auth/email-already-in-use).') {
+                Toaster(toaster, 'error', 'Email already exists!');
+              } else if (error.response) {
+                if (error.response.data.message === 'EMAIL_EXISTS') {
+                  Toaster(toaster, 'error', 'Incorrect Email or Password!');
+                }
+              } else if (
+                errorMessage ===
+                'Firebase: Password should be at least 6 characters (auth/weak-password).'
+              ) {
+                Toaster(toaster, 'error', 'Password should be at least 6 characters');
+              } else {
+                Toaster(toaster, 'error', errorMessage);
+              }
+            });
+        } else {
+          Toaster(toaster, 'error', 'Input fields missing!');
+        }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(error.status, error.message);
+        if (error.response) {
+          if (error.response.data.message === 'PhoneNumber Already exists!') {
+            Toaster(toaster, 'error', 'PhoneNumber already exists!');
+          } else if (error.response.data.message === 'cnic Already exists!') {
+            Toaster(toaster, 'error', 'Cnic already exists!');
+          } else {
+            Toaster(toaster, 'error', error.message);
+          }
+        } else {
+          Toaster(toaster, 'error', error.message);
+        }
       });
   };
 
@@ -147,12 +179,20 @@ export default function SignUp() {
       })
       .catch((error) => {
         //dispatch(loginFailure());          for redux part
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log(errorCode, errorMessage, credential);
+        if (error.response) {
+          if (
+            error.response.data.message === 'Email already exists For a Buyer!' ||
+            error.response.data.message === 'Email already exists For an Artist!'
+          ) {
+            Toaster(toaster, 'error', 'Gmail account already exists for a user');
+          }
+        } else {
+          Toaster(toaster, 'error', errorMessage);
+        }
       });
   };
 
