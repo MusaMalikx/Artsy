@@ -21,59 +21,65 @@ export default function NewAuction() {
   const user = useSelector(selectUser);
   const AddArtwork = async (e) => {
     e.preventDefault();
-    console.log("Endate: ",enddate);
-    console.log("Base price: ",baseprice);
-    console.log("startdate: ",startdate);
-    console.log("description: ",description);
-    console.log("title: ",title);
+    console.log('Endate: ', enddate);
+    console.log('Base price: ', baseprice);
+    console.log('startdate: ', startdate);
+    console.log('description: ', description);
+    console.log('title: ', title);
 
-    if(title == '' || baseprice == '' || startdate == '' || enddate == ''){
+    if (title == '' || baseprice == '' || startdate == '' || enddate == '') {
       Toaster(toaster, 'error', 'Missing Fields');
-    }
-    else if(user.artist && auth ) {
-      await API.post('/api/artworks/check', {
-        title: title,
-        baseprice: baseprice,
-        description: description
-      }, 
-      {
-        headers: {
-          token: 'Bearer ' + auth.token
-        }
-      }).then(async (res) => {
-        console.log(res);
-        await API.post('/api/artworks/add', {
+    } else if (user.artist && auth) {
+      await API.post(
+        '/api/artworks/check',
+        {
           title: title,
           baseprice: baseprice,
-          description: description,
-          startdate: startdate,
-          enddate: enddate,
-          category: category
-        }, 
+          description: description
+        },
         {
-        headers: {
+          headers: {
             token: 'Bearer ' + auth.token
           }
-        }).then(res => {
+        }
+      )
+        .then(async (res) => {
           console.log(res);
-          Toaster(toaster, 'success', 'Artwork Successfully Added');
-
+          await API.post(
+            '/api/artworks/add',
+            {
+              title: title,
+              baseprice: baseprice,
+              description: description,
+              startdate: startdate,
+              enddate: enddate,
+              category: category
+            },
+            {
+              headers: {
+                token: 'Bearer ' + auth.token
+              }
+            }
+          )
+            .then((res) => {
+              console.log(res);
+              Toaster(toaster, 'success', 'Artwork Successfully Added');
+            })
+            .catch((err) => {
+              console.log(err);
+              Toaster(toaster, 'error', err.response.data.message);
+            });
+          //navigate('/');
         })
         .catch((err) => {
           console.log(err);
           Toaster(toaster, 'error', err.response.data.message);
         });
-        //navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-        Toaster(toaster, 'error', err.response.data.message);
-      });
-    }else {
+    } else {
       Toaster(toaster, 'error', 'Please Signin using Google');
     }
-  }
-  
+  };
+
   return (
     <Layout title={'Add Artwork'}>
       <HeaderLayout title="Add Artwork" />
@@ -89,12 +95,18 @@ export default function NewAuction() {
                 type="text"
                 name="title-artwork"
                 placeholder="Ocean Coast"
-                onChange = {(e) => {setTitle(e.target.value)}}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
               />
               <label className=" text-lg font-bold my-2" htmlFor="start-date">
                 Start Date
               </label>
-              <DatePicker onChange = {(e) => {setStartdate(e.toDateString())}} />
+              <DatePicker
+                onChange={(e) => {
+                  setStartdate(e.toDateString());
+                }}
+              />
             </div>
             <div className="flex flex-col w-full">
               <label className=" text-lg font-bold my-2" htmlFor="bid-artwork">
@@ -105,12 +117,18 @@ export default function NewAuction() {
                 type="text"
                 name="bid-artwork"
                 placeholder="4000"
-                onChange = {(e) => {setBaseprice(e.target.value)}}
+                onChange={(e) => {
+                  setBaseprice(e.target.value);
+                }}
               />
               <label className=" text-lg font-bold my-2" htmlFor="end-date">
                 End Date
               </label>
-              <DatePicker onChange = {(e) => {setEnddate(e.toDateString())}} />
+              <DatePicker
+                onChange={(e) => {
+                  setEnddate(e.toDateString());
+                }}
+              />
             </div>
           </div>
           <label className="text-lg font-bold my-2" htmlFor="bid-artwork">
@@ -165,7 +183,9 @@ export default function NewAuction() {
             Description
           </label>
           <textarea
-            onChange = {(e) => {setDescription(e.target.value)}}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
             rows={5}
             className="focus:outline-none border px-2 py-3 rounded-lg"
             placeholder="A distinct artwork depicting the last scenary before the sunset&#10;Material Used - Pastels&#10;Packing - Will be wrapped in bubble sheet "

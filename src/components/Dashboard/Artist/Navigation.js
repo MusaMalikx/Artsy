@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AiOutlineAppstoreAdd } from 'react-icons/ai';
 import { GrView } from 'react-icons/gr';
-import { CgDisplayFlex,CgProfile } from 'react-icons/cg';
+import { CgDisplayFlex, CgProfile } from 'react-icons/cg';
 import { BsWallet2, BsChatDots } from 'react-icons/bs';
 import { MdReportProblem } from 'react-icons/md';
 import { IconButton, Popover, Whisper } from 'rsuite';

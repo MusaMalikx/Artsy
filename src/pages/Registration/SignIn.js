@@ -119,7 +119,7 @@ export default function Login() {
             //navigate("/");
           });
         } else if (user.admin) {
-          //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually 
+          //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
           // await API.post('/api/auth/admin/signin', {
           //   email: userCredential.user.email
           // }).then((res) => {

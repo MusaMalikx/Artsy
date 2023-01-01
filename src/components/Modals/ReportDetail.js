@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, useToaster } from 'rsuite';
-import Toaster from '../Common/Toaster'
+import Toaster from '../Common/Toaster';
 import { GoPrimitiveDot } from 'react-icons/go';
 export default function ReportDetail({ open, setOpen }) {
   const handleClose = () => setOpen(false);
@@ -54,7 +54,9 @@ export default function ReportDetail({ open, setOpen }) {
               }
             </textarea>
             <div className="text-center">
-              <button onClick={sendWarning} className="focus:outline-none mt-4 border w-1/4 py-2 rounded-lg bg-primary active:bg-cyan-800 text-base font-bold text-white">
+              <button
+                onClick={sendWarning}
+                className="focus:outline-none mt-4 border w-1/4 py-2 rounded-lg bg-primary active:bg-cyan-800 text-base font-bold text-white">
                 Send Warning
               </button>
             </div>

@@ -26,7 +26,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-  
+
   // const [user, setUser] = useState({
   //   buyer: true,
   //   artist: false
@@ -76,7 +76,7 @@ export default function SignUp() {
               })
                 .then((res) => {
                   console.log(res);
-                  navigate("/SignIn");
+                  navigate('/SignIn');
                 })
                 .catch((err) => console.log(err));
             } else if (user.artist) {
@@ -88,7 +88,7 @@ export default function SignUp() {
                 cnic: cnicfield
               }).then((res) => {
                 console.log(res);
-                navigate("/SignIn");
+                navigate('/SignIn');
               });
             }
             // ...
@@ -120,7 +120,7 @@ export default function SignUp() {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
-            email: result.user.email,
+            email: result.user.email
           }).then((res) => {
             console.log(res);
             localStorage.setItem('auth', JSON.stringify(res.data));
