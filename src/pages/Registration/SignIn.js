@@ -87,12 +87,14 @@ export default function Login() {
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
         console.log(errorCode, errorMessage, credential);
-        if(error.response){
-          if(error.response.data.message === 'Email already exists For a Buyer!' || error.response.data.message === 'Email already exists For an Artist!'){
+        if (error.response) {
+          if (
+            error.response.data.message === 'Email already exists For a Buyer!' ||
+            error.response.data.message === 'Email already exists For an Artist!'
+          ) {
             Toaster(toaster, 'error', 'Gmail account not found for user');
           }
-        } 
-        else {
+        } else {
           Toaster(toaster, 'error', errorMessage);
         }
       });
@@ -127,7 +129,7 @@ export default function Login() {
             //navigate("/");
           });
         } else if (user.admin) {
-          //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually 
+          //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
           // await API.post('/api/auth/admin/signin', {
           //   email: userCredential.user.email
           // }).then((res) => {
@@ -142,17 +144,19 @@ export default function Login() {
       })
       .catch((error) => {
         const errorMessage = error.message;
-        console.log( errorMessage);
-        if(errorMessage === 'Firebase: Error (auth/user-not-found).' || errorMessage === 'Firebase: Error (auth/wrong-password).'){
+        console.log(errorMessage);
+        if (
+          errorMessage === 'Firebase: Error (auth/user-not-found).' ||
+          errorMessage === 'Firebase: Error (auth/wrong-password).'
+        ) {
           Toaster(toaster, 'error', 'Incorrect Email or Password!');
-        } else if(error.response) {
-          if(error.response.data.message === 'User not found!') {
+        } else if (error.response) {
+          if (error.response.data.message === 'User not found!') {
             Toaster(toaster, 'error', 'Incorrect Email or Password!');
           }
         } else {
           Toaster(toaster, 'error', errorMessage);
         }
-        
       });
   };
 
@@ -246,7 +250,6 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                
 
                 <div className="flex justify-between items-center mb-6">
                   <div className="form-group form-check">

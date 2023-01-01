@@ -29,7 +29,7 @@ export default function SignUp() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const toaster = useToaster();
-  
+
   // const [user, setUser] = useState({
   //   buyer: true,
   //   artist: false
@@ -64,7 +64,7 @@ export default function SignUp() {
     })
       .then((res) => {
         console.log(res);
-        if(name != '' && email != '' && password != ''){
+        if (name != '' && email != '' && password != '') {
           const auth = getAuth();
           createUserWithEmailAndPassword(auth, email, password)
             .then(async (userCredential) => {
@@ -80,7 +80,7 @@ export default function SignUp() {
                 })
                   .then((res) => {
                     console.log(res);
-                    navigate("/SignIn");
+                    navigate('/SignIn');
                   })
                   .catch((err) => console.log(err));
               } else if (user.artist) {
@@ -92,27 +92,27 @@ export default function SignUp() {
                   cnic: cnicfield
                 }).then((res) => {
                   console.log(res);
-                  navigate("/SignIn");
+                  navigate('/SignIn');
                 });
               }
               // ...
             })
             .catch((error) => {
-              const errorCode = error.code;
+              // const errorCode = error.code;
               const errorMessage = error.message;
               console.log(errorMessage);
-              if(errorMessage === 'Firebase: Error (auth/email-already-in-use).'){
+              if (errorMessage === 'Firebase: Error (auth/email-already-in-use).') {
                 Toaster(toaster, 'error', 'Email already exists!');
-              } 
-              else if(error.response){
-                if(error.response.data.message === 'EMAIL_EXISTS'){
+              } else if (error.response) {
+                if (error.response.data.message === 'EMAIL_EXISTS') {
                   Toaster(toaster, 'error', 'Incorrect Email or Password!');
                 }
-              }
-              else if(errorMessage === 'Firebase: Password should be at least 6 characters (auth/weak-password).'){
+              } else if (
+                errorMessage ===
+                'Firebase: Password should be at least 6 characters (auth/weak-password).'
+              ) {
                 Toaster(toaster, 'error', 'Password should be at least 6 characters');
-              }   
-              else {
+              } else {
                 Toaster(toaster, 'error', errorMessage);
               }
             });
@@ -121,19 +121,16 @@ export default function SignUp() {
         }
       })
       .catch((error) => {
-        console.log(error.status , error.message);
-        if(error.response){
-          if(error.response.data.message === 'PhoneNumber Already exists!'){
+        console.log(error.status, error.message);
+        if (error.response) {
+          if (error.response.data.message === 'PhoneNumber Already exists!') {
             Toaster(toaster, 'error', 'PhoneNumber already exists!');
-          }
-          else if(error.response.data.message === 'cnic Already exists!'){
+          } else if (error.response.data.message === 'cnic Already exists!') {
             Toaster(toaster, 'error', 'Cnic already exists!');
-          }
-          else {
+          } else {
             Toaster(toaster, 'error', error.message);
           }
-        } 
-        else {
+        } else {
           Toaster(toaster, 'error', error.message);
         }
       });
@@ -155,7 +152,7 @@ export default function SignUp() {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
-            email: result.user.email,
+            email: result.user.email
           }).then((res) => {
             console.log(res);
             localStorage.setItem('auth', JSON.stringify(res.data));
@@ -186,12 +183,14 @@ export default function SignUp() {
         const errorMessage = error.message;
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log(errorCode, errorMessage, credential);
-        if(error.response){
-          if(error.response.data.message === 'Email already exists For a Buyer!' || error.response.data.message === 'Email already exists For an Artist!'){
+        if (error.response) {
+          if (
+            error.response.data.message === 'Email already exists For a Buyer!' ||
+            error.response.data.message === 'Email already exists For an Artist!'
+          ) {
             Toaster(toaster, 'error', 'Gmail account already exists for a user');
           }
-        } 
-        else {
+        } else {
           Toaster(toaster, 'error', errorMessage);
         }
       });
