@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,13 @@ import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUser } from '../../redux/features/userReducer';
+import {
+  emailValidate,
+  passValidate,
+  nameValidate,
+  phoneValidate,
+  cnicValidate
+} from '../../utils/Validors/CredentialValidator';
 import {
   getAuth,
   signInWithPopup,
@@ -29,17 +36,18 @@ export default function SignUp() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const toaster = useToaster();
+  const [acceptTerms, setAcceptTerms] = useState(false);
 
   // const [user, setUser] = useState({
   //   buyer: true,
   //   artist: false
   // });
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [phonenumber, setPhonenumber] = useState('');
-  const [cnicfield, setCnicfield] = useState('');
+  const email = useRef();
+  const password = useRef();
+  const name = useRef();
+  const phonenumber = useRef();
+  const cnicfield = useRef();
 
   // const clearInputs = () => {
   //   setEmail('');
@@ -50,90 +58,125 @@ export default function SignUp() {
   // };
 
   const signUpwithEmail = async (e) => {
-    e.preventDefault();
-    let url = '/api/auth/user/check';
-    if (user.buyer) {
-      url = '/api/auth/user/check';
-    } else if (user.artist) {
-      url = '/api/auth/artist/check';
-    }
-
-    await API.post(url, {
-      phonenumber: phonenumber,
-      cnic: cnicfield
-    })
-      .then((res) => {
-        console.log(res);
-        if (name != '' && email != '' && password != '') {
-          const auth = getAuth();
-          createUserWithEmailAndPassword(auth, email, password)
-            .then(async (userCredential) => {
-              // Signed in
-              // const data = userCredential.user;
-              if (user.buyer) {
-                await API.post('/api/auth/user/signup', {
-                  email: userCredential.user.email,
-                  firebaseid: userCredential.user.uid,
-                  name: name,
-                  phonenumber: phonenumber,
-                  cnic: cnicfield
+    if (
+      emailValidate(email.current.value) &&
+      passValidate(password.current.value) &&
+      nameValidate(name.current.value) &&
+      phoneValidate(phonenumber.current.value) &&
+      cnicValidate(cnicfield.current.value)
+    ) {
+      e.preventDefault();
+      if (!user.buyer && !user.artist) {
+        Toaster(toaster, 'error', 'Select User Type');
+      } else if (!acceptTerms) {
+        Toaster(toaster, 'error', 'Accept Terms and Agreements to Continue');
+      } else {
+        let url = '/api/auth/user/check';
+        if (user.buyer) {
+          url = '/api/auth/user/check';
+        } else if (user.artist) {
+          url = '/api/auth/artist/check';
+        }
+        await API.post(url, {
+          phonenumber: phonenumber.current.value,
+          cnic: cnicfield.current.value
+        })
+          .then((res) => {
+            console.log(res);
+            if (
+              name.current.value != '' &&
+              email.current.value != '' &&
+              password.current.value != ''
+            ) {
+              const auth = getAuth();
+              createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+                .then(async (userCredential) => {
+                  // Signed in
+                  // const data = userCredential.user;
+                  if (user.buyer) {
+                    await API.post('/api/auth/user/signup', {
+                      email: userCredential.user.email,
+                      firebaseid: userCredential.user.uid,
+                      name: name.current.value,
+                      phonenumber: phonenumber.current.value,
+                      cnic: cnicfield.current.value
+                    })
+                      .then((res) => {
+                        console.log(res);
+                        navigate('/SignIn');
+                      })
+                      .catch((err) => console.log(err));
+                  } else if (user.artist) {
+                    await API.post('/api/auth/artist/signup', {
+                      email: userCredential.user.email,
+                      firebaseid: userCredential.user.uid,
+                      name: name.current.value,
+                      phonenumber: phonenumber.current.value,
+                      cnic: cnicfield.current.value
+                    }).then((res) => {
+                      console.log(res);
+                      navigate('/SignIn');
+                    });
+                  }
+                  // ...
                 })
-                  .then((res) => {
-                    console.log(res);
-                    navigate('/SignIn');
-                  })
-                  .catch((err) => console.log(err));
-              } else if (user.artist) {
-                await API.post('/api/auth/artist/signup', {
-                  email: userCredential.user.email,
-                  firebaseid: userCredential.user.uid,
-                  name: name,
-                  phonenumber: phonenumber,
-                  cnic: cnicfield
-                }).then((res) => {
-                  console.log(res);
-                  navigate('/SignIn');
+                .catch((error) => {
+                  // const errorCode = error.code;
+                  const errorMessage = error.message;
+                  console.log(errorMessage);
+                  if (errorMessage === 'Firebase: Error (auth/email-already-in-use).') {
+                    Toaster(toaster, 'error', 'Email already exists!');
+                  } else if (error.response) {
+                    if (error.response.data.message === 'EMAIL_EXISTS') {
+                      Toaster(toaster, 'error', 'Incorrect Email or Password!');
+                    }
+                  } else if (
+                    errorMessage ===
+                    'Firebase: Password should be at least 6 characters (auth/weak-password).'
+                  ) {
+                    Toaster(toaster, 'error', 'Password should be at least 6 characters');
+                  } else {
+                    Toaster(toaster, 'error', errorMessage);
+                  }
                 });
-              }
-              // ...
-            })
-            .catch((error) => {
-              // const errorCode = error.code;
-              const errorMessage = error.message;
-              console.log(errorMessage);
-              if (errorMessage === 'Firebase: Error (auth/email-already-in-use).') {
-                Toaster(toaster, 'error', 'Email already exists!');
-              } else if (error.response) {
-                if (error.response.data.message === 'EMAIL_EXISTS') {
-                  Toaster(toaster, 'error', 'Incorrect Email or Password!');
-                }
-              } else if (
-                errorMessage ===
-                'Firebase: Password should be at least 6 characters (auth/weak-password).'
-              ) {
-                Toaster(toaster, 'error', 'Password should be at least 6 characters');
+            } else {
+              Toaster(toaster, 'error', 'Input fields missing!');
+            }
+          })
+          .catch((error) => {
+            console.log(error.status, error.message);
+            if (error.response) {
+              if (error.response.data.message === 'PhoneNumber Already exists!') {
+                Toaster(toaster, 'error', 'PhoneNumber already exists!');
+              } else if (error.response.data.message === 'cnic Already exists!') {
+                Toaster(toaster, 'error', 'Cnic already exists!');
               } else {
-                Toaster(toaster, 'error', errorMessage);
+                Toaster(toaster, 'error', error.message);
               }
-            });
-        } else {
-          Toaster(toaster, 'error', 'Input fields missing!');
-        }
-      })
-      .catch((error) => {
-        console.log(error.status, error.message);
-        if (error.response) {
-          if (error.response.data.message === 'PhoneNumber Already exists!') {
-            Toaster(toaster, 'error', 'PhoneNumber already exists!');
-          } else if (error.response.data.message === 'cnic Already exists!') {
-            Toaster(toaster, 'error', 'Cnic already exists!');
-          } else {
-            Toaster(toaster, 'error', error.message);
-          }
-        } else {
-          Toaster(toaster, 'error', error.message);
-        }
-      });
+            } else {
+              Toaster(toaster, 'error', error.message);
+            }
+          });
+      }
+    } else {
+      !nameValidate(name.current.value)
+        ? name.current.setCustomValidity(
+            'Name must contain only alphabets and length should be greater than or equal to 3'
+          )
+        : name.current.setCustomValidity('');
+      !emailValidate(email.current.value)
+        ? email.current.setCustomValidity('Invalid Email Format!')
+        : email.current.setCustomValidity('');
+      !passValidate(password.current.value)
+        ? password.current.setCustomValidity('Password Length must be greater than or equal to 6')
+        : password.current.setCustomValidity('');
+      !phoneValidate(phonenumber.current.value)
+        ? phonenumber.current.setCustomValidity('Invalid Phone Number')
+        : phonenumber.current.setCustomValidity('');
+      !cnicValidate(cnicfield.current.value)
+        ? cnicfield.current.setCustomValidity('Invalid CNIC')
+        : cnicfield.current.setCustomValidity('');
+    }
   };
 
   const signInWithGoogle = () => {
@@ -253,7 +296,7 @@ export default function SignUp() {
                     type="text"
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Full Name"
-                    onChange={(e) => setName(e.target.value)}
+                    ref={name}
                   />
                 </div>
                 <div className="mb-6">
@@ -261,7 +304,7 @@ export default function SignUp() {
                     type="email"
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Email address"
-                    onChange={(e) => setEmail(e.target.value)}
+                    ref={email}
                   />
                 </div>
                 <div className="mb-6">
@@ -269,23 +312,31 @@ export default function SignUp() {
                     type="password"
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    ref={password}
                   />
                 </div>
                 <div className="mb-6">
                   <input
-                    type="text"
+                    type="number"
+                    min={0}
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Phone Number"
-                    onChange={(e) => setPhonenumber(e.target.value)}
+                    ref={phonenumber}
+                    onChange={(e) => {
+                      if (e.target.value.length > 11) e.target.value = e.target.value.slice(0, 11);
+                    }}
                   />
                 </div>
                 <div className="mb-6">
                   <input
-                    type="text"
+                    type="number"
+                    min={0}
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="CNIC"
-                    onChange={(e) => setCnicfield(e.target.value)}
+                    onChange={(e) => {
+                      if (e.target.value.length > 13) e.target.value = e.target.value.slice(0, 13);
+                    }}
+                    ref={cnicfield}
                   />
                 </div>
                 <div className="flex justify-between items-center mb-6">
@@ -294,6 +345,7 @@ export default function SignUp() {
                       type="checkbox"
                       className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                       id="exampleCheck3"
+                      onClick={() => setAcceptTerms(!acceptTerms)}
                     />
                     <label
                       className="form-check-label inline-block text-gray-800"

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
+import { emailValidate, passValidate } from '../../utils/Validors/CredentialValidator';
 import {
   getAuth,
   signInWithPopup,
@@ -30,9 +31,8 @@ export default function Login() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const toaster = useToaster();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const email = useRef();
+  const password = useRef();
   const navigate = useNavigate();
 
   const signInWithGoogle = () => {
@@ -101,63 +101,71 @@ export default function Login() {
   };
 
   const signInWithEmailAndPass = (e) => {
-    e.preventDefault();
-
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed in
-        // const data = userCredential.user;
-        if (user.buyer) {
-          await API.post('/api/auth/user/signin', {
-            email: userCredential.user.email
-          }).then((res) => {
-            console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
-        } else if (user.artist) {
-          await API.post('/api/auth/artist/signin', {
-            email: userCredential.user.email
-          }).then((res) => {
-            console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
-        } else if (user.admin) {
-          //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
-          // await API.post('/api/auth/admin/signin', {
-          //   email: userCredential.user.email
-          // }).then((res) => {
-          //   console.log(res);
-          //   navigate('/admin/dashboard');
-          //   //dispatch(loginSuccess(res.data));    for redux part
-          //   //navigate("/");
-          // });
-          navigate('/admin/dashboard');
-        }
-        // ...
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        if (
-          errorMessage === 'Firebase: Error (auth/user-not-found).' ||
-          errorMessage === 'Firebase: Error (auth/wrong-password).'
-        ) {
-          Toaster(toaster, 'error', 'Incorrect Email or Password!');
-        } else if (error.response) {
-          if (error.response.data.message === 'User not found!') {
-            Toaster(toaster, 'error', 'Incorrect Email or Password!');
+    if (passValidate(password.current.value) && emailValidate(email.current.value)) {
+      e.preventDefault();
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+        .then(async (userCredential) => {
+          // Signed in
+          // const data = userCredential.user;
+          if (user.buyer) {
+            await API.post('/api/auth/user/signin', {
+              email: userCredential.user.email
+            }).then((res) => {
+              console.log(res);
+              localStorage.setItem('auth', JSON.stringify(res.data));
+              navigate('/');
+              //dispatch(loginSuccess(res.data));    for redux part
+              //navigate("/");
+            });
+          } else if (user.artist) {
+            await API.post('/api/auth/artist/signin', {
+              email: userCredential.user.email
+            }).then((res) => {
+              console.log(res);
+              localStorage.setItem('auth', JSON.stringify(res.data));
+              navigate('/');
+              //dispatch(loginSuccess(res.data));    for redux part
+              //navigate("/");
+            });
+          } else if (user.admin) {
+            //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
+            // await API.post('/api/auth/admin/signin', {
+            //   email: userCredential.user.email
+            // }).then((res) => {
+            //   console.log(res);
+            //   navigate('/admin/dashboard');
+            //   //dispatch(loginSuccess(res.data));    for redux part
+            //   //navigate("/");
+            // });
+            navigate('/admin/dashboard');
           }
-        } else {
-          Toaster(toaster, 'error', errorMessage);
-        }
-      });
+          // ...
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log(errorMessage);
+          if (
+            errorMessage === 'Firebase: Error (auth/user-not-found).' ||
+            errorMessage === 'Firebase: Error (auth/wrong-password).'
+          ) {
+            Toaster(toaster, 'error', 'Invalid Credentials Entered!');
+          } else if (error.response) {
+            if (error.response.data.message === 'User not found!') {
+              Toaster(toaster, 'error', 'Incorrect Email or Password!');
+            }
+          } else {
+            Toaster(toaster, 'error', errorMessage);
+          }
+        });
+    } else {
+      !emailValidate(email.current.value)
+        ? email.current.setCustomValidity('Invalid Email Format!')
+        : email.current.setCustomValidity('');
+      !passValidate(password.current.value)
+        ? password.current.setCustomValidity('Password Length must be greater than or equal to 6')
+        : password.current.setCustomValidity('');
+    }
   };
 
   // const signedIn = () => {
@@ -238,7 +246,7 @@ export default function Login() {
                     type="text"
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Email address"
-                    onChange={(e) => setEmail(e.target.value)}
+                    ref={email}
                   />
                 </div>
 
@@ -247,7 +255,7 @@ export default function Login() {
                     type="password"
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    ref={password}
                   />
                 </div>
 

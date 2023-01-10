@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Checkbox, Modal } from 'rsuite';
 import { AiFillFlag } from 'react-icons/ai';
 import { useToaster } from 'rsuite';
 import Toaster from '../Common/Toaster';
+import { descriptionValidate } from '../../utils/Validors/ProposalValidators';
 export default function ProfileReport({ open, setOpen }) {
   const handleClose = () => setOpen(false);
+  const description = useRef();
   const toaster = useToaster();
+
   const submitReport = (e) => {
-    e.preventDefault();
-    Toaster(toaster, 'success', 'Successfully Reported');
+    if (descriptionValidate(description.current.value)) {
+      e.preventDefault();
+      //Write Axios Code here
+
+      Toaster(toaster, 'success', 'Successfully Reported');
+    } else {
+      !descriptionValidate(description.current.value)
+        ? description.current.setCustomValidity(
+            'Description must have a minimum length of 10 characters'
+          )
+        : description.current.setCustomValidity('');
+    }
   };
   return (
     <Modal onClose={handleClose} size="sm" open={open}>
@@ -41,6 +54,7 @@ export default function ProfileReport({ open, setOpen }) {
               Description
             </label>
             <textarea
+              ref={description}
               name="report-desc"
               className="h-40 rounded-lg bg-gray-50 border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"></textarea>
           </div>
