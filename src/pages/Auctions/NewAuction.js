@@ -23,10 +23,12 @@ export default function NewAuction() {
   const [startdate, setStartDate] = useState('');
   const [enddate, setEndDate] = useState('');
   const description = useRef();
+  const [images, setImages] = useState([]);
   const [startLoader, setStartLoader] = useState(false);
   const user = useSelector(selectUser);
   const AddArtwork = async (e) => {
     if (
+      //Also Add check if files are selected or not , and max limit for pictures are 3 for now, change limit in backend in artworks.js in /add api 
       titleValidate(title.current.value) &&
       descriptionValidate(description.current.value) &&
       amountValidate(baseprice.current.value) &&
@@ -36,6 +38,7 @@ export default function NewAuction() {
       setStartLoader(true);
       e.preventDefault();
       if (user.artist && auth) {
+
         await API.post(
           '/api/artworks/check',
           {
@@ -50,22 +53,42 @@ export default function NewAuction() {
           }
         )
           .then(async (res) => {
+            const formData = new FormData();
+            // formData.append('productImage', images);
+            for (let i = 0; i < images.length; i++) {
+              formData.append('productImage', images[i]);
+            }
+            formData.append('title' ,title.current.value);
+            formData.append('baseprice', baseprice.current.value);
+            formData.append('description', description.current.value);
+            formData.append('startdate', startdate);
+            formData.append('enddate', enddate);
+            formData.append('category', category);
+
+            const config = {
+              headers: {
+                token: 'Bearer ' + auth.token,
+                'Content-Type': 'multipart/form-data'
+              }
+            };
+
             console.log(res);
             await API.post(
-              '/api/artworks/add',
-              {
-                title: title.current.value,
-                baseprice: baseprice.current.value,
-                description: description.current.value,
-                startdate: startdate,
-                enddate: enddate,
-                category: category
-              },
-              {
-                headers: {
-                  token: 'Bearer ' + auth.token
-                }
-              }
+              '/api/artworks/add', formData , config
+
+              // {
+              //   title: title.current.value,
+              //   baseprice: baseprice.current.value,
+              //   description: description.current.value,
+              //   startdate: startdate,
+              //   enddate: enddate,
+              //   category: category
+              // },
+              // {
+              //   headers: {
+              //     token: 'Bearer ' + auth.token
+              //   }
+              // }
             )
               .then((res) => {
                 setTimeout(() => {
@@ -208,6 +231,7 @@ export default function NewAuction() {
             className="focus:outline-none border px-2 py-3 rounded-lg focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
             placeholder="A distinct artwork depicting the last scenary before the sunset&#10;Material Used - Pastels&#10;Packing - Will be wrapped in bubble sheet "
             name="desc-artwork"></textarea>
+          <input type="file" onChange={(e) => { setImages(e.target.files); }} multiple />
           {startLoader ? (
             <Loader />
           ) : (
@@ -218,7 +242,7 @@ export default function NewAuction() {
             </button>
           )}
         </form>
-        <ArtworkImageUploader />
+        {/* <ArtworkImageUploader /> */}
       </div>
       {/* {showToaster ? (
         <Toaster
