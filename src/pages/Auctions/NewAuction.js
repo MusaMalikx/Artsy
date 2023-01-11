@@ -13,6 +13,7 @@ import {
   amountValidate,
   descriptionValidate
 } from '../../utils/Validors/ProposalValidators';
+import Loader from '../../components/Loader/Loader';
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
@@ -22,7 +23,7 @@ export default function NewAuction() {
   const [startdate, setStartDate] = useState('');
   const [enddate, setEndDate] = useState('');
   const description = useRef();
-
+  const [startLoader, setStartLoader] = useState(false);
   const user = useSelector(selectUser);
   const AddArtwork = async (e) => {
     if (
@@ -32,6 +33,7 @@ export default function NewAuction() {
       startdate != '' &&
       enddate != ''
     ) {
+      setStartLoader(true);
       e.preventDefault();
       if (user.artist && auth) {
         await API.post(
@@ -66,23 +68,30 @@ export default function NewAuction() {
               }
             )
               .then((res) => {
+                setTimeout(() => {
+                  setStartLoader(false);
+                }, 2000);
                 console.log(res);
                 Toaster(toaster, 'success', 'Artwork Successfully Added');
               })
               .catch((err) => {
+                setStartLoader(false);
                 console.log(err);
                 Toaster(toaster, 'error', err.response.data.message);
               });
             //navigate('/');
           })
           .catch((err) => {
+            setStartLoader(false);
             console.log(err);
             Toaster(toaster, 'error', err.response.data.message);
           });
       } else {
+        setStartLoader(false);
         Toaster(toaster, 'error', 'Please Signin using Google');
       }
     } else {
+      setStartLoader(false);
       !titleValidate(title.current.value)
         ? title.current.setCustomValidity(
             'Title must contain only alphabets and length should be greater than or equal to 10'
@@ -199,11 +208,15 @@ export default function NewAuction() {
             className="focus:outline-none border px-2 py-3 rounded-lg focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
             placeholder="A distinct artwork depicting the last scenary before the sunset&#10;Material Used - Pastels&#10;Packing - Will be wrapped in bubble sheet "
             name="desc-artwork"></textarea>
-          <button
-            onClick={AddArtwork}
-            className="focus:outline-none bg-black text-white mx-auto my-5 px-2 py-3 w-4/12 font-bold ">
-            List Artwork
-          </button>
+          {startLoader ? (
+            <Loader />
+          ) : (
+            <button
+              onClick={AddArtwork}
+              className="focus:outline-none bg-black text-white mx-auto my-5 px-2 py-3 w-4/12 font-bold ">
+              List Artwork
+            </button>
+          )}
         </form>
         <ArtworkImageUploader />
       </div>
