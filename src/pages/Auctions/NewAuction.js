@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useState } from 'react';
 import { DatePicker, Dropdown, useToaster } from 'rsuite';
 import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
@@ -8,75 +8,107 @@ import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import API from '../../api/server';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/userReducer';
-
+import {
+  titleValidate,
+  amountValidate,
+  descriptionValidate
+} from '../../utils/Validors/ProposalValidators';
+import Loader from '../../components/Loader/Loader';
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
-  const [title, setTitle] = useState('');
-  const [baseprice, setBaseprice] = useState('');
-  const [startdate, setStartdate] = useState('');
-  const [enddate, setEnddate] = useState('');
-  const [description, setDescription] = useState('');
+  const title = useRef();
+  const baseprice = useRef();
+  const [startdate, setStartDate] = useState('');
+  const [enddate, setEndDate] = useState('');
+  const description = useRef();
+  const [startLoader, setStartLoader] = useState(false);
   const user = useSelector(selectUser);
   const AddArtwork = async (e) => {
-    e.preventDefault();
-    console.log('Endate: ', enddate);
-    console.log('Base price: ', baseprice);
-    console.log('startdate: ', startdate);
-    console.log('description: ', description);
-    console.log('title: ', title);
-
-    if (title == '' || baseprice == '' || startdate == '' || enddate == '') {
-      Toaster(toaster, 'error', 'Missing Fields');
-    } else if (user.artist && auth) {
-      await API.post(
-        '/api/artworks/check',
-        {
-          title: title,
-          baseprice: baseprice,
-          description: description
-        },
-        {
-          headers: {
-            token: 'Bearer ' + auth.token
-          }
-        }
-      )
-        .then(async (res) => {
-          console.log(res);
-          await API.post(
-            '/api/artworks/add',
-            {
-              title: title,
-              baseprice: baseprice,
-              description: description,
-              startdate: startdate,
-              enddate: enddate,
-              category: category
-            },
-            {
-              headers: {
-                token: 'Bearer ' + auth.token
-              }
+    if (
+      titleValidate(title.current.value) &&
+      descriptionValidate(description.current.value) &&
+      amountValidate(baseprice.current.value) &&
+      startdate != '' &&
+      enddate != ''
+    ) {
+      setStartLoader(true);
+      e.preventDefault();
+      if (user.artist && auth) {
+        await API.post(
+          '/api/artworks/check',
+          {
+            title: title.current.value,
+            baseprice: baseprice.current.value,
+            description: description.current.value
+          },
+          {
+            headers: {
+              token: 'Bearer ' + auth.token
             }
-          )
-            .then((res) => {
-              console.log(res);
-              Toaster(toaster, 'success', 'Artwork Successfully Added');
-            })
-            .catch((err) => {
-              console.log(err);
-              Toaster(toaster, 'error', err.response.data.message);
-            });
-          //navigate('/');
-        })
-        .catch((err) => {
-          console.log(err);
-          Toaster(toaster, 'error', err.response.data.message);
-        });
+          }
+        )
+          .then(async (res) => {
+            console.log(res);
+            await API.post(
+              '/api/artworks/add',
+              {
+                title: title.current.value,
+                baseprice: baseprice.current.value,
+                description: description.current.value,
+                startdate: startdate,
+                enddate: enddate,
+                category: category
+              },
+              {
+                headers: {
+                  token: 'Bearer ' + auth.token
+                }
+              }
+            )
+              .then((res) => {
+                setTimeout(() => {
+                  setStartLoader(false);
+                }, 2000);
+                console.log(res);
+                Toaster(toaster, 'success', 'Artwork Successfully Added');
+              })
+              .catch((err) => {
+                setStartLoader(false);
+                console.log(err);
+                Toaster(toaster, 'error', err.response.data.message);
+              });
+            //navigate('/');
+          })
+          .catch((err) => {
+            setStartLoader(false);
+            console.log(err);
+            Toaster(toaster, 'error', err.response.data.message);
+          });
+      } else {
+        setStartLoader(false);
+        Toaster(toaster, 'error', 'Please Signin using Google');
+      }
     } else {
-      Toaster(toaster, 'error', 'Please Signin using Google');
+      setStartLoader(false);
+      !titleValidate(title.current.value)
+        ? title.current.setCustomValidity(
+            'Title must contain only alphabets and length should be greater than or equal to 10'
+          )
+        : title.current.setCustomValidity('');
+      !amountValidate(baseprice.current.value)
+        ? baseprice.current.setCustomValidity('Invalid base price!')
+        : baseprice.current.setCustomValidity('');
+      !descriptionValidate(description.current.value)
+        ? description.current.setCustomValidity(
+            'Invalid Description. Atleast 10 characters are expected!'
+          )
+        : description.current.setCustomValidity('');
+      if (startdate == '' || enddate == '') {
+        e.preventDefault();
+        Toaster(toaster, 'error', 'Missing Dates');
+      }
     }
   };
 
@@ -91,44 +123,32 @@ export default function NewAuction() {
                 Title
               </label>
               <input
-                className="focus:outline-none border px-2 py-1 text-base rounded"
+                className="focus:outline-none border px-2 py-1 text-base rounded focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                 type="text"
                 name="title-artwork"
                 placeholder="Ocean Coast"
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
+                ref={title}
               />
               <label className=" text-lg font-bold my-2" htmlFor="start-date">
                 Start Date
               </label>
-              <DatePicker
-                onChange={(e) => {
-                  setStartdate(e.toDateString());
-                }}
-              />
+              <DatePicker onChange={(e) => setStartDate(e.toDateString())} />
             </div>
             <div className="flex flex-col w-full">
               <label className=" text-lg font-bold my-2" htmlFor="bid-artwork">
                 Base Bid
               </label>
               <input
-                className="focus:outline-none border px-2 py-1 text-base rounded"
+                className="focus:outline-none border px-2 py-1 text-base rounded focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                 type="text"
                 name="bid-artwork"
                 placeholder="4000"
-                onChange={(e) => {
-                  setBaseprice(e.target.value);
-                }}
+                ref={baseprice}
               />
               <label className=" text-lg font-bold my-2" htmlFor="end-date">
                 End Date
               </label>
-              <DatePicker
-                onChange={(e) => {
-                  setEnddate(e.toDateString());
-                }}
-              />
+              <DatePicker onChange={(e) => setEndDate(e.toDateString())} />
             </div>
           </div>
           <label className="text-lg font-bold my-2" htmlFor="bid-artwork">
@@ -183,18 +203,20 @@ export default function NewAuction() {
             Description
           </label>
           <textarea
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
+            ref={description}
             rows={5}
-            className="focus:outline-none border px-2 py-3 rounded-lg"
+            className="focus:outline-none border px-2 py-3 rounded-lg focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
             placeholder="A distinct artwork depicting the last scenary before the sunset&#10;Material Used - Pastels&#10;Packing - Will be wrapped in bubble sheet "
             name="desc-artwork"></textarea>
-          <button
-            onClick={AddArtwork}
-            className="focus:outline-none bg-black text-white mx-auto my-5 px-2 py-3 w-4/12 font-bold ">
-            List Artwork
-          </button>
+          {startLoader ? (
+            <Loader />
+          ) : (
+            <button
+              onClick={AddArtwork}
+              className="focus:outline-none bg-black text-white mx-auto my-5 px-2 py-3 w-4/12 font-bold ">
+              List Artwork
+            </button>
+          )}
         </form>
         <ArtworkImageUploader />
       </div>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
+import { emailValidate, passValidate } from '../../utils/Validors/CredentialValidator';
 import {
   getAuth,
   signInWithPopup,
@@ -15,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUser } from '../../redux/features/userReducer';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
+import Loader from '../../components/Loader/Loader';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
 export default function Login() {
@@ -30,13 +32,14 @@ export default function Login() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const toaster = useToaster();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const email = useRef();
+  const password = useRef();
   const navigate = useNavigate();
+  const [loadSignIn, setLoadSignIn] = useState(false);
 
   const signInWithGoogle = () => {
     //dispatch(loginStart());        for redux part
+    setLoadSignIn(true);
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
@@ -75,11 +78,15 @@ export default function Login() {
         } else if (user.admin) {
           // I think we should not allow admin to login through Google only email and password
           navigate('/admin/dashboard');
+        } else {
+          Toaster(toaster, 'error', 'Select a user type');
+          setLoadSignIn(false);
         }
 
         // console.log(token, data);
       })
       .catch((error) => {
+        setLoadSignIn(false);
         //dispatch(loginFailure());          for redux part
         // Handle Errors here.
         const errorCode = error.code;
@@ -101,63 +108,77 @@ export default function Login() {
   };
 
   const signInWithEmailAndPass = (e) => {
-    e.preventDefault();
-
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed in
-        // const data = userCredential.user;
-        if (user.buyer) {
-          await API.post('/api/auth/user/signin', {
-            email: userCredential.user.email
-          }).then((res) => {
-            console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
-        } else if (user.artist) {
-          await API.post('/api/auth/artist/signin', {
-            email: userCredential.user.email
-          }).then((res) => {
-            console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
-        } else if (user.admin) {
-          //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
-          // await API.post('/api/auth/admin/signin', {
-          //   email: userCredential.user.email
-          // }).then((res) => {
-          //   console.log(res);
-          //   navigate('/admin/dashboard');
-          //   //dispatch(loginSuccess(res.data));    for redux part
-          //   //navigate("/");
-          // });
-          navigate('/admin/dashboard');
-        }
-        // ...
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        if (
-          errorMessage === 'Firebase: Error (auth/user-not-found).' ||
-          errorMessage === 'Firebase: Error (auth/wrong-password).'
-        ) {
-          Toaster(toaster, 'error', 'Incorrect Email or Password!');
-        } else if (error.response) {
-          if (error.response.data.message === 'User not found!') {
-            Toaster(toaster, 'error', 'Incorrect Email or Password!');
+    if (passValidate(password.current.value) && emailValidate(email.current.value)) {
+      setLoadSignIn(true);
+      e.preventDefault();
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+        .then(async (userCredential) => {
+          // Signed in
+          // const data = userCredential.user;
+          if (user.buyer) {
+            await API.post('/api/auth/user/signin', {
+              email: userCredential.user.email
+            }).then((res) => {
+              console.log(res);
+              localStorage.setItem('auth', JSON.stringify(res.data));
+              navigate('/');
+              //dispatch(loginSuccess(res.data));    for redux part
+              //navigate("/");
+            });
+          } else if (user.artist) {
+            await API.post('/api/auth/artist/signin', {
+              email: userCredential.user.email
+            }).then((res) => {
+              console.log(res);
+              localStorage.setItem('auth', JSON.stringify(res.data));
+              navigate('/');
+              //dispatch(loginSuccess(res.data));    for redux part
+              //navigate("/");
+            });
+          } else if (user.admin) {
+            //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
+            // await API.post('/api/auth/admin/signin', {
+            //   email: userCredential.user.email
+            // }).then((res) => {
+            //   console.log(res);
+            //   navigate('/admin/dashboard');
+            //   //dispatch(loginSuccess(res.data));    for redux part
+            //   //navigate("/");
+            // });
+            navigate('/admin/dashboard');
+          } else {
+            Toaster(toaster, 'error', 'Select a user type');
+            setLoadSignIn(false);
           }
-        } else {
-          Toaster(toaster, 'error', errorMessage);
-        }
-      });
+          // ...
+        })
+        .catch((error) => {
+          setLoadSignIn(false);
+          const errorMessage = error.message;
+          console.log(errorMessage);
+          if (
+            errorMessage === 'Firebase: Error (auth/user-not-found).' ||
+            errorMessage === 'Firebase: Error (auth/wrong-password).'
+          ) {
+            Toaster(toaster, 'error', 'Invalid Credentials Entered!');
+          } else if (error.response) {
+            if (error.response.data.message === 'User not found!') {
+              Toaster(toaster, 'error', 'Incorrect Email or Password!');
+            }
+          } else {
+            Toaster(toaster, 'error', errorMessage);
+          }
+        });
+    } else {
+      setLoadSignIn(false);
+      !emailValidate(email.current.value)
+        ? email.current.setCustomValidity('Invalid Email Format!')
+        : email.current.setCustomValidity('');
+      !passValidate(password.current.value)
+        ? password.current.setCustomValidity('Password Length must be greater than or equal to 6')
+        : password.current.setCustomValidity('');
+    }
   };
 
   // const signedIn = () => {
@@ -238,7 +259,7 @@ export default function Login() {
                     type="text"
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Email address"
-                    onChange={(e) => setEmail(e.target.value)}
+                    ref={email}
                   />
                 </div>
 
@@ -247,7 +268,7 @@ export default function Login() {
                     type="password"
                     className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                     placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    ref={password}
                   />
                 </div>
 
@@ -270,56 +291,62 @@ export default function Login() {
                     Forgot Password?
                   </a>
                 </div>
-                <button
-                  // onClick={signedIn}
-                  onClick={signInWithEmailAndPass}
-                  type="submit"
-                  className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light">
-                  Sign in
-                </button>
+                {loadSignIn ? (
+                  <Loader />
+                ) : (
+                  <>
+                    <button
+                      // onClick={signedIn}
+                      onClick={signInWithEmailAndPass}
+                      type="submit"
+                      className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
+                      data-mdb-ripple="true"
+                      data-mdb-ripple-color="light">
+                      Sign in
+                    </button>
 
-                <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-                  <p className="text-center font-semibold mx-4 mb-0">OR</p>
-                </div>
+                    <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
+                      <p className="text-center font-semibold mx-4 mb-0">OR</p>
+                    </div>
 
-                <p
-                  onClick={signInWithGoogle}
-                  className="px-7 py-3 border border-slate-300 text-slate-400 font-medium text-sm leading-snug uppercase rounded-lg shadow-md focus:no-underline hover:text-slate-600 focus:text-slate-600 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out hover:no-underline w-full flex justify-center items-center mb-3"
-                  role="button"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 50 50"
-                    className="h-4 w-4 mr-2">
-                    <path
-                      fill="#fbc02d"
-                      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20	s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
-                    <path
-                      fill="#e53935"
-                      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039	l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
-                    <path
-                      fill="#4caf50"
-                      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
-                    <path
-                      fill="#1565c0"
-                      d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
-                  </svg>
-                  Continue with Google
-                </p>
+                    <p
+                      onClick={signInWithGoogle}
+                      className="px-7 py-3 border border-slate-300 text-slate-400 font-medium text-sm leading-snug uppercase rounded-lg shadow-md focus:no-underline hover:text-slate-600 focus:text-slate-600 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out hover:no-underline w-full flex justify-center items-center mb-3"
+                      role="button"
+                      data-mdb-ripple="true"
+                      data-mdb-ripple-color="light">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        x="0px"
+                        y="0px"
+                        viewBox="0 0 50 50"
+                        className="h-4 w-4 mr-2">
+                        <path
+                          fill="#fbc02d"
+                          d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20	s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
+                        <path
+                          fill="#e53935"
+                          d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039	l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
+                        <path
+                          fill="#4caf50"
+                          d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
+                        <path
+                          fill="#1565c0"
+                          d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
+                      </svg>
+                      Continue with Google
+                    </p>
 
-                <div className="mt-6 text-center">
-                  <p onClick={() => navigate('/signup')}>
-                    Need an Account?{' '}
-                    <span className="text-primary hover:text-primary focus:text-primary hover:underline hover:underline-offset-2 cursor-pointer">
-                      Sign Up
-                    </span>
-                  </p>
-                </div>
+                    <div className="mt-6 text-center">
+                      <p onClick={() => navigate('/signup')}>
+                        Need an Account?{' '}
+                        <span className="text-primary hover:text-primary focus:text-primary hover:underline hover:underline-offset-2 cursor-pointer">
+                          Sign Up
+                        </span>
+                      </p>
+                    </div>
+                  </>
+                )}
               </form>
             </div>
           </div>
