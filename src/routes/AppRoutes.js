@@ -82,7 +82,7 @@ const AppRoutes = () => {
             <>
               <Route path="add/artwork" element={<NewAuction />} />
               <Route path="artist/auctions" element={<ArtistAuctionList />} />
-              <Route path="artist/profile" element={<ArtistProfileDashboard data={data} />} />
+              <Route path="artist/profile" element={<ArtistProfileDashboard />} />
               <Route path="view/buyer/proposal" element={<BuyerProposal data={data} />} />
             </>
           )}

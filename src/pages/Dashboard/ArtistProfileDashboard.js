@@ -14,7 +14,8 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
-export default function ArtistProfileDashboard({ data }) {
+import API from '../../api/server';
+export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const toaster = useToaster();
@@ -23,6 +24,7 @@ export default function ArtistProfileDashboard({ data }) {
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [artistname, setArtistname] = useState('');
   const [profileimage, setProfileimage] = useState('');
+  const [artworks, setArtworks] = useState([]);
   useEffect(() => {
     if (auth) {
       setArtistname(auth.user.name);
@@ -33,8 +35,21 @@ export default function ArtistProfileDashboard({ data }) {
           'https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg'
         );
       }
+      API.get('/api/artworks/artist', {
+        headers: {
+          token: 'Bearer ' + auth.token
+        }
+      })
+        .then((res) => {
+          console.log(res);
+          setArtworks(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          Toaster(toaster, 'error', err.response.data.message);
+        });
     }
-  });
+  }, []);
   const logoutuser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -82,6 +97,7 @@ export default function ArtistProfileDashboard({ data }) {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
                       <img
+                        referrerPolicy="no-referrer"
                         alt="..."
                         src={profileimage}
                         // src="https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg"
@@ -169,12 +185,20 @@ export default function ArtistProfileDashboard({ data }) {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {data?.map((photo) => (
+                      {/* {data?.map((photo) => (
                         <motion.div
                           key={photo.id}
                           animate={{ x: [-2000, 350, 0] }}
                           transition={{ duration: 1.5, delay: 0 }}>
                           <ProfileAuctionCard key={photo.id} photo={photo} />
+                        </motion.div>
+                      ))} */}
+                      {artworks?.map((artwork) => (
+                        <motion.div
+                          key={artwork._id}
+                          animate={{ x: [-2000, 350, 0] }}
+                          transition={{ duration: 1.5, delay: 0 }}>
+                          <ProfileAuctionCard key={artwork._id} artwork={artwork} />
                         </motion.div>
                       ))}
                       <div></div>
