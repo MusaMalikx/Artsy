@@ -15,6 +15,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ export default function ArtistProfileDashboard() {
   const [artistname, setArtistname] = useState('');
   const [profileimage, setProfileimage] = useState('');
   const [artworks, setArtworks] = useState([]);
+
   useEffect(() => {
     if (auth) {
       setArtistname(auth.user.name);

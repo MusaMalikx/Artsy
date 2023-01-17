@@ -6,7 +6,7 @@ export default function ArtworkImageUploader({ setImageList }) {
   const [isUploaded, setIsUploaded] = useState([]);
 
   const uploadImage = (event) => {
-    setIsUploaded([])
+    setIsUploaded([]);
     const length = event.target.files.length;
     setImageList(event.target.files);
     let i = 0;
