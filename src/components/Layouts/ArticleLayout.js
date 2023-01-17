@@ -24,11 +24,11 @@ const ArticleLayout = ({ children, title, bool }) => {
   return (
     <div>
       <motion.article
-        initial={{ y: "50px", opacity: 0 }}
+        initial={{ y: '50px', opacity: 0 }}
         // initial="hidden"
-        animate={{ opacity: 1, y: "0px" }}
+        animate={{ opacity: 1, y: '0px' }}
         transition={{
-          type: "tween",
+          type: 'tween',
           duration: 1,
           repeat: 0
         }}

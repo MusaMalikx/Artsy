@@ -58,7 +58,8 @@ export default function Login() {
             imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
+            const newData = { ...res.data, usertype: 'buyer' };
+            localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
@@ -72,7 +73,8 @@ export default function Login() {
             imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
+            const newData = { ...res.data, usertype: 'artist' };
+            localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             // navigate("/");
@@ -123,7 +125,8 @@ export default function Login() {
               email: userCredential.user.email
             }).then((res) => {
               console.log(res);
-              localStorage.setItem('auth', JSON.stringify(res.data));
+              const newData = { ...res.data, usertype: 'buyer' };
+              localStorage.setItem('auth', JSON.stringify(newData));
               navigate('/');
               //dispatch(loginSuccess(res.data));    for redux part
               //navigate("/");
@@ -133,7 +136,8 @@ export default function Login() {
               email: userCredential.user.email
             }).then((res) => {
               console.log(res);
-              localStorage.setItem('auth', JSON.stringify(res.data));
+              const newData = { ...res.data, usertype: 'artist' };
+              localStorage.setItem('auth', JSON.stringify(newData));
               navigate('/');
               //dispatch(loginSuccess(res.data));    for redux part
               //navigate("/");

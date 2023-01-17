@@ -9,7 +9,7 @@ const passValidate = (password) => {
 };
 
 const nameValidate = (name) => {
-  const currentName = name.replace(" ","")
+  const currentName = name.replace(' ', '');
   return validator.isAlpha(currentName) && validator.isLength(currentName, { min: 3, max: 30 });
 };
 
@@ -22,10 +22,7 @@ const phoneValidate = (phone) => {
 };
 
 const cnicValidate = (cnic) => {
-  return (
-    validator.isNumeric(cnic) &&
-    validator.isLength(cnic, { min: 13, max: 13 })
-  );
+  return validator.isNumeric(cnic) && validator.isLength(cnic, { min: 13, max: 13 });
 };
 
 export { emailValidate, passValidate, nameValidate, phoneValidate, cnicValidate };

@@ -74,7 +74,7 @@ const AppRoutes = () => {
             <>
               <Route path="chat" element={<Chat data={data} />} />
               <Route path="search" element={<Search data={data} />} />
-              <Route path="auctions" element={<Auctions data={data} />} />
+              <Route path="auctions" element={<Auctions />} />
               <Route path="auctions/:id" element={<AuctionItem data={data} />} />
             </>
           )}

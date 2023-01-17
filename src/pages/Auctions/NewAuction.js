@@ -57,7 +57,7 @@ export default function NewAuction() {
           .then(async (res) => {
             const formData = new FormData();
             // formData.append('productImage', images);
-            for (let i = 0; i < images.length && i<9; i++) {
+            for (let i = 0; i < images.length && i < 9; i++) {
               formData.append('productImage', images[i]);
             }
             formData.append('title', title.current.value);
