@@ -14,8 +14,7 @@ const amountValidate = (balance) => {
 };
 
 const secruityCodeValidate = (secCode) => {
-    return validator.isNumeric(secCode) && validator.isLength(secCode, { min: 3 , max: 3 });
-  };
+  return validator.isNumeric(secCode) && validator.isLength(secCode, { min: 3, max: 3 });
+};
 
-
-export { holderNameValidate,secruityCodeValidate, cardNumberValidate, amountValidate };
+export { holderNameValidate, secruityCodeValidate, cardNumberValidate, amountValidate };
