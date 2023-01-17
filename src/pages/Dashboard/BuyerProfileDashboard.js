@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
 import { AiFillFlag, AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { motion } from 'framer-motion';
@@ -12,12 +12,44 @@ import { logout } from '../../redux/features/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
 import BuyerReview from '../../components/Modals/BuyerReview';
 import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCard';
+import { getAuth, signOut } from 'firebase/auth';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
 export default function BuyerProfileDashboard({ data }) {
+  const toaster = useToaster();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
+  const [buyername, setBuyername] = useState('');
+  const [profileimage, setProfileimage] = useState('');
+  useEffect(() => {
+    if (auth) {
+      setBuyername(auth.user.name);
+      if (auth.user.imageURL !== '') {
+        setProfileimage(auth.user.imageURL);
+      } else {
+        setProfileimage('https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe');
+      }
+    }
+  });
+  const logoutuser = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful for firebase
+        localStorage.setItem('auth', JSON.stringify(null)); //remove auth token from localstorage
+        setAuth(JSON.parse(localStorage.getItem('auth')));
+        navigate('/signin');
+        dispatch(logout()); //Remove redux state for signedIn to false
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error);
+        Toaster(toaster, 'error', 'An Error Occured When Logging Out, Refresh Page');
+      });
+  };
   return (
     <Layout title="Profile">
       <main className="profile-page">
@@ -29,14 +61,7 @@ export default function BuyerProfileDashboard({ data }) {
                 "url('https://img.freepik.com/free-photo/blue-oil-paint-strokes-textured-background_53876-98328.jpg?w=2000')"
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
-            <div
-              className="flex justify-end m-5"
-              onClick={() => {
-                localStorage.setItem('auth', JSON.stringify(null));
-                setAuth(JSON.parse(localStorage.getItem('auth')));
-                navigate('/signin');
-                dispatch(logout());
-              }}>
+            <div className="flex justify-end m-5" onClick={logoutuser}>
               <Button color="red" appearance="primary">
                 Logout
               </Button>
@@ -56,7 +81,8 @@ export default function BuyerProfileDashboard({ data }) {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
                       <img
-                        src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
+                        // src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
+                        src={profileimage}
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
                         alt="profile"
                         srcSet=""
@@ -135,7 +161,7 @@ export default function BuyerProfileDashboard({ data }) {
                 </div>
                 <div className="text-center">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    {auth ? auth.user.name : 'Ahmed'}
+                    {buyername ? buyername : 'Name Unknown'}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>

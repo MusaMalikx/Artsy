@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
 import { AiFillStar, AiOutlineStar, AiFillFlag } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
@@ -11,12 +11,61 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-export default function ArtistProfileDashboard({ data }) {
+import { getAuth, signOut } from 'firebase/auth';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
+import API from '../../api/server';
+export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const toaster = useToaster();
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
+  const [artistname, setArtistname] = useState('');
+  const [profileimage, setProfileimage] = useState('');
+  const [artworks, setArtworks] = useState([]);
+  useEffect(() => {
+    if (auth) {
+      setArtistname(auth.user.name);
+      if (auth.user.imageURL !== '') {
+        setProfileimage(auth.user.imageURL);
+      } else {
+        setProfileimage(
+          'https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg'
+        );
+      }
+      API.get('/api/artworks/artist', {
+        headers: {
+          token: 'Bearer ' + auth.token
+        }
+      })
+        .then((res) => {
+          console.log(res);
+          setArtworks(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          Toaster(toaster, 'error', err.response.data.message);
+        });
+    }
+  }, []);
+  const logoutuser = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful for firebase
+        localStorage.setItem('auth', JSON.stringify(null)); //remove auth token from localstorage
+        setAuth(JSON.parse(localStorage.getItem('auth')));
+        navigate('/signin');
+        dispatch(logout()); //Remove redux state for signedIn to false
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error);
+        Toaster(toaster, 'error', 'An Error Occured When Logging Out, Refresh Page');
+      });
+  };
   return (
     <Layout title="Profile">
       <main className="profile-page">
@@ -28,14 +77,7 @@ export default function ArtistProfileDashboard({ data }) {
                 "url('https://img.freepik.com/free-photo/blue-oil-paint-strokes-textured-background_53876-98328.jpg?w=2000')"
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
-            <div
-              className="flex justify-end m-5"
-              onClick={() => {
-                localStorage.setItem('auth', JSON.stringify(null));
-                setAuth(JSON.parse(localStorage.getItem('auth')));
-                navigate('/signin');
-                dispatch(logout());
-              }}>
+            <div className="flex justify-end m-5" onClick={logoutuser}>
               <Button color="red" appearance="primary">
                 Logout
               </Button>
@@ -55,8 +97,10 @@ export default function ArtistProfileDashboard({ data }) {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
                       <img
+                        referrerPolicy="no-referrer"
                         alt="..."
-                        src="https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg"
+                        src={profileimage}
+                        // src="https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg"
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
                       />
                     </div>
@@ -128,7 +172,7 @@ export default function ArtistProfileDashboard({ data }) {
                 </div>
                 <div className="text-center">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    {auth ? auth.user.name : 'Musa Malik'}
+                    {artistname ? artistname : 'Name Unknown'}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
@@ -141,12 +185,20 @@ export default function ArtistProfileDashboard({ data }) {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {data?.map((photo) => (
+                      {/* {data?.map((photo) => (
                         <motion.div
                           key={photo.id}
                           animate={{ x: [-2000, 350, 0] }}
                           transition={{ duration: 1.5, delay: 0 }}>
                           <ProfileAuctionCard key={photo.id} photo={photo} />
+                        </motion.div>
+                      ))} */}
+                      {artworks?.map((artwork) => (
+                        <motion.div
+                          key={artwork._id}
+                          animate={{ x: [-2000, 350, 0] }}
+                          transition={{ duration: 1.5, delay: 0 }}>
+                          <ProfileAuctionCard key={artwork._id} artwork={artwork} />
                         </motion.div>
                       ))}
                       <div></div>

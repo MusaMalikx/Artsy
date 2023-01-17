@@ -68,10 +68,10 @@ export default function SignUp() {
     ) {
       e.preventDefault();
       if (!user.buyer && !user.artist) {
-        setLoadSignUp(false)
+        setLoadSignUp(false);
         Toaster(toaster, 'error', 'Select User Type');
       } else if (!acceptTerms) {
-        setLoadSignUp(false)
+        setLoadSignUp(false);
         Toaster(toaster, 'error', 'Accept Terms and Agreements to Continue');
       } else {
         setLoadSignUp(true);
@@ -121,8 +121,7 @@ export default function SignUp() {
                       console.log(res);
                       navigate('/SignIn');
                     });
-                  }
-                  else {
+                  } else {
                     setLoadSignUp(false);
                     Toaster(toaster, 'error', 'Select a user type');
                   }
@@ -208,7 +207,8 @@ export default function SignUp() {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
-            email: result.user.email
+            email: result.user.email,
+            imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
             localStorage.setItem('auth', JSON.stringify(res.data));
@@ -221,7 +221,8 @@ export default function SignUp() {
           await API.post('/api/auth/artist/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
-            email: result.user.email
+            email: result.user.email,
+            imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
             localStorage.setItem('auth', JSON.stringify(res.data));
@@ -229,11 +230,10 @@ export default function SignUp() {
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
           });
-        }  else {
+        } else {
           setLoadSignUp(false);
           Toaster(toaster, 'error', 'Select a user type');
         }
-
         // console.log(token, data);
       })
       .catch((error) => {

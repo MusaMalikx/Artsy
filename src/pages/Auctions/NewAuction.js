@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useState } from 'react';
 import { DatePicker, Dropdown, useToaster } from 'rsuite';
-import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
+// import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
 import Toaster from '../../components/Common/Toaster';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
@@ -14,6 +14,8 @@ import {
   descriptionValidate
 } from '../../utils/Validors/ProposalValidators';
 import Loader from '../../components/Loader/Loader';
+import { useNavigate } from 'react-router-dom';
+import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
@@ -23,10 +25,13 @@ export default function NewAuction() {
   const [startdate, setStartDate] = useState('');
   const [enddate, setEndDate] = useState('');
   const description = useRef();
+  const [images, setImages] = useState({});
   const [startLoader, setStartLoader] = useState(false);
   const user = useSelector(selectUser);
+  const navigate = useNavigate();
   const AddArtwork = async (e) => {
     if (
+      //Also Add check if files are selected or not , and max limit for pictures are 3 for now, change limit in backend in artworks.js in /add api
       titleValidate(title.current.value) &&
       descriptionValidate(description.current.value) &&
       amountValidate(baseprice.current.value) &&
@@ -50,23 +55,27 @@ export default function NewAuction() {
           }
         )
           .then(async (res) => {
-            console.log(res);
-            await API.post(
-              '/api/artworks/add',
-              {
-                title: title.current.value,
-                baseprice: baseprice.current.value,
-                description: description.current.value,
-                startdate: startdate,
-                enddate: enddate,
-                category: category
-              },
-              {
-                headers: {
-                  token: 'Bearer ' + auth.token
-                }
+            const formData = new FormData();
+            // formData.append('productImage', images);
+            for (let i = 0; i < images.length && i<9; i++) {
+              formData.append('productImage', images[i]);
+            }
+            formData.append('title', title.current.value);
+            formData.append('baseprice', baseprice.current.value);
+            formData.append('description', description.current.value);
+            formData.append('startdate', startdate);
+            formData.append('enddate', enddate);
+            formData.append('category', category);
+
+            const config = {
+              headers: {
+                token: 'Bearer ' + auth.token,
+                'Content-Type': 'multipart/form-data'
               }
-            )
+            };
+
+            console.log(res);
+            await API.post('/api/artworks/add', formData, config)
               .then((res) => {
                 setTimeout(() => {
                   setStartLoader(false);
@@ -79,7 +88,7 @@ export default function NewAuction() {
                 console.log(err);
                 Toaster(toaster, 'error', err.response.data.message);
               });
-            //navigate('/');
+            navigate('/artist/profile');
           })
           .catch((err) => {
             setStartLoader(false);
@@ -115,8 +124,8 @@ export default function NewAuction() {
   return (
     <Layout title={'Add Artwork'}>
       <HeaderLayout title="Add Artwork" />
-      <div className="border-2   mb-14 w-10/12 mx-auto p-2 flex flex-col md:flex-row rounded-lg">
-        <form className="flex flex-col w-full px-2 max-w-6xl" action="#">
+      <div className="border-2   mb-14 w-10/12 mx-auto p-2 flex flex-col lg:flex-row rounded-lg">
+        <form className="flex flex-col w-full px-2 lg:max-w-4xl" action="#">
           <div className="flex sm:flex-row flex-col gap-3">
             <div className="flex flex-col w-full">
               <label className=" text-lg font-bold my-2" htmlFor="title-artwork">
@@ -208,6 +217,13 @@ export default function NewAuction() {
             className="focus:outline-none border px-2 py-3 rounded-lg focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
             placeholder="A distinct artwork depicting the last scenary before the sunset&#10;Material Used - Pastels&#10;Packing - Will be wrapped in bubble sheet "
             name="desc-artwork"></textarea>
+          {/* <input
+            type="file"
+            onChange={(e) => {
+              setImages(e.target.files);
+            }}
+            multiple
+          /> */}
           {startLoader ? (
             <Loader />
           ) : (
@@ -218,7 +234,11 @@ export default function NewAuction() {
             </button>
           )}
         </form>
-        <ArtworkImageUploader />
+        <ArtworkImageUploader
+          setImageList={(files) => {
+            setImages(files);
+          }}
+        />
       </div>
       {/* {showToaster ? (
         <Toaster
