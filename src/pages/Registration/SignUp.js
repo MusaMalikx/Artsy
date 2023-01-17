@@ -211,7 +211,7 @@ export default function SignUp() {
             imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
+            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'buyer' }));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
@@ -225,7 +225,7 @@ export default function SignUp() {
             imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
-            localStorage.setItem('auth', JSON.stringify(res.data));
+            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'artist' }));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");

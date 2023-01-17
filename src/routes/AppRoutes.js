@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import ArtistAuctionList from '../pages/Artist/ArtistAuctionList';
 import AuctionItem from '../pages/Auctions/AuctionItem';
 import Auctions from '../pages/Auctions/Auctions';
@@ -18,8 +18,8 @@ import BuyerCreatedProposal from '../pages/Proposal/BuyerCreatedProposal';
 import ArtistProposal from '../pages/Proposal/ArtistProposal';
 import BuyerAcceptedProposal from '../pages/Proposal/BuyerAcceptedProposal';
 import BuyerProfileDashboard from '../pages/Dashboard/BuyerProfileDashboard';
-import { useSelector } from 'react-redux';
-import { selectSignedIn, selectUser } from '../redux/features/userReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSignedIn, selectUser, setUser } from '../redux/features/userReducer';
 import Reports from '../pages/Admin/Reports';
 import AuctionsList from '../pages/Admin/AuctionsList';
 import AuctionListItem from '../pages/Admin/AuctionListItem';
@@ -27,11 +27,20 @@ import AdminChat from '../pages/Admin/AdminChat';
 import AdminUsers from '../pages/Admin/AdminUsers';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
+  // console.log('auth', JSON.parse(localStorage.getItem('auth')));
+  const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
+  // console.log(auth);
+
+  // console.log('user', auth.user);
+  // const us = Object.assign(auth.user, { artist: false });
+  // console.log('us', us);
   // const [user, setUser] = useState({
   //   admin: false,
   //   buyer: false,
   //   artist: false
   // });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector(selectUser);
   const signedIn = useSelector(selectSignedIn);
   // console.log(user);
@@ -42,11 +51,21 @@ const AppRoutes = () => {
   // const [user, setUser] = useState(null);
 
   useEffect(() => {
+    if (auth?.type === 'buyer') {
+      dispatch(setUser({ buyer: true }));
+      navigate('/');
+    } else if (auth?.type === 'artist') {
+      dispatch(setUser({ artist: true }));
+      navigate('/');
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     API.search
       .getPhotos({ query: 'art' })
       .then((res) => {
         setPhotosResponse(res.response.results);
-        console.log(res.response.results);
+        // console.log(res.response.results);
       })
       .catch(() => {
         console.log('something went wrong!');
