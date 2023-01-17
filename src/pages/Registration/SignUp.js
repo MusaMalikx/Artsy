@@ -6,14 +6,14 @@ import { FaUserAlt, FaUserEdit } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setUser } from '../../redux/features/userReducer';
+import { selectUser, setUser } from '../../redux/features/reducer/userReducer';
 import {
   emailValidate,
   passValidate,
   nameValidate,
   phoneValidate,
   cnicValidate
-} from '../../utils/Validors/CredentialValidator';
+} from '../../helpers/credential-validators';
 import {
   getAuth,
   signInWithPopup,

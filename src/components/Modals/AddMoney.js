@@ -7,7 +7,7 @@ import {
   cardNumberValidate,
   amountValidate,
   secruityCodeValidate
-} from '../../utils/Validors/WalletValidators';
+} from '../../helpers/wallet-validators';
 
 const AddMoney = ({ open, handleClose }) => {
   const holderName = useRef();

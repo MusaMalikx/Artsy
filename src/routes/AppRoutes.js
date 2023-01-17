@@ -19,7 +19,7 @@ import ArtistProposal from '../pages/Proposal/ArtistProposal';
 import BuyerAcceptedProposal from '../pages/Proposal/BuyerAcceptedProposal';
 import BuyerProfileDashboard from '../pages/Dashboard/BuyerProfileDashboard';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSignedIn, selectUser, setUser } from '../redux/features/userReducer';
+import { selectSignedIn, selectUser, setUser } from '../redux/features/reducer/userReducer';
 import Reports from '../pages/Admin/Reports';
 import AuctionsList from '../pages/Admin/AuctionsList';
 import AuctionListItem from '../pages/Admin/AuctionListItem';

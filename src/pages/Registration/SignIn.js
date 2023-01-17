@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
-import { emailValidate, passValidate } from '../../utils/Validors/CredentialValidator';
+import { emailValidate, passValidate } from '../../helpers/credential-validators';
 import {
   getAuth,
   signInWithPopup,
@@ -11,12 +11,17 @@ import {
 } from 'firebase/auth';
 import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
-import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setUser } from '../../redux/features/userReducer';
+import { selectUser, setUser } from '../../redux/features/reducer/userReducer';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import Loader from '../../components/Loader/Loader';
+import {
+  useSignInArtistWithEmailAndPassMutation,
+  useSignInArtistWithGoogleMutation,
+  useSignInBuyerWithEmailAndPassMutation,
+  useSignInBuyerWithGoogleMutation
+} from '../../redux/features/api/signinReducer';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
 export default function Login() {
@@ -29,6 +34,31 @@ export default function Login() {
     delaySpeed: 3000
   });
 
+  // const [deletePost, { isLoading, error, isSuccess, isError }] = useDeletePostMutation();
+  // console.log(isLoading, error, isSuccess, isError);
+
+  const [signInBuyerWithGoogle, signInBuyerWithGoogleResponse] = useSignInBuyerWithGoogleMutation();
+
+  const [signInArtistWithGoogle, signInArtistWithGoogleResponse] =
+    useSignInArtistWithGoogleMutation();
+
+  const [signInBuyerWithEmailAndPass, signInBuyerWithEmailAndPassResponse] =
+    useSignInBuyerWithEmailAndPassMutation();
+
+  const [signInArtistWithEmailAndPass, signInArtistWithEmailAndPassResponse] =
+    useSignInArtistWithEmailAndPassMutation();
+
+  // const [dependencies] = useState([
+  //   signInBuyerWithGoogleResponse.isError,
+  //   signInBuyerWithGoogleResponse.isSuccess,
+  //   signInArtistWithGoogleResponse.isError,
+  //   signInArtistWithGoogleResponse.isSuccess,
+  //   signInBuyerWithEmailAndPassResponse.isError,
+  //   signInBuyerWithEmailAndPassResponse.isSuccess,
+  //   signInArtistWithEmailAndPassResponse.isError,
+  //   signInArtistWithEmailAndPassResponse.isSuccess
+  // ]);
+
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const toaster = useToaster();
@@ -37,48 +67,66 @@ export default function Login() {
   const navigate = useNavigate();
   const [loadSignIn, setLoadSignIn] = useState(false);
 
+  useEffect(() => {
+    const responseFunction = (response) => {
+      if (response.isError) {
+        Toaster(toaster, 'error', response.error.data.message);
+      } else if (response.isSuccess) {
+        navigate('/');
+      }
+    };
+
+    // responseFunction(signInBuyerWithGoogleResponse);
+    responseFunction(signInArtistWithGoogleResponse);
+
+    // if (signInBuyerWithGoogleResponse) errorFunction(signInBuyerWithGoogleResponse);
+    // if (signInBuyerWithGoogleResponse) successFunction(signInBuyerWithGoogleResponse);
+    // if (signInArtistWithGoogleResponse) errorFunction(signInArtistWithGoogleResponse);
+    // if (signInArtistWithGoogleResponse) successFunction(signInArtistWithGoogleResponse);
+    // if (signInBuyerWithEmailAndPassResponse) errorFunction(signInBuyerWithEmailAndPassResponse);
+    // if (signInBuyerWithEmailAndPassResponse) successFunction(signInBuyerWithEmailAndPassResponse);
+    // if (signInArtistWithEmailAndPassResponse) errorFunction(signInArtistWithEmailAndPassResponse);
+    // if (signInArtistWithEmailAndPassResponse) successFunction(signInArtistWithEmailAndPassResponse);
+  }, [
+    signInBuyerWithGoogleResponse.isError,
+    signInBuyerWithGoogleResponse.isSuccess,
+    signInArtistWithGoogleResponse.isError,
+    signInArtistWithGoogleResponse.isSuccess,
+    signInBuyerWithEmailAndPassResponse.isError,
+    signInBuyerWithEmailAndPassResponse.isSuccess,
+    signInArtistWithEmailAndPassResponse.isError,
+    signInArtistWithEmailAndPassResponse.isSuccess
+  ]);
+
   const signInWithGoogle = () => {
     //dispatch(loginStart());        for redux part
-    setLoadSignIn(true);
+
+    // setLoadSignIn(true);
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
         if (user.buyer) {
-          await API.post('/api/auth/user/google', {
+          const payload = {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
             email: result.user.email,
             imageURL: result.user.photoURL
-          }).then((res) => {
-            // console.log(res);
-            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'buyer' }));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
+          };
+          signInBuyerWithGoogle(payload);
         } else if (user.artist) {
-          //await API.get('/').then((res) => console.log(res.data));
-          await API.post('/api/auth/artist/google', {
+          const payload = {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
             email: result.user.email,
             imageURL: result.user.photoURL
-          }).then((res) => {
-            console.log(res);
-            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'artist' }));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            // navigate("/");
-          });
+          };
+          signInArtistWithGoogle(payload);
         } else if (user.admin) {
-          // I think we should not allow admin to login through Google only email and password
           navigate('/admin/dashboard');
         } else {
           Toaster(toaster, 'error', 'Select a user type');
           setLoadSignIn(false);
         }
-
-        // console.log(token, data);
       })
       .catch((error) => {
         setLoadSignIn(false);
@@ -112,35 +160,17 @@ export default function Login() {
           // Signed in
           // const data = userCredential.user;
           if (user.buyer) {
-            await API.post('/api/auth/user/signin', {
+            const payload = {
               email: userCredential.user.email
-            }).then((res) => {
-              console.log(res);
-              localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'buyer' }));
-              navigate('/');
-              //dispatch(loginSuccess(res.data));    for redux part
-              //navigate("/");
-            });
+            };
+            signInBuyerWithEmailAndPass(payload);
           } else if (user.artist) {
-            await API.post('/api/auth/artist/signin', {
+            const payload = {
               email: userCredential.user.email
-            }).then((res) => {
-              console.log(res);
-              localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'artist' }));
-              navigate('/');
-              //dispatch(loginSuccess(res.data));    for redux part
-              //navigate("/");
-            });
+            };
+
+            signInArtistWithEmailAndPass(payload);
           } else if (user.admin) {
-            //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
-            // await API.post('/api/auth/admin/signin', {
-            //   email: userCredential.user.email
-            // }).then((res) => {
-            //   console.log(res);
-            //   navigate('/admin/dashboard');
-            //   //dispatch(loginSuccess(res.data));    for redux part
-            //   //navigate("/");
-            // });
             navigate('/admin/dashboard');
           } else {
             Toaster(toaster, 'error', 'Select a user type');
@@ -175,19 +205,6 @@ export default function Login() {
         : password.current.setCustomValidity('');
     }
   };
-
-  // const signedIn = () => {
-  //   if (user.buyer) {
-  //     // setSignedIn(true);
-  //     navigate('/');
-  //   } else if (user.artist) {
-  //     // setSignedIn(true);
-  //     navigate('/');
-  //   } else if (user.admin) {
-  //     navigate('/admin/dashboard');
-  //     // setSignedIn(true);
-  //   }
-  // };
 
   return (
     <RegistrationLayout title={'Login'}>
