@@ -23,6 +23,12 @@ import {
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import Loader from '../../components/Loader/Loader';
+import {
+  useSignUpArtistWithEmailMutation,
+  useSignUpArtistWithGoogleMutation,
+  useSignUpBuyerWithEmailMutation,
+  useSignUpBuyerWithGoogleMutation
+} from '../../redux/features/api/signupReducer';
 
 export default function SignUp() {
   const [
@@ -38,6 +44,22 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const toaster = useToaster();
   const [acceptTerms, setAcceptTerms] = useState(false);
+
+  const [signUpBuyerWithGoogle, signUpBuyerWithGoogleResponse] = useSignUpBuyerWithGoogleMutation();
+
+  const [signUpArtistWithGoogle, signUpArtistWithGoogleResponse] =
+    useSignUpArtistWithGoogleMutation();
+
+  const [signUpBuyerWithEmail, signUpBuyerWithEmailResponse] = useSignUpBuyerWithEmailMutation();
+
+  const [signUpArtistWithEmail, signUpArtistWithEmailResponse] = useSignUpArtistWithEmailMutation();
+
+  console.log(
+    signUpBuyerWithGoogleResponse,
+    signUpArtistWithGoogleResponse,
+    signUpBuyerWithEmailResponse,
+    signUpArtistWithEmailResponse
+  );
 
   // const [user, setUser] = useState({
   //   buyer: true,
@@ -74,7 +96,7 @@ export default function SignUp() {
         setLoadSignUp(false);
         Toaster(toaster, 'error', 'Accept Terms and Agreements to Continue');
       } else {
-        setLoadSignUp(true);
+        // setLoadSignUp(true);
         let url = '/api/auth/user/check';
         if (user.buyer) {
           url = '/api/auth/user/check';
@@ -86,7 +108,7 @@ export default function SignUp() {
           cnic: cnicfield.current.value
         })
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             if (
               name.current.value != '' &&
               email.current.value != '' &&
@@ -97,30 +119,18 @@ export default function SignUp() {
                 .then(async (userCredential) => {
                   // Signed in
                   // const data = userCredential.user;
+                  const payload = {
+                    email: userCredential.user.email,
+                    firebaseid: userCredential.user.uid,
+                    name: name.current.value,
+                    phonenumber: phonenumber.current.value,
+                    cnic: cnicfield.current.value
+                  };
+
                   if (user.buyer) {
-                    await API.post('/api/auth/user/signup', {
-                      email: userCredential.user.email,
-                      firebaseid: userCredential.user.uid,
-                      name: name.current.value,
-                      phonenumber: phonenumber.current.value,
-                      cnic: cnicfield.current.value
-                    })
-                      .then((res) => {
-                        console.log(res);
-                        navigate('/SignIn');
-                      })
-                      .catch((err) => console.log(err));
+                    signUpBuyerWithEmail(payload);
                   } else if (user.artist) {
-                    await API.post('/api/auth/artist/signup', {
-                      email: userCredential.user.email,
-                      firebaseid: userCredential.user.uid,
-                      name: name.current.value,
-                      phonenumber: phonenumber.current.value,
-                      cnic: cnicfield.current.value
-                    }).then((res) => {
-                      console.log(res);
-                      navigate('/SignIn');
-                    });
+                    signUpArtistWithEmail(payload);
                   } else {
                     setLoadSignUp(false);
                     Toaster(toaster, 'error', 'Select a user type');
@@ -191,7 +201,7 @@ export default function SignUp() {
   };
 
   const signInWithGoogle = () => {
-    setLoadSignUp(true);
+    // setLoadSignUp(true);
     //dispatch(loginStart());        for redux part
 
     const auth = getAuth(firebaseApp);
@@ -204,32 +214,46 @@ export default function SignUp() {
         // // The signed-in user info.
         // const data = result.user;
         if (user.buyer) {
-          await API.post('/api/auth/user/google', {
+          const payload = {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
             email: result.user.email,
             imageURL: result.user.photoURL
-          }).then((res) => {
-            console.log(res);
-            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'buyer' }));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
+          };
+          signUpBuyerWithGoogle(payload);
+          // await API.post('/api/auth/user/google', {
+          //   displayName: result.user.displayName,
+          //   firebaseid: result.user.uid,
+          //   email: result.user.email,
+          //   imageURL: result.user.photoURL
+          // }).then((res) => {
+          //   console.log(res);
+          //   localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'buyer' }));
+          //   navigate('/');
+          //   //dispatch(loginSuccess(res.data));    for redux part
+          //   //navigate("/");
+          // });
         } else if (user.artist) {
-          //await API.get('/').then((res) => console.log(res.data));
-          await API.post('/api/auth/artist/google', {
+          const payload = {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
             email: result.user.email,
             imageURL: result.user.photoURL
-          }).then((res) => {
-            console.log(res);
-            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'artist' }));
-            navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
-          });
+          };
+          signUpArtistWithGoogle(payload);
+          //await API.get('/').then((res) => console.log(res.data));
+          // await API.post('/api/auth/artist/google', {
+          //   displayName: result.user.displayName,
+          //   firebaseid: result.user.uid,
+          //   email: result.user.email,
+          //   imageURL: result.user.photoURL
+          // }).then((res) => {
+          //   console.log(res);
+          //   localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'artist' }));
+          //   navigate('/');
+          //   //dispatch(loginSuccess(res.data));    for redux part
+          //   //navigate("/");
+          // });
         } else {
           setLoadSignUp(false);
           Toaster(toaster, 'error', 'Select a user type');

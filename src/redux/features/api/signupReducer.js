@@ -1,18 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseUrl } from '../../../constants/api-base-url';
 
-export const signinReducer = createApi({
-  reducerPath: 'signinReducer',
+export const signupReducer = createApi({
+  reducerPath: 'signupReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl
   }),
-  tagTypes: ['SignIn'],
+  tagTypes: ['SignUp'],
   endpoints: (builder) => ({
     // getPosts: builder.query({
     //   query: () => '/posts',
     //   providesTags: ['Post']
     // }),
-    signInBuyerWithGoogle: builder.mutation({
+    signUpBuyerWithGoogle: builder.mutation({
       query: (payload) => ({
         url: '/api/auth/user/google',
         method: 'POST',
@@ -26,11 +26,11 @@ export const signinReducer = createApi({
         localStorage.setItem('auth', JSON.stringify({ ...res, type: 'buyer' }));
       },
       transformErrorResponse: (res) => console.log(res),
-      invalidatesTags: ['SignIn']
+      invalidatesTags: ['SignUp']
     }),
-    signInBuyerWithEmailAndPass: builder.mutation({
+    signUpBuyerWithEmail: builder.mutation({
       query: (payload) => ({
-        url: '/api/auth/user/signin',
+        url: '/api/auth/user/signup',
         method: 'POST',
         body: payload,
         headers: {
@@ -38,13 +38,13 @@ export const signinReducer = createApi({
         }
       }),
       transformResponse: (res) => {
-        console.log('res', res);
+        console.log(res);
         localStorage.setItem('auth', JSON.stringify({ ...res, type: 'buyer' }));
       },
       transformErrorResponse: (res) => console.log(res),
-      invalidatesTags: ['SignIn']
+      invalidatesTags: ['SignUp']
     }),
-    signInArtistWithGoogle: builder.mutation({
+    signUpArtistWithGoogle: builder.mutation({
       query: (payload) => ({
         url: '/api/auth/artist/google',
         method: 'POST',
@@ -54,15 +54,15 @@ export const signinReducer = createApi({
         }
       }),
       transformResponse: (res) => {
-        console.log(res);
+        console.log('res', res);
         localStorage.setItem('auth', JSON.stringify({ ...res, type: 'artist' }));
       },
       transformErrorResponse: (res) => console.log(res),
-      invalidatesTags: ['SignIn']
+      invalidatesTags: ['SignUp']
     }),
-    signInArtistWithEmailAndPass: builder.mutation({
+    signUpArtistWithEmail: builder.mutation({
       query: (payload) => ({
-        url: '/api/auth/artist/signin',
+        url: '/api/auth/artist/signup',
         method: 'POST',
         body: payload,
         headers: {
@@ -70,18 +70,18 @@ export const signinReducer = createApi({
         }
       }),
       transformResponse: (res) => {
-        console.log(res);
+        console.log('res', res);
         localStorage.setItem('auth', JSON.stringify({ ...res, type: 'artist' }));
       },
       transformErrorResponse: (res) => console.log(res),
-      invalidatesTags: ['SignIn']
+      invalidatesTags: ['SignUp']
     })
   })
 });
 
 export const {
-  useSignInBuyerWithGoogleMutation,
-  useSignInBuyerWithEmailAndPassMutation,
-  useSignInArtistWithGoogleMutation,
-  useSignInArtistWithEmailAndPassMutation
-} = signinReducer;
+  useSignUpBuyerWithGoogleMutation,
+  useSignUpBuyerWithEmailMutation,
+  useSignUpArtistWithGoogleMutation,
+  useSignUpArtistWithEmailMutation
+} = signupReducer;

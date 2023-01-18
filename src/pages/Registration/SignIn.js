@@ -105,21 +105,16 @@ export default function Login() {
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
+        const payload = {
+          displayName: result.user.displayName,
+          firebaseid: result.user.uid,
+          email: result.user.email,
+          imageURL: result.user.photoURL
+        };
+
         if (user.buyer) {
-          const payload = {
-            displayName: result.user.displayName,
-            firebaseid: result.user.uid,
-            email: result.user.email,
-            imageURL: result.user.photoURL
-          };
           signInBuyerWithGoogle(payload);
         } else if (user.artist) {
-          const payload = {
-            displayName: result.user.displayName,
-            firebaseid: result.user.uid,
-            email: result.user.email,
-            imageURL: result.user.photoURL
-          };
           signInArtistWithGoogle(payload);
         } else if (user.admin) {
           navigate('/admin/dashboard');
