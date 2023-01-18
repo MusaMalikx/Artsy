@@ -15,6 +15,7 @@ import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCar
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
+
 export default function BuyerProfileDashboard({ data }) {
   const toaster = useToaster();
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function BuyerProfileDashboard({ data }) {
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [buyername, setBuyername] = useState('');
   const [profileimage, setProfileimage] = useState('');
+
   useEffect(() => {
     if (auth) {
       setBuyername(auth.user.name);
