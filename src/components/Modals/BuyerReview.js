@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'rsuite';
 import ReviewDescription from './Description/ReviewDescription';
+
 export default function BuyerReview({ open, setOpen }) {
   const handleClose = () => setOpen(false);
   return (

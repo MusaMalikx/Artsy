@@ -4,7 +4,8 @@ import {
   titleValidate,
   amountValidate,
   descriptionValidate
-} from '../../utils/Validors/ProposalValidators';
+} from '../../helpers/proposal-validators';
+
 export default function BuyerProposal({ isOpen, setIsOpen }) {
   const title = useRef();
   const amount = useRef();

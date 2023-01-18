@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, useToaster } from 'rsuite';
 import Toaster from '../Common/Toaster';
 import { GoPrimitiveDot } from 'react-icons/go';
+
 export default function ReportDetail({ open, setOpen }) {
   const handleClose = () => setOpen(false);
   const toaster = useToaster();

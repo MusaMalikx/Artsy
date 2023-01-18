@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal } from 'rsuite';
+
 export default function AutomateBid({ open, setOpen }) {
   const handleClose = () => setOpen(false);
   return (
