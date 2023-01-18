@@ -4,6 +4,12 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        montserrat: 'Montserrat'
+      },
+      boxShadow: {
+        'all-rounded': '0px 0px 4px 3px rgba(0, 0, 0, 0.25)'
+      },
       backgroundImage: {
         banner1: "url('/src/assets/images/banner/banner1.jpg')",
         banner2: "url('/src/assets/images/banner/banner2.jpg')",

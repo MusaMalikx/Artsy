@@ -6,8 +6,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; */
-  font-family: 'Poppins', sans-serif;
+  /* font-family: 'Poppins', sans-serif; */
   /* background: rgb(15, 19, 26); */
+  /* font-family: 'Montserrat', sans-serif; */
 }
 
 code {

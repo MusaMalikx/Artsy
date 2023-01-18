@@ -112,7 +112,7 @@ export default function SignIn() {
   };
 
   const signInWithEmailAndPass = (e) => {
-    if (passValidate(password.current.value) && emailValidate(email.current.value)) {
+    if (passValidate(password?.current.value) && emailValidate(email?.current.value)) {
       setLoadSignIn(true);
       e.preventDefault();
       const auth = getAuth();
