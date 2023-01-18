@@ -43,6 +43,13 @@ export default function Login() {
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+
+        // The signed-in user info.
+        // const data = result.user;
+
         if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
@@ -50,8 +57,9 @@ export default function Login() {
             email: result.user.email,
             imageURL: result.user.photoURL
           }).then((res) => {
-            // console.log(res);
-            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'buyer' }));
+            console.log(res);
+            const newData = { ...res.data, usertype: 'buyer' };
+            localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             //navigate("/");
@@ -65,7 +73,8 @@ export default function Login() {
             imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
-            localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'artist' }));
+            const newData = { ...res.data, usertype: 'artist' };
+            localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
             // navigate("/");
@@ -116,7 +125,8 @@ export default function Login() {
               email: userCredential.user.email
             }).then((res) => {
               console.log(res);
-              localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'buyer' }));
+              const newData = { ...res.data, usertype: 'buyer' };
+              localStorage.setItem('auth', JSON.stringify(newData));
               navigate('/');
               //dispatch(loginSuccess(res.data));    for redux part
               //navigate("/");
@@ -126,7 +136,8 @@ export default function Login() {
               email: userCredential.user.email
             }).then((res) => {
               console.log(res);
-              localStorage.setItem('auth', JSON.stringify({ ...res.data, type: 'artist' }));
+              const newData = { ...res.data, usertype: 'artist' };
+              localStorage.setItem('auth', JSON.stringify(newData));
               navigate('/');
               //dispatch(loginSuccess(res.data));    for redux part
               //navigate("/");

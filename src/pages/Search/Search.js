@@ -15,7 +15,7 @@ const Search = ({ data }) => {
         {search && (
           <div className="container mx-auto grid grid-cols-1 pt-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5">
             {data?.map((photo) => (
-              <AuctionCard key={photo.id} photo={photo} />
+              <AuctionCard key={photo.id} artwork={photo} />
             ))}
           </div>
         )}
