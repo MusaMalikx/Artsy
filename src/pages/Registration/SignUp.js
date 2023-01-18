@@ -13,7 +13,7 @@ import {
   nameValidate,
   phoneValidate,
   cnicValidate
-} from '../../utils/Validors/CredentialValidator';
+} from '../../helpers/credential-validators';
 import {
   getAuth,
   signInWithPopup,

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
-import { emailValidate, passValidate } from '../../utils/Validors/CredentialValidator';
+import { emailValidate, passValidate } from '../../helpers/credential-validators';
 import {
   getAuth,
   signInWithPopup,
