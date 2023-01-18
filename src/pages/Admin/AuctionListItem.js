@@ -93,7 +93,7 @@ const AuctionListItem = ({ data }) => {
         </div>
         <div className="flex items-center flex-wrap justify-center ">
           {data?.slice(4, 9).map((photo) => (
-            <AuctionCard key={photo.id} photo={photo} />
+            <AuctionCard key={photo.id} artwork={photo} />
           ))}
         </div>
       </div>
