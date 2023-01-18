@@ -108,7 +108,7 @@ export default function SignUp() {
           cnic: cnicfield.current.value
         })
           .then((res) => {
-            // console.log(res);
+            console.log(res);
             if (
               name.current.value != '' &&
               email.current.value != '' &&
