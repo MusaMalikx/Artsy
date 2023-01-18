@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { FcGoogle } from 'react-icons/fc';
 import Lottie from 'react-lottie-player';
 import lottie from '../../assets/json/web-design-animation.json';
 import { useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
+import {
+  cnicValidate,
+  emailValidate,
+  nameValidate,
+  passValidate,
+  phoneValidate
+} from '../../helpers/credential-validators';
+import { Button, Modal } from 'rsuite';
 
 const AdminSignUp = () => {
   const [text] = useTypewriter({
@@ -15,8 +23,51 @@ const AdminSignUp = () => {
 
   const navigate = useNavigate();
 
+  const email = useRef();
+  const password = useRef();
+  const name = useRef();
+  const phonenumber = useRef();
+  const cnicfield = useRef();
+  const [acceptTerms, setAcceptTerms] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const signUpWithEmail = () => {
+    if (
+      emailValidate(email.current.value) &&
+      passValidate(password.current.value) &&
+      nameValidate(name.current.value) &&
+      phoneValidate(phonenumber.current.value) &&
+      cnicValidate(cnicfield.current.value)
+    ) {
+      console.log('success');
+      handleOpen();
+    } else {
+      !nameValidate(name.current.value)
+        ? name.current.setCustomValidity(
+            'Name must contain only alphabets and length should be greater than or equal to 3'
+          )
+        : name.current.setCustomValidity('');
+      !emailValidate(email.current.value)
+        ? email.current.setCustomValidity('Invalid Email Format!')
+        : email.current.setCustomValidity('');
+      !passValidate(password.current.value)
+        ? password.current.setCustomValidity('Password Length must be greater than or equal to 6')
+        : password.current.setCustomValidity('');
+      !phoneValidate(phonenumber.current.value)
+        ? phonenumber.current.setCustomValidity('Invalid Phone Number')
+        : phonenumber.current.setCustomValidity('');
+      !cnicValidate(cnicfield.current.value)
+        ? cnicfield.current.setCustomValidity('Invalid CNIC')
+        : cnicfield.current.setCustomValidity('');
+    }
+  };
+
   return (
     <RegistrationLayout title="Admin">
+      <CodeModal open={open} handleClose={handleClose} />
       <div>
         <div className="py-6 min-h-screen flex">
           <div className="flex flex-grow bg-white rounded-lg shadow-all-rounded overflow-hidden my-auto mx-auto max-w-sm lg:max-w-4xl">
@@ -28,113 +79,140 @@ const AdminSignUp = () => {
                 Sign Up
               </h2>
               <p className="text-xl text-gray-600 h-6 text-center">{text}</p>
-              <a
-                href="#"
-                className="flex items-center justify-center mt-4 text-white rounded-lg shadow-all-rounded hover:bg-gray-100">
+              <p className="flex items-center justify-center mt-4 text-white rounded-lg shadow-all-rounded hover:bg-gray-100 cursor-pointer">
                 <div className="px-4 py-3">
                   <FcGoogle size={20} />
                 </div>
                 <h1 className="px-4 py-3 w-5/6 text-base text-center text-gray-600 font-bold">
                   Sign up with Google
                 </h1>
-              </a>
+              </p>
               <div className="mt-4 flex items-center justify-between">
                 <span className="border-b w-1/3"></span>
                 <p className="text-xs text-center text-gray-500 uppercase">or</p>
                 <span className="border-b w-1/3"></span>
               </div>
-              <div className="my-6">
-                <input
-                  type="text"
-                  className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  placeholder="Full Name"
-                  // ref={name}
-                />
-              </div>
-              <div className="mb-6">
-                <input
-                  type="email"
-                  className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  placeholder="Email address"
-                  // ref={email}
-                />
-              </div>
-              <div className="mb-6">
-                <input
-                  type="password"
-                  className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  placeholder="Password"
-                  // ref={password}
-                />
-              </div>
-              <div className="mb-6">
-                <input
-                  type="number"
-                  min={0}
-                  className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  placeholder="Phone Number"
-                  // ref={phonenumber}
-                  onChange={(e) => {
-                    if (e.target.value.length > 11) e.target.value = e.target.value.slice(0, 11);
-                  }}
-                />
-              </div>
-              <div className="mb-6">
-                <input
-                  type="number"
-                  min={0}
-                  className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  placeholder="CNIC"
-                  onChange={(e) => {
-                    if (e.target.value.length > 13) e.target.value = e.target.value.slice(0, 13);
-                  }}
-                  // ref={cnicfield}
-                />
-              </div>
-              <div className="flex justify-between items-center mb-6">
-                <div className="form-group form-check">
+              <form>
+                <div className="my-6">
                   <input
-                    type="checkbox"
-                    className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                    id="exampleCheck3"
-                    // onClick={() => setAcceptTerms(!acceptTerms)}
+                    type="text"
+                    className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+                    placeholder="Full Name"
+                    ref={name}
                   />
-                  <label
-                    className="form-check-label inline-block text-gray-800"
-                    htmlFor="exampleCheck2">
-                    I agree to{' '}
-                    <span className="text-primary cursor-pointer hover:text-cyan-900 hover:underline">
-                      Terms and Agreements
-                    </span>{' '}
-                  </label>
                 </div>
-              </div>
-              <div className="mt-8">
-                <button
-                  type="submit"
-                  className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light">
-                  Sign up
-                </button>
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="border-b w-1/5 md:w-1/4"></span>
-                <div className="text-center text-xs text-gray-500 uppercase">
-                  <p onClick={() => navigate('/admin/signin')}>
-                    Have an Account?{' '}
-                    <span className="text-primary hover:text-primary focus:text-primary hover:underline hover:underline-offset-2 cursor-pointer">
-                      Sign In
-                    </span>
-                  </p>
+                <div className="mb-6">
+                  <input
+                    type="email"
+                    className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+                    placeholder="Email address"
+                    ref={email}
+                  />
                 </div>
-                <span className="border-b w-1/5 md:w-1/4"></span>
-              </div>
+                <div className="mb-6">
+                  <input
+                    type="password"
+                    className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+                    placeholder="Password"
+                    ref={password}
+                  />
+                </div>
+                <div className="mb-6">
+                  <input
+                    type="number"
+                    min={0}
+                    className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+                    placeholder="Phone Number"
+                    ref={phonenumber}
+                    onChange={(e) => {
+                      if (e.target.value.length > 11) e.target.value = e.target.value.slice(0, 11);
+                    }}
+                  />
+                </div>
+                <div className="mb-6">
+                  <input
+                    type="number"
+                    min={0}
+                    className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+                    placeholder="CNIC"
+                    onChange={(e) => {
+                      if (e.target.value.length > 13) e.target.value = e.target.value.slice(0, 13);
+                    }}
+                    ref={cnicfield}
+                  />
+                </div>
+                <div className="flex justify-between items-center mb-6">
+                  <div className="form-group form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                      id="exampleCheck3"
+                      onClick={() => setAcceptTerms(!acceptTerms)}
+                    />
+                    <label
+                      className="form-check-label inline-block text-gray-800"
+                      htmlFor="exampleCheck2">
+                      I agree to{' '}
+                      <span className="text-primary cursor-pointer hover:text-cyan-900 hover:underline">
+                        Terms and Agreements
+                      </span>{' '}
+                    </label>
+                  </div>
+                </div>
+                <div className="mt-8">
+                  <button
+                    type="submit"
+                    onClick={signUpWithEmail}
+                    className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
+                    data-mdb-ripple="true"
+                    data-mdb-ripple-color="light">
+                    Sign up
+                  </button>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="border-b w-1/5 md:w-1/4"></span>
+                  <div className="text-center text-xs text-gray-500 uppercase">
+                    <p onClick={() => navigate('/admin/signin')}>
+                      Have an Account?{' '}
+                      <span className="text-primary hover:text-primary focus:text-primary hover:underline hover:underline-offset-2 cursor-pointer">
+                        Sign In
+                      </span>
+                    </p>
+                  </div>
+                  <span className="border-b w-1/5 md:w-1/4"></span>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </RegistrationLayout>
+  );
+};
+
+const CodeModal = ({ open, handleClose }) => {
+  return (
+    <Modal size="xs" open={open} onClose={handleClose}>
+      <Modal.Header>
+        <Modal.Title>Admin Code</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="p-2">
+        <input
+          type="text"
+          className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+          placeholder="Enter Admin code"
+          // ref={name}
+        />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={handleClose} color="green" appearance="primary">
+          Sign Up
+        </Button>
+        <Button onClick={handleClose} appearance="subtle">
+          Cancel
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

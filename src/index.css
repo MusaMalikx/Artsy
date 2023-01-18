@@ -8,12 +8,15 @@ body {
   -moz-osx-font-smoothing: grayscale; */
   /* font-family: 'Poppins', sans-serif; */
   /* background: rgb(15, 19, 26); */
-  /* font-family: 'Montserrat', sans-serif; */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+html {
+  font-family: 'Montserrat', sans-serif;
 }
+
+/* code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+} */
 
 :root {
   --secondary: #b2b2b2;
