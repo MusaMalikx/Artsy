@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'rsuite';
-import { logout } from '../../../redux/features/userReducer';
+import { logout } from '../../../redux/features/reducer/userReducer';
 
 const Profile = () => {
   const navigate = useNavigate();
