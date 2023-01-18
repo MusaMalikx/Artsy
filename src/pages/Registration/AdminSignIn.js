@@ -18,9 +18,8 @@ const AdminSignIn = () => {
   const email = useRef();
   const password = useRef();
 
-  const signInWithEmailAndPass = (e) => {
+  const signInWithEmailAndPass = () => {
     console.log('hello');
-    e.preventDefault();
     if (passValidate(password.current.value) && emailValidate(email.current.value)) {
       console.log('Success');
     } else {
@@ -56,54 +55,56 @@ const AdminSignIn = () => {
                   Sign in with Google
                 </h1>
               </a>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="border-b w-1/3"></span>
-                <p className="text-xs text-center text-gray-500 uppercase">or</p>
-                <span className="border-b w-1/3"></span>
-              </div>
-              <div className="my-6">
-                <input
-                  type="text"
-                  className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  placeholder="Email address"
-                  ref={email}
-                />
-              </div>
-              <div className="mb-6">
-                <input
-                  type="password"
-                  className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  placeholder="Password"
-                  ref={password}
-                />
-              </div>
-              <div className="mt-4">
-                <div className="flex justify-end">
-                  <p className="text-xs text-gray-500 cursor-pointer hover:underline hover:underline-offset-2">
-                    Forget Password?
-                  </p>
+              <form>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="border-b w-1/3"></span>
+                  <p className="text-xs text-center text-gray-500 uppercase">or</p>
+                  <span className="border-b w-1/3"></span>
                 </div>
-              </div>
-              <div className="mt-8">
-                <button
-                  type="submit"
-                  onClick={signInWithEmailAndPass}
-                  className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full">
-                  Sign in
-                </button>
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="border-b w-1/5 md:w-1/4"></span>
-                <div className="text-center text-xs text-gray-500 uppercase">
-                  <p onClick={() => navigate('/admin/signup')}>
-                    Need an Account?{' '}
-                    <span className="text-primary hover:text-primary focus:text-primary hover:underline hover:underline-offset-2 cursor-pointer">
-                      Sign Up
-                    </span>
-                  </p>
+                <div className="my-6">
+                  <input
+                    type="text"
+                    className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+                    placeholder="Email address"
+                    ref={email}
+                  />
                 </div>
-                <span className="border-b w-1/5 md:w-1/4"></span>
-              </div>
+                <div className="mb-6">
+                  <input
+                    type="password"
+                    className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+                    placeholder="Password"
+                    ref={password}
+                  />
+                </div>
+                <div className="mt-4">
+                  <div className="flex justify-end">
+                    <p className="text-xs text-gray-500 cursor-pointer hover:underline hover:underline-offset-2">
+                      Forget Password?
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-8">
+                  <button
+                    type="submit"
+                    onClick={signInWithEmailAndPass}
+                    className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full">
+                    Sign in
+                  </button>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="border-b w-1/5 md:w-1/4"></span>
+                  <div className="text-center text-xs text-gray-500 uppercase">
+                    <p onClick={() => navigate('/admin/signup')}>
+                      Need an Account?{' '}
+                      <span className="text-primary hover:text-primary focus:text-primary hover:underline hover:underline-offset-2 cursor-pointer">
+                        Sign Up
+                      </span>
+                    </p>
+                  </div>
+                  <span className="border-b w-1/5 md:w-1/4"></span>
+                </div>
+              </form>
             </div>
           </div>
         </div>
