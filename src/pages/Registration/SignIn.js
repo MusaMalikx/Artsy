@@ -13,13 +13,13 @@ import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setUser } from '../../redux/features/userReducer';
+import { selectUser, setUser } from '../../redux/features/reducer/userReducer';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import Loader from '../../components/Loader/Loader';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
-export default function Login() {
+export default function SignIn() {
   const [
     text
     //, helper
@@ -201,7 +201,7 @@ export default function Login() {
   // };
 
   return (
-    <RegistrationLayout title={'Login'}>
+    <RegistrationLayout title={'Sign in'}>
       <section className="h-screen">
         <div className="">
           <div className="flex w-full h-16 justify-center px-6">

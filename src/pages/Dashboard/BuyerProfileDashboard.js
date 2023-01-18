@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import BuyerProposal from '../../components/Modals/BuyerProposal';
 import ProfileReport from '../../components/Modals/ProfileReport';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/features/userReducer';
+import { logout } from '../../redux/features/reducer/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
 import BuyerReview from '../../components/Modals/BuyerReview';
 import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCard';

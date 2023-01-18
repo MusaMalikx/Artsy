@@ -19,12 +19,13 @@ import ArtistProposal from '../pages/Proposal/ArtistProposal';
 import BuyerAcceptedProposal from '../pages/Proposal/BuyerAcceptedProposal';
 import BuyerProfileDashboard from '../pages/Dashboard/BuyerProfileDashboard';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSignedIn, selectUser, setUser } from '../redux/features/userReducer';
+import { selectSignedIn, selectUser, setUser } from '../redux/features/reducer/userReducer';
 import Reports from '../pages/Admin/Reports';
 import AuctionsList from '../pages/Admin/AuctionsList';
 import AuctionListItem from '../pages/Admin/AuctionListItem';
 import AdminChat from '../pages/Admin/AdminChat';
 import AdminUsers from '../pages/Admin/AdminUsers';
+import AdminSignIn from '../pages/Registration/AdminSignIn';
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
   // console.log('auth', JSON.parse(localStorage.getItem('auth')));
@@ -122,6 +123,7 @@ const AppRoutes = () => {
       <Route path="/">
         <Route path="signin" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
+        <Route path="admin/signin" element={<AdminSignIn />} />
       </Route>
     </Routes>
   );
