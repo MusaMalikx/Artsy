@@ -9,7 +9,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword
 } from 'firebase/auth';
-import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
+import { FaUserAlt, FaUserEdit } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
@@ -79,9 +79,6 @@ export default function SignIn() {
             //dispatch(loginSuccess(res.data));    for redux part
             // navigate("/");
           });
-        } else if (user.admin) {
-          // I think we should not allow admin to login through Google only email and password
-          navigate('/admin/dashboard');
         } else {
           Toaster(toaster, 'error', 'Select a user type');
           setLoadSignIn(false);
@@ -142,17 +139,6 @@ export default function SignIn() {
               //dispatch(loginSuccess(res.data));    for redux part
               //navigate("/");
             });
-          } else if (user.admin) {
-            //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
-            // await API.post('/api/auth/admin/signin', {
-            //   email: userCredential.user.email
-            // }).then((res) => {
-            //   console.log(res);
-            //   navigate('/admin/dashboard');
-            //   //dispatch(loginSuccess(res.data));    for redux part
-            //   //navigate("/");
-            // });
-            navigate('/admin/dashboard');
           } else {
             Toaster(toaster, 'error', 'Select a user type');
             setLoadSignIn(false);
@@ -250,14 +236,14 @@ export default function SignIn() {
                     <FaUserEdit className="w-full" />
                     <p className="text-sm">Artist</p>
                   </div>
-                  <div
+                  {/* <div
                     className={`border ${
                       user.admin && 'text-primary border-primary'
                     } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
                     onClick={() => dispatch(setUser({ admin: true }))}>
                     <FaUserTie className="w-full" />
                     <p className="text-sm">Admin</p>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="mb-6">

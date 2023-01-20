@@ -24,14 +24,14 @@ const ArticleLayout = ({ children, title, bool }) => {
   return (
     <div>
       <motion.article
-        initial={{ y: '50px', opacity: 0 }}
-        // initial="hidden"
-        animate={{ opacity: 1, y: '0px' }}
-        transition={{
-          type: 'tween',
-          duration: 1,
-          repeat: 0
-        }}
+        // initial={{ y: '50px', opacity: 0 }}
+        // // initial="hidden"
+        // animate={{ opacity: 1, y: '0px' }}
+        // transition={{
+        //   type: 'tween',
+        //   duration: 1,
+        //   repeat: 0
+        // }}
         // variants={variants}
         style={{ position: 'relative' }}>
         <div className="flex">

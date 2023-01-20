@@ -12,7 +12,19 @@ import {
   passValidate,
   phoneValidate
 } from '../../helpers/credential-validators';
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword
+} from 'firebase/auth';
+import firebaseApp from '../../utils/firebase';
 import { Button, Modal } from 'rsuite';
+import API from '../../api/server';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/features/reducer/userReducer';
 
 const AdminSignUp = () => {
   const [text] = useTypewriter({
@@ -22,19 +34,23 @@ const AdminSignUp = () => {
   });
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const email = useRef();
   const password = useRef();
   const name = useRef();
   const phonenumber = useRef();
   const cnicfield = useRef();
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const admincode = useRef();
+  const toaster = useToaster();
+
+  const [fromgoogle, setFromgoogle] = useState(false);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const signUpWithEmail = () => {
+  const signUpWithEmail = async (e) => {
     if (
       emailValidate(email.current.value) &&
       passValidate(password.current.value) &&
@@ -42,8 +58,12 @@ const AdminSignUp = () => {
       phoneValidate(phonenumber.current.value) &&
       cnicValidate(cnicfield.current.value)
     ) {
+      e.preventDefault();
       console.log('success');
+      setFromgoogle(false);
       handleOpen();
+
+      // The signup API continued in signUpwithEmailandPassword function below
     } else {
       !nameValidate(name.current.value)
         ? name.current.setCustomValidity(
@@ -65,9 +85,155 @@ const AdminSignUp = () => {
     }
   };
 
+  const signUpwithEmailandPassword = async () => {
+    console.log('Admin code', admincode.current.value);
+    await API.post('/api/auth/admin/check', {
+      phonenumber: phonenumber.current.value,
+      cnic: cnicfield.current.value,
+      code: admincode.current.value,
+      fromgoogle: false
+    })
+      .then((res) => {
+        console.log(res);
+        if (name.current.value != '' && email.current.value != '' && password.current.value != '') {
+          const auth = getAuth();
+          createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+            .then(async (userCredential) => {
+              await API.post('/api/auth/admin/signup', {
+                email: userCredential.user.email,
+                firebaseid: userCredential.user.uid,
+                name: name.current.value,
+                phonenumber: phonenumber.current.value,
+                cnic: cnicfield.current.value
+              }).then((res) => {
+                console.log(res);
+                handleClose();
+                Toaster(toaster, 'success', 'Account Created Successfully');
+                //navigate('/admin/signin');
+              });
+            })
+            .catch((error) => {
+              // const errorCode = error.code;
+              const errorMessage = error.message;
+              console.log(errorMessage);
+              if (errorMessage === 'Firebase: Error (auth/email-already-in-use).') {
+                handleClose();
+                Toaster(toaster, 'error', 'Email already exists!');
+              } else if (error.response) {
+                if (error.response.data.message === 'EMAIL_EXISTS') {
+                  handleClose();
+                  Toaster(toaster, 'error', 'Incorrect Email or Password!');
+                }
+              } else if (
+                errorMessage ===
+                'Firebase: Password should be at least 6 characters (auth/weak-password).'
+              ) {
+                handleClose();
+                Toaster(toaster, 'error', 'Password should be at least 6 characters');
+              } else {
+                handleClose();
+                Toaster(toaster, 'error', errorMessage);
+              }
+            });
+        } else {
+          handleClose();
+          Toaster(toaster, 'error', 'Input fields missing!');
+        }
+      })
+      .catch((error) => {
+        console.log(error.status, error.message);
+        if (error.response) {
+          if (error.response.data.message === 'PhoneNumber Already exists!') {
+            handleClose();
+            Toaster(toaster, 'error', 'PhoneNumber already exists!');
+          } else if (error.response.data.message === 'cnic Already exists!') {
+            handleClose();
+            Toaster(toaster, 'error', 'Cnic already exists!');
+          } else if (error.response.data.message === 'Admin Code Incorrect!') {
+            Toaster(toaster, 'error', 'Admin Code Incorrect!');
+          } else {
+            handleClose();
+            Toaster(toaster, 'error', error.response.data.message);
+          }
+        } else {
+          Toaster(toaster, 'error', error.message);
+        }
+      });
+  };
+
+  const signUpwithGoogle = async () => {
+    console.log('Code for google:', admincode.current.value);
+    await API.post('/api/auth/admin/check', {
+      phonenumber: phonenumber.current.value,
+      cnic: cnicfield.current.value,
+      code: admincode.current.value,
+      fromgoogle: true
+    })
+      .then((res) => {
+        console.log(res);
+
+        const auth = getAuth(firebaseApp);
+        signInWithPopup(auth, new GoogleAuthProvider())
+          .then(async (result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            // const credential = GoogleAuthProvider.credentialFromResult(result);
+            // const token = credential.accessToken;
+            await API.post('/api/auth/admin/google/signup', {
+              displayName: result.user.displayName,
+              firebaseid: result.user.uid,
+              email: result.user.email,
+              imageURL: result.user.photoURL
+            }).then((res) => {
+              console.log(res);
+              const newData = { ...res.data, usertype: 'admin' };
+              localStorage.setItem('auth', JSON.stringify(newData));
+              dispatch(setUser({ admin: true }));
+              navigate('/admin/dashboard');
+              // navigate('/');
+            });
+
+            // console.log(token, data);
+          })
+          .catch((error) => {
+            //dispatch(loginFailure());          for redux part
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            console.log(errorCode, errorMessage, credential);
+            if (error.response) {
+              if (
+                error.response.data.message === 'Email already exists For a Buyer!' ||
+                error.response.data.message === 'Email already exists For an Artist!'
+              ) {
+                Toaster(toaster, 'error', 'Gmail account already exists for a user');
+              }
+            } else {
+              Toaster(toaster, 'error', errorMessage);
+            }
+          });
+      })
+      .catch((error) => {
+        console.log(error.status, error.message);
+        if (error.response) {
+          if (error.response.data.message === 'Admin Code Incorrect!') {
+            Toaster(toaster, 'error', 'Admin Code Incorrect!');
+          } else {
+            handleClose();
+            Toaster(toaster, 'error', error.response.data.message);
+          }
+        } else {
+          Toaster(toaster, 'error', error.message);
+        }
+      });
+  };
+
+  const checkSignupOption = () => {
+    if (fromgoogle === true) signUpwithGoogle();
+    else signUpwithEmailandPassword();
+  };
+
   return (
     <RegistrationLayout title="Admin">
-      <CodeModal open={open} handleClose={handleClose} />
       <div>
         <div className="py-6 min-h-screen flex">
           <div className="flex flex-grow bg-white rounded-lg shadow-all-rounded overflow-hidden my-auto mx-auto max-w-sm lg:max-w-4xl">
@@ -79,7 +245,12 @@ const AdminSignUp = () => {
                 Sign Up
               </h2>
               <p className="text-xl text-gray-600 h-6 text-center">{text}</p>
-              <p className="flex items-center justify-center mt-4 text-white rounded-lg shadow-all-rounded hover:bg-gray-100 cursor-pointer">
+              <p
+                className="flex items-center justify-center mt-4 text-white rounded-lg shadow-all-rounded hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  setFromgoogle(true);
+                  handleOpen();
+                }}>
                 <div className="px-4 py-3">
                   <FcGoogle size={20} />
                 </div>
@@ -186,33 +357,28 @@ const AdminSignUp = () => {
           </div>
         </div>
       </div>
+      <Modal size="xs" open={open} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Admin Code</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="p-2">
+          <input
+            type="text"
+            className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
+            placeholder="Enter Admin code"
+            ref={admincode}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={checkSignupOption} color="green" appearance="primary">
+            Sign Up
+          </Button>
+          <Button onClick={handleClose} appearance="subtle">
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </RegistrationLayout>
-  );
-};
-
-const CodeModal = ({ open, handleClose }) => {
-  return (
-    <Modal size="xs" open={open} onClose={handleClose}>
-      <Modal.Header>
-        <Modal.Title>Admin Code</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="p-2">
-        <input
-          type="text"
-          className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-          placeholder="Enter Admin code"
-          // ref={name}
-        />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleClose} color="green" appearance="primary">
-          Sign Up
-        </Button>
-        <Button onClick={handleClose} appearance="subtle">
-          Cancel
-        </Button>
-      </Modal.Footer>
-    </Modal>
   );
 };
 

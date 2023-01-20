@@ -6,6 +6,18 @@ import lottie from '../../assets/json/technology.json';
 import { useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
 import { emailValidate, passValidate } from '../../helpers/credential-validators';
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword
+} from 'firebase/auth';
+import firebaseApp from '../../utils/firebase';
+import API from '../../api/server';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/features/reducer/userReducer';
 
 const AdminSignIn = () => {
   const [text] = useTypewriter({
@@ -17,11 +29,44 @@ const AdminSignIn = () => {
   const navigate = useNavigate();
   const email = useRef();
   const password = useRef();
+  const toaster = useToaster();
+  const dispatch = useDispatch();
 
-  const signInWithEmailAndPass = () => {
-    console.log('hello');
+  const signInWithEmailAndPass = (e) => {
     if (passValidate(password.current.value) && emailValidate(email.current.value)) {
+      e.preventDefault();
       console.log('Success');
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+        .then(async (userCredential) => {
+          // Signed in
+          await API.post('/api/auth/admin/signin', {
+            email: userCredential.user.email
+          }).then((res) => {
+            console.log(res);
+            const newData = { ...res.data, usertype: 'admin' };
+            localStorage.setItem('auth', JSON.stringify(newData));
+            dispatch(setUser({ admin: true }));
+            navigate('/admin/dashboard');
+          });
+        })
+        .catch((error) => {
+          // setLoadSignIn(false);
+          const errorMessage = error.message;
+          console.log(errorMessage);
+          if (
+            errorMessage === 'Firebase: Error (auth/user-not-found).' ||
+            errorMessage === 'Firebase: Error (auth/wrong-password).'
+          ) {
+            Toaster(toaster, 'error', 'Invalid Credentials Entered!');
+          } else if (error.response) {
+            if (error.response.data.message === 'User not found!') {
+              Toaster(toaster, 'error', 'Incorrect Email or Password!');
+            }
+          } else {
+            Toaster(toaster, 'error', errorMessage);
+          }
+        });
     } else {
       !emailValidate(email.current.value)
         ? email.current.setCustomValidity('Invalid Email Format!')
@@ -31,7 +76,41 @@ const AdminSignIn = () => {
         : password.current.setCustomValidity('');
     }
   };
+  const signInwithGoogle = async () => {
+    const auth = getAuth(firebaseApp);
+    signInWithPopup(auth, new GoogleAuthProvider())
+      .then(async (result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        await API.post('/api/auth/admin/google/signin', {
+          firebaseid: result.user.uid,
+          email: result.user.email
+        }).then((res) => {
+          console.log(res);
+          const newData = { ...res.data, usertype: 'admin' };
+          localStorage.setItem('auth', JSON.stringify(newData));
+          dispatch(setUser({ admin: true }));
+          navigate('/admin/dashboard');
+          // navigate('/');
+        });
 
+        // console.log(token, data);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(errorCode, errorMessage, credential);
+        if (error.response) {
+          if (error.response.data.message === 'No Admin User Found!') {
+            Toaster(toaster, 'error', 'No Admin User Found');
+          }
+        } else {
+          Toaster(toaster, 'error', errorMessage);
+        }
+      });
+  };
   return (
     <RegistrationLayout title="Admin">
       <div>
@@ -45,16 +124,16 @@ const AdminSignIn = () => {
                 Sign In
               </h2>
               <p className="text-xl text-gray-600 h-6 text-center">{text}</p>
-              <a
-                href="#"
-                className="flex items-center justify-center mt-4 text-white rounded-lg shadow-all-rounded hover:bg-gray-100">
+              <p
+                className="flex items-center justify-center mt-4 text-white rounded-lg shadow-all-rounded hover:bg-gray-100 cursor-pointer"
+                onClick={signInwithGoogle}>
                 <div className="px-4 py-3">
                   <FcGoogle size={20} />
                 </div>
                 <h1 className="px-4 py-3 w-5/6 text-base text-center text-gray-600 font-bold">
                   Sign in with Google
                 </h1>
-              </a>
+              </p>
               <form>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="border-b w-1/3"></span>

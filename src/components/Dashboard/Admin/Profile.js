@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'rsuite';
 import { logout } from '../../../redux/features/reducer/userReducer';
+import { getAuth, signOut } from 'firebase/auth';
+import Toaster from '../../Common/Toaster';
+import { useToaster } from 'rsuite';
 
 const Profile = () => {
+  const toaster = useToaster();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
+
+  const logoutuser = () => {
+    const firebaseauth = getAuth();
+    if (auth) {
+      signOut(firebaseauth)
+        .then(() => {
+          // Sign-out successful for firebase
+          localStorage.setItem('auth', JSON.stringify(null)); //remove auth token from localstorage
+          setAuth(JSON.parse(localStorage.getItem('auth')));
+          navigate('/admin/signin');
+          dispatch(logout()); //Remove redux state for signedIn to false
+        })
+        .catch((error) => {
+          // An error happened.
+          console.log(error);
+          Toaster(toaster, 'error', 'An Error Occured When Logging Out, Refresh Page');
+        });
+    }
+  };
   return (
     <div>
       <section className="font-medium sticky top-10">
@@ -52,12 +76,7 @@ const Profile = () => {
             <span className="text-gray-600 font-semibold">Storage:</span>
             <span>40%</span>
           </div>
-          <div
-            className="flex justify-end mt-5 w-full"
-            onClick={() => {
-              navigate('/signin');
-              dispatch(logout());
-            }}>
+          <div className="flex justify-end mt-5 w-full" onClick={logoutuser}>
             <Button color="red" appearance="primary">
               Logout
             </Button>

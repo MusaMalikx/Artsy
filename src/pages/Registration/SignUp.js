@@ -104,12 +104,10 @@ export default function SignUp() {
                       name: name.current.value,
                       phonenumber: phonenumber.current.value,
                       cnic: cnicfield.current.value
-                    })
-                      .then((res) => {
-                        console.log(res);
-                        navigate('/SignIn');
-                      })
-                      .catch((err) => console.log(err));
+                    }).then((res) => {
+                      console.log(res);
+                      navigate('/SignIn');
+                    });
                   } else if (user.artist) {
                     await API.post('/api/auth/artist/signup', {
                       email: userCredential.user.email,
