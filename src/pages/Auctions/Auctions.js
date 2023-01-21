@@ -24,7 +24,6 @@ const Auctions = () => {
     API.get('/api/artworks/all')
       .then((res) => {
         setArtworks(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
