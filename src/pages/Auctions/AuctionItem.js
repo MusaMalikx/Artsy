@@ -54,7 +54,9 @@ const AuctionItem = ({ data }) => {
     if (state.artwork) {
       const newBid = parseFloat(bid.current.value);
       const minBid =
-        bidInfo.currentBid > bidInfo.basePrice ? bidInfo.currentBid + 1 : bidInfo.basePrice + 1;
+        parseFloat(bidInfo.currentBid) > parseFloat(bidInfo.basePrice)
+          ? parseFloat(bidInfo.currentBid) + 1
+          : parseFloat(bidInfo.basePrice) + 1;
       if (newBid >= minBid) {
         e.preventDefault();
         try {
