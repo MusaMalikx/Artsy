@@ -14,6 +14,7 @@ import { BiWallet } from 'react-icons/bi';
 
 const SideNav = () => {
   const user = useSelector(selectUser);
+  const auth = JSON.parse(localStorage.getItem('auth'));
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,7 +50,7 @@ const SideNav = () => {
               <Wallet open={open} handleClose={handleClose} />
               {user.buyer && (
                 <Nav.Item
-                  onClick={() => navigate('/buyer/profile')}
+                  onClick={() => navigate(`/buyer/profile/${auth.user._id}`)}
                   eventKey="5"
                   icon={<Icon as={CgProfile} />}>
                   Buyer Profile
@@ -57,7 +58,7 @@ const SideNav = () => {
               )}
               {user.artist && (
                 <Nav.Item
-                  onClick={() => navigate('/artist/profile')}
+                  onClick={() => navigate(`/artist/profile/${auth.user._id}`)}
                   eventKey="5"
                   icon={<Icon as={CgProfile} />}>
                   Artist Profile

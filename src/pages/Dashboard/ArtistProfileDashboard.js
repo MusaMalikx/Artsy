@@ -6,7 +6,7 @@ import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
 import BuyerReview from '../../components/Modals/BuyerReview';
 import { motion } from 'framer-motion';
 import ProfileReport from '../../components/Modals/ProfileReport';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
@@ -22,35 +22,53 @@ export default function ArtistProfileDashboard() {
   const toaster = useToaster();
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
+  const location = useLocation();
+  const currentUserID = location.pathname.split('/')[3];
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
-  const [artistname, setArtistname] = useState('');
-  const [profileimage, setProfileimage] = useState('');
-  const [artworks, setArtworks] = useState([]);
+  const [profileInfo, setProfileInfo] = useState({
+    artistName: 'Unknown',
+    profileImage:
+      'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg',
+    artworks: []
+  });
+
+  const fetchArtworks = async () => {
+    const res = await API.get('/api/artworks/artist', {
+      headers: {
+        token: 'Bearer ' + auth.token
+      }
+    });
+
+    if (res.data) {
+      setProfileInfo((info) => {
+        return {
+          ...info,
+          artworks: res.data
+        };
+      });
+    }
+  };
+
+  const fetchArtistData = async () => {
+    if (auth.user._id !== currentUserID) {
+      const res = await API.get(`/api/artists/${currentUserID}`);
+      if (res.data) {
+        setProfileInfo({
+          artistName: res.data.name !== '' ? res.data.name : profileInfo.buyerName,
+          profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage
+        });
+      }
+    } else {
+      setProfileInfo({
+        artistName: auth.user.name ? auth.user.name : profileInfo.buyerName,
+        profileImage: auth.user.imageURL !== '' ? auth.user.imageURL : profileInfo.profileImage
+      });
+    }
+  };
 
   useEffect(() => {
-    if (auth) {
-      setArtistname(auth.user.name);
-      if (auth.user.imageURL !== '') {
-        setProfileimage(auth.user.imageURL);
-      } else {
-        setProfileimage(
-          'https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg'
-        );
-      }
-      API.get('/api/artworks/artist', {
-        headers: {
-          token: 'Bearer ' + auth.token
-        }
-      })
-        .then((res) => {
-          console.log(res);
-          setArtworks(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-          Toaster(toaster, 'error', err.response.data.message);
-        });
-    }
+    fetchArtistData();
+    fetchArtworks();
   }, []);
   const logoutuser = () => {
     const auth = getAuth();
@@ -101,7 +119,7 @@ export default function ArtistProfileDashboard() {
                       <img
                         referrerPolicy="no-referrer"
                         alt="..."
-                        src={profileimage}
+                        src={profileInfo.profileImage}
                         // src="https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg"
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
                       />
@@ -174,7 +192,7 @@ export default function ArtistProfileDashboard() {
                 </div>
                 <div className="text-center">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    {artistname ? artistname : 'Name Unknown'}
+                    {profileInfo.artistName}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
@@ -195,7 +213,7 @@ export default function ArtistProfileDashboard() {
                           <ProfileAuctionCard key={photo.id} photo={photo} />
                         </motion.div>
                       ))} */}
-                      {artworks?.map((artwork) => (
+                      {profileInfo.artworks?.map((artwork) => (
                         <motion.div
                           key={artwork._id}
                           animate={{ x: [-2000, 350, 0] }}
