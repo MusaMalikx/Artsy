@@ -80,7 +80,7 @@ const AuctionCard = ({ artwork }) => {
           <div className="uppercase">
             <p className="font-extrabold text-black text-xl text-center">Le bouquet de Paris</p>
             <p className="text-center">
-              current Bid: <span className="font-bold">$51</span>
+              current Bid: <span className="font-bold">PKR 51</span>
             </p>
           </div>
         </div>
@@ -137,7 +137,7 @@ const AuctionCard = ({ artwork }) => {
           <div className="uppercase">
             <p className="font-extrabold text-black text-xl text-center">{artwork.title}</p>
             <p className="text-center">
-              current Bid: <span className="font-bold">${artwork.currentbid}</span>
+              current Bid: <span className="font-bold">PKR {artwork.currentbid}</span>
             </p>
           </div>
         </div>

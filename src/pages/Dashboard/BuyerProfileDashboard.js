@@ -59,7 +59,7 @@ export default function BuyerProfileDashboard({ data }) {
           <div
             className="absolute top-0 w-full h-full bg-center bg-cover"
             style={{
-              'background-image':
+              backgroundImage:
                 "url('https://img.freepik.com/free-photo/blue-oil-paint-strokes-textured-background_53876-98328.jpg?w=2000')"
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>

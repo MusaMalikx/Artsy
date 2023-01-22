@@ -62,11 +62,11 @@ export default function AutomateBid({ open, setOpen, bidInfo, setBidInfo, artId 
           <div className="flex justify-between items-center">
             <p className="text-base font-bold">
               Current Highest Bid{' '}
-              <span className="text-lg text-red-500">${bidInfo.currentBid}</span>
+              <span className="text-lg text-red-500">PKR {bidInfo.currentBid}</span>
             </p>
             <p className="text-base font-bold">
               Your Previous Bid{' '}
-              <span className="text-lg text-green-500">${bidInfo.buyerInfo.bid}</span>
+              <span className="text-lg text-green-500">PKR {bidInfo.buyerInfo.bid}</span>
             </p>
           </div>
           <form action="#" className="flex flex-col">

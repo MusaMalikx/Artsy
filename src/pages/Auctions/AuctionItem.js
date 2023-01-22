@@ -132,7 +132,7 @@ const AuctionItem = ({ data }) => {
               <div className="flex text-lg">
                 <p className="mr-1 font-mono">Highest Bid:</p>
                 <div className="font-bold text-green-800">
-                  <span className="mr-0.5">$</span>
+                  <span className="mr-0.5">PKR</span>
                   <span>51</span>
                 </div>
               </div>
@@ -195,14 +195,14 @@ const AuctionItem = ({ data }) => {
               <div className="flex text-lg">
                 <p className="mr-1 font-mono">Starting Bid:</p>
                 <div className="font-bold text-yellow-800">
-                  <span className="mr-0.5">$</span>
+                  <span className="mr-0.5">PKR</span>
                   <span>{bidInfo.basePrice}</span>
                 </div>
               </div>
               <div className="flex text-lg">
                 <p className="mr-1 font-mono">Highest Bid:</p>
                 <div className="font-bold text-green-800">
-                  <span className="mr-0.5">$</span>
+                  <span className="mr-0.5">PKR</span>
                   <span>{bidInfo.currentBid}</span>
                 </div>
               </div>

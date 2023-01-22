@@ -19,7 +19,7 @@ import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
-  const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
+  const [auth] = useState();
   const title = useRef();
   const baseprice = useRef();
   const [startdate, setStartDate] = useState('');

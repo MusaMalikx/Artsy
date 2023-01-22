@@ -1,12 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GiWallet } from 'react-icons/gi';
 import { Button, List, Modal, Panel } from 'rsuite';
 import AddMoney from './AddMoney';
+import API from '../../api/server';
+import keygen from 'keygenerator';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/userReducer';
 
 const Wallet = ({ open, handleClose }) => {
+  const user = useSelector(selectUser);
+  const auth = JSON.parse(localStorage.getItem('auth'));
   const [openAdd, setOpenAdd] = useState(false);
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+  const [walletInfo, setWalletInfo] = useState({
+    Amount: 0,
+    Transactions: []
+  });
+  const fetchBalanceBuyer = async () => {
+    const res = await API.get('/api/users/wallet', {
+      headers: {
+        token: 'Bearer ' + auth.token
+      }
+    });
+    if (res.data) {
+      setWalletInfo({
+        Amount: res.data.Amount,
+        Transactions: res.data.Transactions
+      });
+    }
+  };
+
+  const fetchBalanceArtist = async () => {
+    const res = await API.get('/api/artists/wallet', {
+      headers: {
+        token: 'Bearer ' + auth.token
+      }
+    });
+    if (res.data) {
+      setWalletInfo({
+        Amount: res.data.Amount,
+        Transactions: res.data.Transactions
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (user.buyer) fetchBalanceBuyer();
+    else if (user.artist) fetchBalanceArtist();
+  }, []);
 
   return (
     <Modal
@@ -20,7 +62,7 @@ const Wallet = ({ open, handleClose }) => {
         <GiWallet className="mx-auto" size="50" />
         <div className="text-center">
           <p className="font-bold">Total Balance</p>
-          <p className="font-mono text-xl">PKR 863123681</p>
+          <p className="font-mono text-xl">PKR {walletInfo.Amount}</p>
         </div>
         <div className="flex space-x-3 items-center">
           {/* <Button onClick={handleClose} appearance="default" block>
@@ -33,40 +75,36 @@ const Wallet = ({ open, handleClose }) => {
             block>
             Add money
           </Button>
-          <AddMoney open={openAdd} handleClose={handleCloseAdd} />
+          <AddMoney
+            setNewAmount={() => {
+              if (user.buyer) fetchBalanceBuyer();
+              else if (user.artist) fetchBalanceArtist();
+            }}
+            open={openAdd}
+            handleClose={handleCloseAdd}
+          />
         </div>
         <Panel header="History" bordered>
           <List bordered autoScroll className="h-48">
-            <List.Item>
-              <div className="flex justify-between items-center text-xs">
-                <span>Payment to xyz shop</span>
-                <span className="text-red-500 font-semibold">-100 PKR</span>
-              </div>
-            </List.Item>
-            <List.Item>
-              <div className="flex justify-between items-center text-xs">
-                <span>Payment to xyz shop</span>
-                <span className="text-red-500 font-semibold">-150 PKR</span>
-              </div>
-            </List.Item>
-            <List.Item>
-              <div className="flex justify-between items-center text-xs">
-                <span>Credit from abc shop</span>
-                <span className="text-emerald-500 font-semibold">+300 PKR</span>
-              </div>
-            </List.Item>
-            <List.Item>
-              <div className="flex justify-between items-center text-xs">
-                <span>Transfer from Ahmed</span>
-                <span className="text-emerald-500 font-semibold">+100 PKR</span>
-              </div>
-            </List.Item>
-            <List.Item>
-              <div className="flex justify-between items-center text-xs">
-                <span>Transfer from Abdullah</span>
-                <span className="text-emerald-500 font-semibold">+500 PKR</span>
-              </div>
-            </List.Item>
+            {walletInfo.Transactions.map((t) => {
+              return (
+                <List.Item key={keygen._()}>
+                  <div className="flex justify-between items-center text-xs">
+                    {t.sent === true ? (
+                      <>
+                        <span>Payment to {t.userName}</span>
+                        <span className="text-red-500 font-semibold">-{t.Amount} PKR</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Received from {t.userName} </span>
+                        <span className="text-green-500 font-semibold">+{t.Amount} PKR</span>
+                      </>
+                    )}
+                  </div>
+                </List.Item>
+              );
+            })}
           </List>
         </Panel>
       </div>
