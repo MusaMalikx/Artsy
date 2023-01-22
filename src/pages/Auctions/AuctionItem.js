@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AuctionCard from '../../components/Auction/AuctionCard';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
@@ -17,6 +17,7 @@ const AuctionItem = ({ data }) => {
   const [openAutoBid, setOpenAutoBid] = useState(false);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [artistname, setArtistname] = useState('');
+  const [timer, setTimer] = useState('00:00:00');
   const bid = useRef();
   const [disableManualBid, setDisableManualBid] = useState(false);
   const [bidInfo, setBidInfo] = useState({
@@ -26,6 +27,7 @@ const AuctionItem = ({ data }) => {
     buyerInfo: {}
   });
   const toaster = useToaster();
+  const navigate = useNavigate();
   const location = useLocation();
   const artId = location.pathname.split('/')[2];
   const placeAutoBid = (e) => {
@@ -98,6 +100,29 @@ const AuctionItem = ({ data }) => {
       getHighBidInfo();
     }
   }, []);
+
+  useEffect(() => {
+    const generateTime = () => {
+      const date1 = new Date(state.artwork.enddate);
+      const date2 = new Date();
+      if (date1 - date2 > 0) {
+        const diffInSeconds = Math.abs(date1 - date2) / 1000;
+        let days = Math.floor(diffInSeconds / 60 / 60 / 24);
+        let hours = Math.floor((diffInSeconds / 60 / 60) % 24);
+        let minutes = Math.floor((diffInSeconds / 60) % 60);
+        let seconds = Math.floor(diffInSeconds % 60);
+        days = days.toString().length == 1 ? `0${days}` : days;
+        hours = hours.toString().length == 1 ? `0${hours}` : hours;
+        minutes = minutes.toString().length == 1 ? `0${minutes}` : minutes;
+        seconds = seconds.toString().length == 1 ? `0${seconds}` : seconds;
+        setTimer(`${days}:${hours}:${minutes}:${seconds}`);
+      } else {
+        setTimer('Auction Closed');
+      }
+    };
+    generateTime();
+  }, [timer]);
+
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title="Auction Item" />
@@ -115,7 +140,7 @@ const AuctionItem = ({ data }) => {
                 <p className="font-mono mr-auto text-gray-600 text-4xl font-bold uppercase">
                   {state.user.name}
                 </p>
-                <p className="text-xl font-mono text-green-600">21:21:00</p>
+                <p className="text-xl font-mono text-green-600">{timer}</p>
               </div>
               <p className="text-base ">
                 Made by <span className="font-bold underline cursor-pointer">Chris Johnson</span>{' '}
@@ -182,11 +207,15 @@ const AuctionItem = ({ data }) => {
                 <p className="font-mono mr-auto text-gray-600 text-4xl font-bold uppercase">
                   {state.artwork.title}
                 </p>
-                <p className="text-xl font-mono text-green-600">21:21:00</p>
+                <p className="text-xl font-mono text-green-600">{timer}</p>
               </div>
               <p className="text-base ">
                 Made by{' '}
-                <span className="font-bold underline cursor-pointer">
+                <span
+                  onClick={() => {
+                    navigate(`/artist/profile/${state.artwork.artistId}`);
+                  }}
+                  className="font-bold uppercase hover:text-black underline cursor-pointer">
                   {artistname ? artistname : 'Not Found'}
                 </span>{' '}
               </p>

@@ -31,14 +31,8 @@ export default function ArtistProfileDashboard() {
       'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg',
     artworks: []
   });
-
   const fetchArtworks = async () => {
-    const res = await API.get('/api/artworks/artist', {
-      headers: {
-        token: 'Bearer ' + auth.token
-      }
-    });
-
+    const res = await API.get(`/api/artworks/artist/${currentUserID}`);
     if (res.data) {
       setProfileInfo((info) => {
         return {
@@ -51,7 +45,7 @@ export default function ArtistProfileDashboard() {
 
   const fetchArtistData = async () => {
     if (auth.user._id !== currentUserID) {
-      const res = await API.get(`/api/artists/${currentUserID}`);
+      const res = await API.get(`/api/artists/find/${currentUserID}`);
       if (res.data) {
         setProfileInfo({
           artistName: res.data.name !== '' ? res.data.name : profileInfo.buyerName,
@@ -156,16 +150,22 @@ export default function ArtistProfileDashboard() {
                           className="bg-primary active:bg-cyan-700 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button">
                           <RiMessage2Fill className="inline text-lg mr-2" />
-                          Message
+                          {auth.user._id === currentUserID ? 'Chat' : 'Message'}
                         </button>
                       </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
                     <div className="flex items-center justify-center py-4 lg:pt-4 pt-8">
-                      <div className="mr-4">
-                        <Drop />
-                      </div>
+                      {auth.user._id === currentUserID ? (
+                        <>
+                          <div className="mr-4">
+                            <Drop />
+                          </div>
+                        </>
+                      ) : (
+                        ''
+                      )}
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           22
@@ -178,15 +178,21 @@ export default function ArtistProfileDashboard() {
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Closed</span>
                       </div>
-                      <div
-                        onClick={() => setOpenReport(true)}
-                        className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
-                        <span className="text-xl font-bold block uppercase tracking-wide mb-2">
-                          <AiFillFlag className="w-full" />
-                        </span>
-                        <span className="text-sm ">Report</span>
-                      </div>
-                      {<ProfileReport open={openReport} setOpen={setOpenReport} />}
+                      {auth.user._id !== currentUserID ? (
+                        <>
+                          <div
+                            onClick={() => setOpenReport(true)}
+                            className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
+                            <span className="text-xl font-bold block uppercase tracking-wide mb-2">
+                              <AiFillFlag className="w-full" />
+                            </span>
+                            <span className="text-sm ">Report</span>
+                          </div>
+                          {<ProfileReport open={openReport} setOpen={setOpenReport} />}
+                        </>
+                      ) : (
+                        ''
+                      )}
                     </div>
                   </div>
                 </div>
@@ -205,14 +211,6 @@ export default function ArtistProfileDashboard() {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {/* {data?.map((photo) => (
-                        <motion.div
-                          key={photo.id}
-                          animate={{ x: [-2000, 350, 0] }}
-                          transition={{ duration: 1.5, delay: 0 }}>
-                          <ProfileAuctionCard key={photo.id} photo={photo} />
-                        </motion.div>
-                      ))} */}
                       {profileInfo.artworks?.map((artwork) => (
                         <motion.div
                           key={artwork._id}

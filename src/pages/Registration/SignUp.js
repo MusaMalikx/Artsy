@@ -107,6 +107,7 @@ export default function SignUp() {
                     })
                       .then((res) => {
                         console.log(res);
+                        Toaster(toaster, 'success', 'Account Creation Successful!');
                         navigate('/SignIn');
                       })
                       .catch((err) => console.log(err));
@@ -119,10 +120,12 @@ export default function SignUp() {
                       cnic: cnicfield.current.value
                     }).then((res) => {
                       console.log(res);
+                      Toaster(toaster, 'success', 'Account Creation Successful!');
                       navigate('/SignIn');
                     });
                   } else {
                     setLoadSignUp(false);
+                    Toaster(toaster, 'success', 'Account Creation Succcessful!');
                     Toaster(toaster, 'error', 'Select a user type');
                   }
                   // ...

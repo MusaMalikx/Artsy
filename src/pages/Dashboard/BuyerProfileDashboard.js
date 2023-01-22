@@ -137,16 +137,22 @@ export default function BuyerProfileDashboard({ data }) {
                           type="button"
                           onClick={() => navigate('/chat')}>
                           <RiMessage2Fill className="inline text-lg mr-2" />
-                          Message
+                          {auth.user._id === currentUserID ? 'Chat' : 'Message'}
                         </button>
                       </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
                     <div className="flex items-center justify-center py-4 lg:pt-4 pt-8">
-                      <div className="mr-4">
-                        <Drop />
-                      </div>
+                      {auth.user._id === currentUserID ? (
+                        <>
+                          <div className="mr-4">
+                            <Drop />
+                          </div>
+                        </>
+                      ) : (
+                        ''
+                      )}
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           22
@@ -159,15 +165,21 @@ export default function BuyerProfileDashboard({ data }) {
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Won</span>
                       </div>
-                      <div
-                        onClick={() => setOpenReport(true)}
-                        className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
-                        <span className="text-xl font-bold block uppercase tracking-wide mb-2">
-                          <AiFillFlag className="w-full" />
-                        </span>
-                        <span className="text-sm ">Report</span>
-                      </div>
-                      {<ProfileReport open={openReport} setOpen={setOpenReport} />}
+                      {auth.user._id !== currentUserID ? (
+                        <>
+                          <div
+                            onClick={() => setOpenReport(true)}
+                            className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
+                            <span className="text-xl font-bold block uppercase tracking-wide mb-2">
+                              <AiFillFlag className="w-full" />
+                            </span>
+                            <span className="text-sm ">Report</span>
+                          </div>
+                          {<ProfileReport open={openReport} setOpen={setOpenReport} />}
+                        </>
+                      ) : (
+                        ''
+                      )}
                     </div>
                   </div>
                 </div>
