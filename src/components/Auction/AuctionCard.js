@@ -5,6 +5,7 @@ import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/userReducer';
+import AuctionCardTimer from '../Common/Timer/AuctionCardTimer';
 
 const AuctionCard = ({ artwork }) => {
   // const { user, urls } = photo;
@@ -107,32 +108,7 @@ const AuctionCard = ({ artwork }) => {
               />
             </div>
           </div>
-          <div className="flex flex-col my-5 border rounded-md uppercase">
-            <p className="text-gray-500 text-center font-semibold mt-2">Time left</p>
-            <div className="flex items-center justify-around">
-              <div className="w-[1px] h-10 border" />
-              <div className="my-3 flex flex-col items-center">
-                <span className="font-bold text-lg">97</span>
-                <span className="mb-1 text-[8px]">Days</span>
-              </div>
-              <div className="w-[1px] h-10 border" />
-              <div className="my-3 flex flex-col items-center">
-                <span className="font-bold text-lg">97</span>
-                <span className="mb-1 text-[8px]">Hours</span>
-              </div>
-              <div className="w-[1px] h-10 border" />
-              <div className="my-3 flex flex-col items-center">
-                <span className="font-bold text-lg">97</span>
-                <span className="mb-1 text-[8px]">Minutes</span>
-              </div>
-              <div className="w-[1px] h-10 border" />
-              <div className="my-3 flex flex-col items-center">
-                <span className="font-bold text-lg">97</span>
-                <span className="mb-1 text-[8px]">Seconds</span>
-              </div>
-              <div className="w-[1px] h-10 border" />
-            </div>
-          </div>
+          <AuctionCardTimer endDate={artwork.enddate} />
           <hr />
           <div className="uppercase">
             <p className="font-extrabold text-black text-xl text-center">{artwork.title}</p>

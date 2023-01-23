@@ -1,6 +1,15 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
+import AuctionItemTimer from '../Common/Timer/AuctionItemTimer';
+
 export default function ProfileAuctionCard({ artwork }) {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/auctions/${artwork._id}`, { state: { artwork } });
+  };
+
   return (
     <div className="py-6 flex justify-center hover:scale-105 transition-all">
       <div className="flex w-3/4 items-center bg-white shadow-lg rounded-lg overflow-hidden">
@@ -19,13 +28,17 @@ export default function ProfileAuctionCard({ artwork }) {
         <div className="w-full h-full hover:bg-slate-100 p-4 text-left flex flex-col justify-between">
           <div className="flex  w-full md:justify-between md:flex-row flex-col gap-2 md:gap-0 justify-center">
             <h1 className="text-gray-900 font-bold text-2xl">{artwork.title}</h1>
-            <p className="font-bold text-xl text-green-500">21:21:00</p>
+            <p className="font-bold text-xl text-green-500">
+              <AuctionItemTimer endDate={artwork.enddate} />
+            </p>
           </div>
           <div className="flex md:justify-between md:flex-row flex-col justify-center gap-2 md:gap-0 mt-3">
             <h1 className="text-gray-700 text-base font-light">
               Current Bid : <span className="font-bold text-red-500 "> ${artwork.currentbid}</span>
             </h1>
-            <button className="px-3 py-2 bg-primary text-white text-xs font-bold uppercase rounded focus:outline-none active:bg-cyan-700">
+            <button
+              onClick={handleClick}
+              className="px-3 py-2 bg-primary text-white text-xs font-bold uppercase rounded focus:outline-none active:bg-cyan-700">
               View Artwork
             </button>
           </div>

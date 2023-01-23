@@ -9,7 +9,7 @@ import { selectUser } from '../../redux/features/userReducer';
 import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
-
+import Timer from '../../components/Common/Timer/AuctionItemTimer';
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
   // const { user, urls } = state;
@@ -17,7 +17,7 @@ const AuctionItem = ({ data }) => {
   const [openAutoBid, setOpenAutoBid] = useState(false);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [artistname, setArtistname] = useState('');
-  const [timer, setTimer] = useState('00:00:00');
+
   const bid = useRef();
   const [disableManualBid, setDisableManualBid] = useState(false);
   const [bidInfo, setBidInfo] = useState({
@@ -101,28 +101,6 @@ const AuctionItem = ({ data }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const generateTime = () => {
-      const date1 = new Date(state.artwork.enddate);
-      const date2 = new Date();
-      if (date1 - date2 > 0) {
-        const diffInSeconds = Math.abs(date1 - date2) / 1000;
-        let days = Math.floor(diffInSeconds / 60 / 60 / 24);
-        let hours = Math.floor((diffInSeconds / 60 / 60) % 24);
-        let minutes = Math.floor((diffInSeconds / 60) % 60);
-        let seconds = Math.floor(diffInSeconds % 60);
-        days = days.toString().length == 1 ? `0${days}` : days;
-        hours = hours.toString().length == 1 ? `0${hours}` : hours;
-        minutes = minutes.toString().length == 1 ? `0${minutes}` : minutes;
-        seconds = seconds.toString().length == 1 ? `0${seconds}` : seconds;
-        setTimer(`${days}:${hours}:${minutes}:${seconds}`);
-      } else {
-        setTimer('Auction Closed');
-      }
-    };
-    generateTime();
-  }, [timer]);
-
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title="Auction Item" />
@@ -140,7 +118,9 @@ const AuctionItem = ({ data }) => {
                 <p className="font-mono mr-auto text-gray-600 text-4xl font-bold uppercase">
                   {state.user.name}
                 </p>
-                <p className="text-xl font-mono text-green-600">{timer}</p>
+                <p className="text-xl font-mono text-green-600">
+                  <Timer enddate={state.artwowrk.enddate} />
+                </p>
               </div>
               <p className="text-base ">
                 Made by <span className="font-bold underline cursor-pointer">Chris Johnson</span>{' '}
@@ -207,7 +187,9 @@ const AuctionItem = ({ data }) => {
                 <p className="font-mono mr-auto text-gray-600 text-4xl font-bold uppercase">
                   {state.artwork.title}
                 </p>
-                <p className="text-xl font-mono text-green-600">{timer}</p>
+                <p className="text-xl font-mono text-green-600">
+                  <Timer endDate={state.artwork.enddate} />
+                </p>
               </div>
               <p className="text-base ">
                 Made by{' '}

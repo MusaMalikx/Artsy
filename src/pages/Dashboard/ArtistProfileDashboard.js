@@ -15,7 +15,6 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
-
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

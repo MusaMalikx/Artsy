@@ -88,7 +88,7 @@ export default function NewAuction() {
                 console.log(err);
                 Toaster(toaster, 'error', err.response.data.message);
               });
-            navigate('/artist/profile');
+            navigate(`/artist/profile/${auth.user._id}`);
           })
           .catch((err) => {
             setStartLoader(false);
@@ -240,15 +240,6 @@ export default function NewAuction() {
           }}
         />
       </div>
-      {/* {showToaster ? (
-        <Toaster
-          typeOf={'success'}
-          showToaster={setShowToaster}
-          Message={'Failed to List an Artwork'}
-        />
-      ) : (
-        ''
-      )} */}
     </Layout>
   );
 }
