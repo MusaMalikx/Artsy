@@ -2,16 +2,7 @@ import Lottie from 'lottie-react';
 import React from 'react';
 import BidList from '../../assets/json/BidList.json';
 const EmptyBidList = () => {
-  //   const container = useRef(null);
-  //   useEffect(() => {
-  //     Lottie.loadAnimation({
-  //       container: container.current,
-  //       renderer: 'svg',
-  //       loop: true,
-  //       autoplay: true,
-  //       animationData: BidList
-  //     });
-  //   }, []);
+  console.log('JAAAAAAAAAAAAAWa');
   return (
     <div className="h-full w-full p-4">
       <div className="flex justify-center items center w-full h-80">

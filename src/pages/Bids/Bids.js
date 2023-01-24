@@ -11,8 +11,7 @@ const Bids = () => {
   const [bidList, setBidList] = useState([]);
   const getBidList = async () => {
     const res = await API.get(`/api/users/bid/list/${auth.user._id}`);
-    if (res.data) {
-      console.log(res.data);
+    if (res.data.length > 0 && res.data[0] !== null) {
       setBidList(res.data);
     }
   };
