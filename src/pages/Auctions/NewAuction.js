@@ -11,7 +11,8 @@ import { selectUser } from '../../redux/features/reducer/userReducer';
 import {
   titleValidate,
   amountValidate,
-  descriptionValidate
+  descriptionValidate,
+  dateValidate
 } from '../../helpers/proposal-validators.js';
 import Loader from '../../components/Loader/Loader';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +21,7 @@ import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
-  const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
+  const auth = JSON.parse(localStorage.getItem('auth'));
   const title = useRef();
   const baseprice = useRef();
   const [startdate, setStartDate] = useState('');
@@ -39,66 +40,68 @@ export default function NewAuction() {
       startdate != '' &&
       enddate != ''
     ) {
-      setStartLoader(true);
       e.preventDefault();
-      if (user.artist && auth) {
-        await API.post(
-          '/api/artworks/check',
-          {
-            title: title.current.value,
-            baseprice: baseprice.current.value,
-            description: description.current.value
-          },
-          {
-            headers: {
-              token: 'Bearer ' + auth.token
-            }
-          }
-        )
-          .then(async (res) => {
-            const formData = new FormData();
-            // formData.append('productImage', images);
-            for (let i = 0; i < images.length && i < 9; i++) {
-              formData.append('productImage', images[i]);
-            }
-            formData.append('title', title.current.value);
-            formData.append('baseprice', baseprice.current.value);
-            formData.append('description', description.current.value);
-            formData.append('startdate', startdate);
-            formData.append('enddate', enddate);
-            formData.append('category', category);
-
-            const config = {
+      if (dateValidate(startdate, enddate, toaster)) {
+        setStartLoader(true);
+        if (user.artist && auth) {
+          await API.post(
+            '/api/artworks/check',
+            {
+              title: title.current.value,
+              baseprice: baseprice.current.value,
+              description: description.current.value
+            },
+            {
               headers: {
-                token: 'Bearer ' + auth.token,
-                'Content-Type': 'multipart/form-data'
+                token: 'Bearer ' + auth.token
               }
-            };
+            }
+          )
+            .then(async (res) => {
+              const formData = new FormData();
+              // formData.append('productImage', images);
+              for (let i = 0; i < images.length && i < 9; i++) {
+                formData.append('productImage', images[i]);
+              }
+              formData.append('title', title.current.value);
+              formData.append('baseprice', baseprice.current.value);
+              formData.append('description', description.current.value);
+              formData.append('startdate', startdate);
+              formData.append('enddate', enddate);
+              formData.append('category', category);
 
-            console.log(res);
-            await API.post('/api/artworks/add', formData, config)
-              .then((res) => {
-                setTimeout(() => {
+              const config = {
+                headers: {
+                  token: 'Bearer ' + auth.token,
+                  'Content-Type': 'multipart/form-data'
+                }
+              };
+
+              console.log(res);
+              await API.post('/api/artworks/add', formData, config)
+                .then((res) => {
+                  setTimeout(() => {
+                    setStartLoader(false);
+                  }, 2000);
+                  console.log(res);
+                  Toaster(toaster, 'success', 'Artwork Successfully Added');
+                })
+                .catch((err) => {
                   setStartLoader(false);
-                }, 2000);
-                console.log(res);
-                Toaster(toaster, 'success', 'Artwork Successfully Added');
-              })
-              .catch((err) => {
-                setStartLoader(false);
-                console.log(err);
-                Toaster(toaster, 'error', err.response.data.message);
-              });
-            navigate('/artist/profile');
-          })
-          .catch((err) => {
-            setStartLoader(false);
-            console.log(err);
-            Toaster(toaster, 'error', err.response.data.message);
-          });
-      } else {
-        setStartLoader(false);
-        Toaster(toaster, 'error', 'Please Signin using Google');
+                  console.log(err);
+                  Toaster(toaster, 'error', err.response.data.message);
+                });
+              navigate(`/artist/profile/${auth.user._id}`);
+            })
+            .catch((err) => {
+              setStartLoader(false);
+              console.log(err);
+              Toaster(toaster, 'error', err.response.data.message);
+            });
+        } else {
+          setStartLoader(false);
+          Toaster(toaster, 'error', 'Please Signin using Google');
+        }
       }
     } else {
       setStartLoader(false);
@@ -241,15 +244,6 @@ export default function NewAuction() {
           }}
         />
       </div>
-      {/* {showToaster ? (
-        <Toaster
-          typeOf={'success'}
-          showToaster={setShowToaster}
-          Message={'Failed to List an Artwork'}
-        />
-      ) : (
-        ''
-      )} */}
     </Layout>
   );
 }

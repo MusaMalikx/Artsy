@@ -4,7 +4,7 @@ import { AiFillFlag, AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { motion } from 'framer-motion';
 import { RiMessage2Fill } from 'react-icons/ri';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BuyerProposal from '../../components/Modals/BuyerProposal';
 import ProfileReport from '../../components/Modals/ProfileReport';
 import { useDispatch } from 'react-redux';
@@ -15,6 +15,7 @@ import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCar
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
+import API from '../../api/server';
 
 export default function BuyerProfileDashboard({ data }) {
   const toaster = useToaster();
@@ -23,19 +24,34 @@ export default function BuyerProfileDashboard({ data }) {
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
-  const [buyername, setBuyername] = useState('');
-  const [profileimage, setProfileimage] = useState('');
+  const [profileInfo, setProfileInfo] = useState({
+    buyerName: 'Unknown',
+    profileImage:
+      'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg'
+  });
+  const location = useLocation();
+  const currentUserID = location.pathname.split('/')[3];
+
+  const fetchBuyerData = async () => {
+    if (auth.user._id !== currentUserID) {
+      const res = await API.get(`/api/users/${currentUserID}`);
+      if (res.data) {
+        setProfileInfo({
+          buyerName: res.data.name !== '' ? res.data.name : profileInfo.buyerName,
+          profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage
+        });
+      }
+    } else {
+      setProfileInfo({
+        buyerName: auth.user.name ? auth.user.name : profileInfo.buyerName,
+        profileImage: auth.user.imageURL !== '' ? auth.user.imageURL : profileInfo.profileImage
+      });
+    }
+  };
 
   useEffect(() => {
-    if (auth) {
-      setBuyername(auth.user.name);
-      if (auth.user.imageURL !== '') {
-        setProfileimage(auth.user.imageURL);
-      } else {
-        setProfileimage('https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe');
-      }
-    }
-  });
+    fetchBuyerData();
+  }, []);
   const logoutuser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -59,7 +75,7 @@ export default function BuyerProfileDashboard({ data }) {
           <div
             className="absolute top-0 w-full h-full bg-center bg-cover"
             style={{
-              'background-image':
+              backgroundImage:
                 "url('https://img.freepik.com/free-photo/blue-oil-paint-strokes-textured-background_53876-98328.jpg?w=2000')"
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
@@ -83,17 +99,11 @@ export default function BuyerProfileDashboard({ data }) {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
                       <img
-                        // src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
-                        src={profileimage}
+                        src={profileInfo.profileImage}
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
                         alt="profile"
                         srcSet=""
                       />
-                      {/* <img
-                        alt="..."
-                        src="https://api.lorem.space/image/face?w=120&h=120&hash=bart89fe"
-                        className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
-                      /> */}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -127,16 +137,22 @@ export default function BuyerProfileDashboard({ data }) {
                           type="button"
                           onClick={() => navigate('/chat')}>
                           <RiMessage2Fill className="inline text-lg mr-2" />
-                          Message
+                          {auth.user._id === currentUserID ? 'Chat' : 'Message'}
                         </button>
                       </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
                     <div className="flex items-center justify-center py-4 lg:pt-4 pt-8">
-                      <div className="mr-4">
-                        <Drop />
-                      </div>
+                      {auth.user._id === currentUserID ? (
+                        <>
+                          <div className="mr-4">
+                            <Drop />
+                          </div>
+                        </>
+                      ) : (
+                        ''
+                      )}
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           22
@@ -149,21 +165,27 @@ export default function BuyerProfileDashboard({ data }) {
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Won</span>
                       </div>
-                      <div
-                        onClick={() => setOpenReport(true)}
-                        className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
-                        <span className="text-xl font-bold block uppercase tracking-wide mb-2">
-                          <AiFillFlag className="w-full" />
-                        </span>
-                        <span className="text-sm ">Report</span>
-                      </div>
-                      {<ProfileReport open={openReport} setOpen={setOpenReport} />}
+                      {auth.user._id !== currentUserID ? (
+                        <>
+                          <div
+                            onClick={() => setOpenReport(true)}
+                            className="mr-4 p-3 text-center text-red-500 hover:text-red-700 hover:cursor-pointer">
+                            <span className="text-xl font-bold block uppercase tracking-wide mb-2">
+                              <AiFillFlag className="w-full" />
+                            </span>
+                            <span className="text-sm ">Report</span>
+                          </div>
+                          {<ProfileReport open={openReport} setOpen={setOpenReport} />}
+                        </>
+                      ) : (
+                        ''
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="text-center">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    {buyername ? buyername : 'Name Unknown'}
+                    {profileInfo.buyerName}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>

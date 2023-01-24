@@ -83,13 +83,18 @@ const AppRoutes = () => {
                 <Route path="search" element={<Search data={data} />} />
                 <Route path="auctions" element={<Auctions />} />
                 <Route path="auctions/:id" element={<AuctionItem data={data} />} />
+                <Route
+                  path="buyer/profile/:buyerId"
+                  element={<BuyerProfileDashboard data={data} />}
+                />
+                <Route path="artist/profile/:artistId" element={<ArtistProfileDashboard />} />
               </>
             )}
             {user.artist && (
               <>
                 <Route path="add/artwork" element={<NewAuction />} />
                 <Route path="artist/auctions" element={<ArtistAuctionList />} />
-                <Route path="artist/profile" element={<ArtistProfileDashboard />} />
+                {/* <Route path="artist/profile" element={<ArtistProfileDashboard />} /> */}
                 <Route path="view/buyer/proposal" element={<BuyerProposal data={data} />} />
               </>
             )}
@@ -97,7 +102,7 @@ const AppRoutes = () => {
               <>
                 <Route path="bids" element={<Bids data={data} />} />
                 <Route path="view/buyer/proposal" element={<BuyerProposal />} />
-                <Route path="buyer/profile" element={<BuyerProfileDashboard data={data} />} />
+                {/* <Route path="buyer/profile" element={<BuyerProfileDashboard data={data} />} /> */}
                 <Route path="view/buyer/created/proposal" element={<BuyerCreatedProposal />} />
                 <Route path="view/artist/proposal" element={<ArtistProposal />} />
                 <Route path="view/buyer/accepted/proposal" element={<BuyerAcceptedProposal />} />

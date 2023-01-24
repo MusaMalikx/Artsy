@@ -104,10 +104,13 @@ export default function SignUp() {
                       name: name.current.value,
                       phonenumber: phonenumber.current.value,
                       cnic: cnicfield.current.value
-                    }).then((res) => {
-                      console.log(res);
-                      navigate('/SignIn');
-                    });
+                    })
+                      .then((res) => {
+                        console.log(res);
+                        Toaster(toaster, 'success', 'Account Creation Successful!');
+                        navigate('/SignIn');
+                      })
+                      .catch((err) => console.log(err));
                   } else if (user.artist) {
                     await API.post('/api/auth/artist/signup', {
                       email: userCredential.user.email,
@@ -117,10 +120,12 @@ export default function SignUp() {
                       cnic: cnicfield.current.value
                     }).then((res) => {
                       console.log(res);
+                      Toaster(toaster, 'success', 'Account Creation Successful!');
                       navigate('/SignIn');
                     });
                   } else {
                     setLoadSignUp(false);
+                    Toaster(toaster, 'success', 'Account Creation Succcessful!');
                     Toaster(toaster, 'error', 'Select a user type');
                   }
                   // ...
