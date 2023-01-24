@@ -91,7 +91,7 @@ export default function BuyerProfileDashboard({ data }) {
                         srcSet=""
                       /> */}
                       <div className="shadow-xl object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200 bg-white">
-                        <ReactJdenticon size="200" value={auth.user.name} />
+                        <ReactJdenticon size="200" value={auth.user.email} />
                       </div>
                       {/* <img
                         alt="..."

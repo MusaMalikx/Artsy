@@ -4,16 +4,22 @@ import Layout from '../../components/Layouts/ArticleLayout';
 import { BsSearch, BsKeyboardFill } from 'react-icons/bs';
 import { BiSend } from 'react-icons/bi';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
-// import API from '../../utils/unsplash';
 import ServerAPI from '../../api/server';
 import { AiOutlineUserAdd } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
-import { selectUsers } from '../../redux/features/reducer/userReducer';
 import Jdenticon from 'react-jdenticon';
 import API from '../../api/server';
 import { format } from 'timeago.js';
-import { Placeholder } from 'rsuite';
-import { io } from 'socket.io-client';
+import {
+  Button,
+  ButtonToolbar,
+  Modal,
+  Placeholder,
+  SelectPicker,
+  Toggle,
+  useToaster
+} from 'rsuite';
+import io from 'socket.io-client';
+import Toaster from '../../components/Common/Toaster';
 
 const Chat = () => {
   const [conversations, setConversations] = useState([]);
@@ -22,18 +28,13 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState('');
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [clickedUser, setClickedUser] = useState();
-  const socket = useRef();
+  const [socket] = useState(io.connect('http://localhost:8080'));
   const scrollRef = useRef();
-  // const [data, setPeopleResponse] = useState(null);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
-  // const users = useSelector(selectUsers);
-  // console.log(users);
-
-  // console.log('arrival', arrivalMessage);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    socket.current = io('ws://localhost:8900');
-    socket.current.on('getMessage', (data) => {
+    socket.on('getMessage', (data) => {
       setArrivalMessage({
         sender: data.uid,
         text: data.text,
@@ -53,8 +54,8 @@ const Chat = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    socket.current.emit('sendUser', auth?.user._id);
-    socket.current.on('getUsers', (users) => {
+    socket.emit('sendUser', auth?.user._id);
+    socket.on('getUsers', (users) => {
       console.log(users);
     });
   }, [auth.user]);
@@ -111,7 +112,7 @@ const Chat = () => {
       text: newMessage
     };
 
-    socket.current.emit('sendMessage', {
+    socket.emit('sendMessage', {
       uid: auth?.user._id,
       rid: currentChat.members.find((c) => c !== auth?.user._id),
       text: newMessage
@@ -126,8 +127,9 @@ const Chat = () => {
     }
   };
 
-  // console.log('current', currentChat);
-  // console.log('click', clickedUser);
+  const data = ['Eugenia', 'Bryan', 'Linda', 'Nancy', 'Lloyd', 'Alice', 'Julia', 'Albert'].map(
+    (item) => ({ label: item, value: item })
+  );
 
   return (
     <Layout title={'Chat'}>
@@ -136,15 +138,23 @@ const Chat = () => {
         <div className="px-5 flex h-full">
           <div className="w-96 flex-[3] mx-5 overflow-y-scroll scrollbar-hide relative">
             <div className="pb-4 bg-white sticky top-0 d-flex items-center space-y-2">
-              <div className="flex items-center space-x-4 border px-3 py-2 rounded-3xl">
+              <div className="flex items-center space-x-4 border px-3 py-1 rounded-3xl">
                 <BsSearch />
                 <input placeholder="Search" className="border-0 text-sm outline-0 flex-grow py-2" />
               </div>
-              <div className="flex items-center justify-center rounded-2xl shadow-md px-3 py-2 bg-primary text-white font-medium text-sm leading-snug hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full cursor-pointer">
+              <div
+                onClick={() => setModal(true)}
+                className="flex items-center justify-center rounded-2xl shadow-md px-3 py-2 bg-primary text-white font-medium text-sm leading-snug hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full cursor-pointer">
                 <AiOutlineUserAdd />
-                <p className="ml-2">Add User</p>
+                <p className="ml-2">Start Conversation</p>
               </div>
             </div>
+            <SelectPicker
+              data={data}
+              appearance="default"
+              placeholder="Default"
+              style={{ width: 224 }}
+            />
             <div className="pb-4 h-[76vh] overflow-y-scroll">
               {conversations?.map((c) => (
                 <div key={c._id} onClick={() => setcurrentChat(c)}>
@@ -159,7 +169,7 @@ const Chat = () => {
               <div className="border rounded-3xl mb-2 p-5 flex items-center">
                 {clickedUser ? (
                   <>
-                    <Jdenticon size="48" value={clickedUser?.name} />
+                    <Jdenticon size="48" value={clickedUser?.email} />
                     <div className="flex-grow ml-3">
                       <h6>{clickedUser?.name}</h6>
                       <p>description</p>
@@ -169,7 +179,6 @@ const Chat = () => {
                   <>
                     <Placeholder.Paragraph graph="circle" />
                     <div className="flex-grow ml-3">
-                      {/* <Placeholder.Paragraph graph="square" /> */}
                       <Placeholder.Paragraph />
                     </div>
                   </>
@@ -177,16 +186,7 @@ const Chat = () => {
               </div>
               <div className="border rounded-3xl mb-2 p-5 h-[calc(100vh-36vh)] flex-grow overflow-y-scroll">
                 {currentChat ? (
-                  <>
-                    {messages?.map((m) => (
-                      <Message
-                        key={m._id}
-                        message={m}
-                        name={auth?.user.name}
-                        own={m.sender === auth?.user?._id}
-                      />
-                    ))}
-                  </>
+                  <Messages messages={messages} user={auth?.user} clickedUser={clickedUser} />
                 ) : (
                   <span className="flex justify-center items-center h-full text-4xl text-center font-bold text-gray-400">
                     Open a Conversation to start a chat
@@ -210,6 +210,7 @@ const Chat = () => {
           </div>
         </div>
       </div>
+      <ConversationsModal open={modal} setOpen={setModal} user={auth?.user} />
     </Layout>
   );
 };
@@ -222,7 +223,7 @@ const ChatItem = ({ chat, logged_user }) => {
     const friendId = chat.members.find((c) => c !== logged_user._id);
     const getUser = async () => {
       try {
-        const res = await API.get('/api/users/find/' + friendId);
+        const res = await API.get('/api/artists/' + friendId);
         setUser(res.data);
       } catch (error) {
         if (friendId !== undefined) console.log(error);
@@ -249,19 +250,37 @@ const ChatItem = ({ chat, logged_user }) => {
       // }
     >
       <div>
-        <Jdenticon size="48" value={user?.name} />
+        <Jdenticon size="48" value={user?.email} />
       </div>
       {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
       <div className="flex-grow ml-3">
         <h6>{user?.name}</h6>
-        {/* <p>{chat.alt_description.substring(0, 30)}...</p> */}
       </div>
-      {/* <p className="font-bold text-gray-600">09:00 am</p> */}
     </div>
   );
 };
 
-const Message = ({ own, message, name }) => {
+const Messages = ({ messages, user, clickedUser }) => {
+  useEffect(() => {
+    window.scrollTo({ bottom: 0, left: 0, behavior: 'smooth' });
+  }, [messages]);
+
+  return (
+    <div>
+      {messages?.map((m) => (
+        <Message
+          key={m._id}
+          message={m}
+          email={user.email}
+          own={m.sender === user?._id}
+          clickedUser={clickedUser}
+        />
+      ))}
+    </div>
+  );
+};
+
+const Message = ({ own, message, email, clickedUser }) => {
   // console.log(name, message);
   return (
     <>
@@ -271,14 +290,14 @@ const Message = ({ own, message, name }) => {
             <span className="px-4 py-2 rounded-lg inline-block bg-primary text-white ">
               {message.text}
             </span>
-            {name && <Jdenticon size="26" value={name} />}
+            {email && <Jdenticon size="26" value={email} />}
           </div>
           <span className="text-xs mr-11 mt-1">{format(message.createdAt)}</span>
         </div>
       ) : (
         <div className="flex flex-col-reverse mb-2">
           <div className="flex space-x-2 text-xs max-w-xs mx-2 order-2">
-            {name && <Jdenticon size="26" value={name} />}
+            {clickedUser?.email && <Jdenticon size="26" value={clickedUser?.email} />}
             <span className="px-4 py-2 rounded-lg inline-block bg-gray-300 text-gray-600">
               {message.text}
             </span>
@@ -290,68 +309,74 @@ const Message = ({ own, message, name }) => {
   );
 };
 
-const Receiver = ({ message, name }) => {
-  return (
-    <div className="flex flex-col-reverse items-end justify-end mb-2">
-      <div className="flex space-x-2 text-xs max-w-xs mx-2 order-1 items-end">
-        <ReceiverItem text={message.text} />
-        {name && <Jdenticon size="26" value={name} />}
-        {/* <ReceiverItem
-          text="Run this command sudo chown -R `whoami` /Users/
-            username/.npm-global/ then install the package globally without
-            using sudo"
-        /> */}
-      </div>
-      <span className="text-xs mr-11 mt-1">{format(message.createdAt)}</span>
-      {/* <img
-        src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-        alt="My profile"
-        className="w-6 h-6 rounded-full order-2"
-      /> */}
-    </div>
-  );
-};
+const ConversationsModal = ({ open, setOpen, user }) => {
+  const toaster = useToaster();
+  const [select, setSelect] = useState(null);
+  const [users, setUsers] = useState([]);
 
-const Sender = ({ message, name }) => {
-  // console.log(message);
-  return (
-    <div className="flex flex-col-reverse mb-2">
-      <div className="flex space-x-2 text-xs max-w-xs mx-2 order-2">
-        {name && <Jdenticon size="26" value={name} />}
-        <SenderItem text={message.text} />
-        <SenderItem text="I've update the description so it's more obviously now" />
-        <SenderItem text="FYI https://askubuntu.com/a/700266/510172" />
-        <SenderItem
-          text="Check the line above (it ends with a # so, I'm running it as root )"
-          pre="true"
-          pretext="# npm install -g @vue/devtools"
-        />
-      </div>
-      <span className="text-xs ml-11 mt-1">{format(message.createdAt)}</span>
-      {/* <img
-        src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-        alt="My profile"
-        className="w-6 h-6 rounded-full order-1"
-      /> */}
-    </div>
-  );
-};
+  const handleClose = async () => {
+    if (select !== null) {
+      const conversation = {
+        sender_id: user._id,
+        receiver_id: select
+      };
+      try {
+        // console.log(select);
+        const res = await API.post('/api/conversations', conversation);
+        console.log(res);
+        setSelect(null);
+        Toaster(toaster, 'success', 'Conversation has been created');
+      } catch (error) {}
+    } else Toaster(toaster, 'error', 'No User has been selected');
+    setOpen(false);
+  };
 
-const ReceiverItem = ({ text }) => {
-  return (
-    <div>
-      <span className="px-4 py-2 rounded-lg inline-block bg-primary text-white ">{text}</span>
-    </div>
-  );
-};
+  useEffect(() => {
+    const getArtists = async () => {
+      try {
+        const res = await API.get('/api/artists');
+        // console.log(res);
+        setUsers(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getArtists();
+  }, []);
 
-const SenderItem = ({ text, pre, pretext }) => {
+  // console.log('users', users);
+
   return (
-    <div>
-      <span className="px-4 py-2 rounded-lg inline-block bg-gray-300 text-gray-600">
-        {text} {pre && <pre>{pretext}</pre>}
-      </span>
-    </div>
+    <>
+      <Modal open={open} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Select a person to start conversation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {users?.map((user) => (
+            <div
+              key={user._id}
+              onClick={() => setSelect(user._id)}
+              className="flex items-center px-10 transition-all ease-in-out cursor-pointer py-5 hover:bg-primary/10 rounded">
+              <Jdenticon size="50" value={user?.email} />
+              {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
+              <div className="flex-grow ml-3">
+                <h6>{user?.name}</h6>
+                <div className="text-xs uppercase font-semibold text-gray-400">Artist</div>
+              </div>
+            </div>
+          ))}
+          {/* <Placeholder.Paragraph rows={80} /> */}
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="flex items-center justify-center rounded-2xl shadow-md px-3 py-2 bg-primary text-white font-medium text-sm leading-snug hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full cursor-pointer"
+            onClick={handleClose}>
+            Start Conversation
+          </button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 

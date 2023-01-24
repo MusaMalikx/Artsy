@@ -100,7 +100,7 @@ export default function ArtistProfileDashboard() {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
                       <div className="shadow-xl object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200 bg-white">
-                        <ReactJdenticon size="200" value={auth.user.name} />
+                        <ReactJdenticon size="200" value={auth.user.email} />
                       </div>
                       {/* <img
                         referrerPolicy="no-referrer"
