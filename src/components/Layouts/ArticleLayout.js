@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import API from '../../api/server';
+import { setUsers } from '../../redux/features/reducer/userReducer';
 import Footer from '../Footer/Footer';
 import SideNav from '../SideNav/SideNav';
 // import { useSelector } from 'react-redux';
@@ -13,8 +16,18 @@ import SideNav from '../SideNav/SideNav';
 
 const ArticleLayout = ({ children, title, bool }) => {
   document.title = title + ' | Artsy';
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    const handleUsers = async () => {
+      try {
+        const response = await API.get('/api/users/');
+        dispatch(setUsers(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleUsers();
     // 👇️ scroll to top on page load
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, []);

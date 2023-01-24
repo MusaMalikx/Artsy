@@ -201,15 +201,17 @@ export default function SignUp() {
 
         // // The signed-in user info.
         // const data = result.user;
+        // const image = toPng(result.user.displayName, 200);
         if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
             email: result.user.email,
+            // imageURL: image
             imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
-            const newData = { ...res.data, usertype: 'buyer' };
+            const newData = { ...res.data, type: 'buyer' };
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
@@ -224,7 +226,7 @@ export default function SignUp() {
             imageURL: result.user.photoURL
           }).then((res) => {
             console.log(res);
-            const newData = { ...res.data, usertype: 'artist' };
+            const newData = { ...res.data, type: 'artist' };
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
             //dispatch(loginSuccess(res.data));    for redux part
