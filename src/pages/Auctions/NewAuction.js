@@ -7,16 +7,17 @@ import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import API from '../../api/server';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/features/userReducer';
+import { selectUser } from '../../redux/features/reducer/userReducer';
 import {
   titleValidate,
   amountValidate,
   descriptionValidate,
   dateValidate
-} from '../../utils/Validors/ProposalValidators';
+} from '../../helpers/proposal-validators.js';
 import Loader from '../../components/Loader/Loader';
 import { useNavigate } from 'react-router-dom';
 import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
+
 export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
@@ -40,7 +41,7 @@ export default function NewAuction() {
       enddate != ''
     ) {
       e.preventDefault();
-      if (dateValidate(startdate, enddate,toaster)) {
+      if (dateValidate(startdate, enddate, toaster)) {
         setStartLoader(true);
         if (user.artist && auth) {
           await API.post(

@@ -5,11 +5,12 @@ import AuctionCard from '../../components/Auction/AuctionCard';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import AutomateBid from '../../components/Modals/AutomateBid';
-import { selectUser } from '../../redux/features/userReducer';
+import { selectUser } from '../../redux/features/reducer/userReducer';
 import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import Timer from '../../components/Common/Timer/AuctionItemTimer';
+
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
   // const { user, urls } = state;

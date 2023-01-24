@@ -2,24 +2,24 @@ import React, { useRef, useState } from 'react';
 import RegistrationLayout from '../../components/Layouts/RegistrationLayout';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
 import { useNavigate } from 'react-router-dom';
-import { emailValidate, passValidate } from '../../utils/Validors/CredentialValidator';
+import { emailValidate, passValidate } from '../../helpers/credential-validators';
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   signInWithEmailAndPassword
 } from 'firebase/auth';
-import { FaUserAlt, FaUserEdit, FaUserTie } from 'react-icons/fa';
+import { FaUserAlt, FaUserEdit } from 'react-icons/fa';
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setUser } from '../../redux/features/userReducer';
+import { selectUser, setUser } from '../../redux/features/reducer/userReducer';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import Loader from '../../components/Loader/Loader';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
-export default function Login() {
+export default function SignIn() {
   const [
     text
     //, helper
@@ -79,9 +79,6 @@ export default function Login() {
             //dispatch(loginSuccess(res.data));    for redux part
             // navigate("/");
           });
-        } else if (user.admin) {
-          // I think we should not allow admin to login through Google only email and password
-          navigate('/admin/dashboard');
         } else {
           Toaster(toaster, 'error', 'Select a user type');
           setLoadSignIn(false);
@@ -112,7 +109,7 @@ export default function Login() {
   };
 
   const signInWithEmailAndPass = (e) => {
-    if (passValidate(password.current.value) && emailValidate(email.current.value)) {
+    if (passValidate(password?.current.value) && emailValidate(email?.current.value)) {
       setLoadSignIn(true);
       e.preventDefault();
       const auth = getAuth();
@@ -142,17 +139,6 @@ export default function Login() {
               //dispatch(loginSuccess(res.data));    for redux part
               //navigate("/");
             });
-          } else if (user.admin) {
-            //Un-Comment this code below when you have a admin stored in DB no page to signup admin , so add admin manually
-            // await API.post('/api/auth/admin/signin', {
-            //   email: userCredential.user.email
-            // }).then((res) => {
-            //   console.log(res);
-            //   navigate('/admin/dashboard');
-            //   //dispatch(loginSuccess(res.data));    for redux part
-            //   //navigate("/");
-            // });
-            navigate('/admin/dashboard');
           } else {
             Toaster(toaster, 'error', 'Select a user type');
             setLoadSignIn(false);
@@ -201,7 +187,7 @@ export default function Login() {
   // };
 
   return (
-    <RegistrationLayout title={'Login'}>
+    <RegistrationLayout title={'Sign in'}>
       <section className="h-screen">
         <div className="">
           <div className="flex w-full h-16 justify-center px-6">
@@ -250,14 +236,14 @@ export default function Login() {
                     <FaUserEdit className="w-full" />
                     <p className="text-sm">Artist</p>
                   </div>
-                  <div
+                  {/* <div
                     className={`border ${
                       user.admin && 'text-primary border-primary'
                     } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
                     onClick={() => dispatch(setUser({ admin: true }))}>
                     <FaUserTie className="w-full" />
                     <p className="text-sm">Admin</p>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="mb-6">

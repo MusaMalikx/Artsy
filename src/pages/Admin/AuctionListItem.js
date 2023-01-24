@@ -5,7 +5,7 @@ import AuctionCard from '../../components/Auction/AuctionCard';
 import AdminLayout from '../../components/Layouts/AdminLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import AutomateBid from '../../components/Modals/AutomateBid';
-import { selectUser } from '../../redux/features/userReducer';
+import { selectUser } from '../../redux/features/reducer/userReducer';
 
 const AuctionListItem = ({ data }) => {
   const { state } = useLocation();

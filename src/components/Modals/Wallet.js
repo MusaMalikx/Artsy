@@ -5,7 +5,7 @@ import AddMoney from './AddMoney';
 import API from '../../api/server';
 import keygen from 'keygenerator';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/features/userReducer';
+import { selectUser } from '../../redux/features/reducer/userReducer';
 
 const Wallet = ({ open, handleClose }) => {
   const user = useSelector(selectUser);

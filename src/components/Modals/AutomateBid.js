@@ -2,13 +2,14 @@ import React, { useRef, useState } from 'react';
 import { Modal, useToaster } from 'rsuite';
 import API from '../../api/server';
 import Toaster from '../Common/Toaster';
+
 export default function AutomateBid({ open, setOpen, bidInfo, setBidInfo, artId }) {
   const handleClose = () => setOpen(false);
   const maxAmount = useRef();
   const increment = useRef();
   const toaster = useToaster();
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
-  const placeAutomatedBid = async(e) => {
+  const placeAutomatedBid = async (e) => {
     const basePrice = parseFloat(bidInfo.basePrice);
     const currentBid = parseFloat(bidInfo.currentBid);
     const inputMaxAmount = parseFloat(maxAmount.current.value);

@@ -1,5 +1,6 @@
 import validator from 'validator';
-import Toaster from '../../components/Common/Toaster';
+import Toaster from '../components/Common/Toaster';
+
 const titleValidate = (name) => {
   const currentName = name.replace(' ', '');
   return (

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import ProfileReport from '../../components/Modals/ProfileReport';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/features/userReducer';
+import { logout } from '../../redux/features/reducer/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { getAuth, signOut } from 'firebase/auth';

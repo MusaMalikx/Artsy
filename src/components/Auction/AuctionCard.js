@@ -4,7 +4,7 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/features/userReducer';
+import { selectUser } from '../../redux/features/reducer/userReducer';
 import AuctionCardTimer from '../Common/Timer/AuctionCardTimer';
 
 const AuctionCard = ({ artwork }) => {

@@ -8,7 +8,7 @@ import { BsSearch } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import Notification from '../Modals/Notification';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/features/userReducer';
+import { selectUser } from '../../redux/features/reducer/userReducer';
 import Wallet from '../Modals/Wallet';
 import { BiWallet } from 'react-icons/bi';
 
