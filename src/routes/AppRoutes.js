@@ -38,13 +38,13 @@ const AppRoutes = () => {
   const signedIn = useSelector(selectSignedIn);
 
   useEffect(() => {
-    if (auth?.usertype === 'buyer') {
+    if (auth?.type === 'buyer') {
       dispatch(setUser({ buyer: true }));
       navigate('/');
-    } else if (auth?.usertype === 'artist') {
+    } else if (auth?.type === 'artist') {
       dispatch(setUser({ artist: true }));
       navigate('/');
-    } else if (auth?.usertype === 'admin') {
+    } else if (auth?.type === 'admin') {
       dispatch(setUser({ admin: true }));
       navigate('/admin/dashboard');
     }

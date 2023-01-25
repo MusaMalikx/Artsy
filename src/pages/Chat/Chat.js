@@ -24,7 +24,7 @@ import Toaster from '../../components/Common/Toaster';
 const Chat = () => {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setcurrentChat] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [clickedUser, setClickedUser] = useState();
@@ -85,10 +85,10 @@ const Chat = () => {
       }
     };
 
-    const friendId = currentChat?.members.find((c) => c !== auth?.user._id);
+    const friendId = currentChat?.members?.find((c) => c !== auth?.user._id);
     const getUser = async () => {
       try {
-        const res = await API.get('/api/users/find/' + friendId);
+        const res = await API.get('/api/users/check/' + friendId);
         setClickedUser(res.data);
       } catch (error) {
         if (friendId !== undefined) console.log(error);
@@ -114,7 +114,7 @@ const Chat = () => {
 
     socket.emit('sendMessage', {
       uid: auth?.user._id,
-      rid: currentChat.members.find((c) => c !== auth?.user._id),
+      rid: currentChat.members?.find((c) => c !== auth?.user._id),
       text: newMessage
     });
 
@@ -130,6 +130,8 @@ const Chat = () => {
   const data = ['Eugenia', 'Bryan', 'Linda', 'Nancy', 'Lloyd', 'Alice', 'Julia', 'Albert'].map(
     (item) => ({ label: item, value: item })
   );
+
+  // console.log('clicked', clickedUser);
 
   return (
     <Layout title={'Chat'}>
@@ -149,16 +151,18 @@ const Chat = () => {
                 <p className="ml-2">Start Conversation</p>
               </div>
             </div>
-            <SelectPicker
-              data={data}
-              appearance="default"
-              placeholder="Default"
-              style={{ width: 224 }}
-            />
+            {/* <div className=''>
+              <SelectPicker
+                data={data}
+                appearance="default"
+                placeholder="Default"
+                style={{ width: 224 }}
+              />
+            </div> */}
             <div className="pb-4 h-[76vh] overflow-y-scroll">
               {conversations?.map((c) => (
                 <div key={c._id} onClick={() => setcurrentChat(c)}>
-                  <ChatItem chat={c} logged_user={auth?.user} />
+                  <ChatItem chat={c} logged_user={auth?.user} type={auth.type} />
                 </div>
                 // <ChatItem key={d.id} setList={setList} chat={d} />
               ))}
@@ -172,7 +176,9 @@ const Chat = () => {
                     <Jdenticon size="48" value={clickedUser?.email} />
                     <div className="flex-grow ml-3">
                       <h6>{clickedUser?.name}</h6>
-                      <p>description</p>
+                      <p className="text-xs uppercase font-semibold text-gray-400">
+                        {clickedUser?.type}
+                      </p>
                     </div>
                   </>
                 ) : (
@@ -210,20 +216,25 @@ const Chat = () => {
           </div>
         </div>
       </div>
-      <ConversationsModal open={modal} setOpen={setModal} user={auth?.user} />
+      <ConversationsModal
+        open={modal}
+        setOpen={setModal}
+        auth={auth}
+        setConversations={setConversations}
+      />
     </Layout>
   );
 };
 
-const ChatItem = ({ chat, logged_user }) => {
+const ChatItem = ({ chat, logged_user, type }) => {
   // console.log('chat', chat);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const friendId = chat.members.find((c) => c !== logged_user._id);
+    const friendId = chat.members?.find((c) => c !== logged_user._id);
     const getUser = async () => {
       try {
-        const res = await API.get('/api/artists/' + friendId);
+        const res = await API.get('/api/users/check/' + friendId);
         setUser(res.data);
       } catch (error) {
         if (friendId !== undefined) console.log(error);
@@ -255,6 +266,7 @@ const ChatItem = ({ chat, logged_user }) => {
       {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
       <div className="flex-grow ml-3">
         <h6>{user?.name}</h6>
+        <p className="text-xs uppercase font-semibold text-gray-400">{user?.type}</p>
       </div>
     </div>
   );
@@ -265,17 +277,25 @@ const Messages = ({ messages, user, clickedUser }) => {
     window.scrollTo({ bottom: 0, left: 0, behavior: 'smooth' });
   }, [messages]);
 
+  // console.log(messages);
+
   return (
-    <div>
-      {messages?.map((m) => (
-        <Message
-          key={m._id}
-          message={m}
-          email={user.email}
-          own={m.sender === user?._id}
-          clickedUser={clickedUser}
-        />
-      ))}
+    <div className="h-full pb-10">
+      {messages.length === 0 ? (
+        <div className="flex justify-center items-center h-full text-4xl text-center font-bold text-gray-400">
+          Haven&apos;t started conversation yet
+        </div>
+      ) : (
+        messages?.map((m) => (
+          <Message
+            key={m._id}
+            message={m}
+            email={user.email}
+            own={m.sender === user?._id}
+            clickedUser={clickedUser}
+          />
+        ))
+      )}
     </div>
   );
 };
@@ -309,7 +329,7 @@ const Message = ({ own, message, email, clickedUser }) => {
   );
 };
 
-const ConversationsModal = ({ open, setOpen, user }) => {
+const ConversationsModal = ({ open, setOpen, auth, setConversations }) => {
   const toaster = useToaster();
   const [select, setSelect] = useState(null);
   const [users, setUsers] = useState([]);
@@ -317,13 +337,14 @@ const ConversationsModal = ({ open, setOpen, user }) => {
   const handleClose = async () => {
     if (select !== null) {
       const conversation = {
-        sender_id: user._id,
+        sender_id: auth.user._id,
         receiver_id: select
       };
       try {
         // console.log(select);
         const res = await API.post('/api/conversations', conversation);
         console.log(res);
+        setConversations((prev) => [...prev, res.data]);
         setSelect(null);
         Toaster(toaster, 'success', 'Conversation has been created');
       } catch (error) {}
@@ -334,8 +355,9 @@ const ConversationsModal = ({ open, setOpen, user }) => {
   useEffect(() => {
     const getArtists = async () => {
       try {
-        const res = await API.get('/api/artists');
-        // console.log(res);
+        const res = await API.get(
+          auth?.type === 'artist' ? '/api/users' : auth?.type === 'buyer' && '/api/artists'
+        );
         setUsers(res.data);
       } catch (error) {
         console.log(error);
@@ -344,7 +366,7 @@ const ConversationsModal = ({ open, setOpen, user }) => {
     getArtists();
   }, []);
 
-  // console.log('users', users);
+  // console.log('type', auth?.type);
 
   return (
     <>
@@ -362,7 +384,9 @@ const ConversationsModal = ({ open, setOpen, user }) => {
               {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
               <div className="flex-grow ml-3">
                 <h6>{user?.name}</h6>
-                <div className="text-xs uppercase font-semibold text-gray-400">Artist</div>
+                <div className="text-xs uppercase font-semibold text-gray-400">
+                  {auth.type === 'buyer' ? 'Artist' : 'buyer'}
+                </div>
               </div>
             </div>
           ))}
