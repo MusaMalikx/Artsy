@@ -34,7 +34,7 @@ export default function BuyerProfileDashboard({ data }) {
 
   const fetchBuyerData = async () => {
     if (auth.user._id !== currentUserID) {
-      const res = await API.get(`/api/users/${currentUserID}`);
+      const res = await API.get(`/api/users/find/${currentUserID}`);
       if (res.data) {
         setProfileInfo({
           buyerName: res.data.name !== '' ? res.data.name : profileInfo.buyerName,

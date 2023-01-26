@@ -1,8 +1,10 @@
 import validator from 'validator';
 
 const holderNameValidate = (name) => {
-  const currentName = name.replace(' ', '');
-  return validator.isAlpha(currentName) && validator.isLength(currentName, { min: 3, max: 30 });
+  return (
+    validator.isAlphanumeric(validator.blacklist(name, ' ')) &&
+    validator.isLength(name, { min: 3, max: 30 })
+  );
 };
 
 const cardNumberValidate = (cardnumber) => {

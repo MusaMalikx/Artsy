@@ -2,9 +2,9 @@ import validator from 'validator';
 import Toaster from '../components/Common/Toaster';
 
 const titleValidate = (name) => {
-  const currentName = name.replace(' ', '');
   return (
-    validator.isAlphanumeric(currentName) && validator.isLength(currentName, { min: 10, max: 200 })
+    validator.isAlphanumeric(validator.blacklist(name, ' ')) &&
+    validator.isLength(name, { min: 10, max: 200 })
   );
 };
 

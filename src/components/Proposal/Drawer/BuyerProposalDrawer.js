@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Drawer } from 'rsuite';
 import ArtistProposal from '../../Modals/ArtistProposal';
-export default function ProposalDrawer({ setOpen }) {
+export default function ProposalDrawer({ setOpen, proposal, updateProposalList }) {
   const [openField, setOpenField] = useState(false);
-  const text =
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius molestiae accusamus distinctio atque consequuntur tempora dolore veniam aut accusantium pariatur temporibus fugiat illum, quis nobis fugit beatae soluta numquam unde!';
+  const navigate = useNavigate();
   return (
     <>
       <Drawer size="xs" open={true} onClose={() => setOpen(false)}>
@@ -14,30 +14,50 @@ export default function ProposalDrawer({ setOpen }) {
               <div className=" rounded-full relative w-40 overflow-hidden">
                 <img
                   className=" w-full h-full object-cover "
-                  src="https://www.skintransform.co.uk/wp-content/uploads/2016/10/Men-Face4.jpg"
+                  src={
+                    proposal.buyerInfo.image !== ''
+                      ? proposal.buyerInfo.image
+                      : 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg'
+                  }
                   alt=""
                 />
               </div>
               <div className="font-bold text-center justify-between w-full">
-                <p className="text-green-500 text-xl">John D. Moore</p>
+                <p className="text-green-500 capitalize text-xl">{proposal.buyerInfo.name}</p>
                 <p className="font-light">Lahore, Punjab, Pakistan</p>
-                <p className=" underline cursor-pointer hover:text-slate-500 ">View Profile</p>
+                <p
+                  onClick={() => {
+                    navigate(`/buyer/profile/${proposal.buyerInfo.buyerId}`);
+                  }}
+                  className=" underline cursor-pointer hover:text-black hover:font-semibold">
+                  View Profile
+                </p>
               </div>
             </div>
             <div className="flex flex-col mt-6">
               <p className="text-lg font-bold ">
                 {' '}
-                Expected : <span className=" text-red-500 "> Rs. 5000</span>{' '}
+                Expected : <span className=" text-red-500 ">
+                  {' '}
+                  Rs. {proposal.expectedAmount}
+                </span>{' '}
               </p>
-              <p className="text-lg font-bold mt-6">Description</p>
-              <p className="text-justify">{text}</p>
+              <p className="text-lg font-bold mt-6"> {proposal.title}</p>
+              <p className="text-justify">{proposal.description}</p>
             </div>
             <button
               onClick={() => setOpenField(true)}
               className="mt-10 w-full focus:outline-none border py-3 rounded-lg bg-primary hover:bg-cyan-700 text-white font-bold ">
               Bid Now
             </button>
-            {<ArtistProposal isOpen={openField} setIsOpen={setOpenField} />}
+            {
+              <ArtistProposal
+                isOpen={openField}
+                setIsOpen={setOpenField}
+                updateProposalList={updateProposalList}
+                proposalId={proposal._id}
+              />
+            }
           </div>
         </Drawer.Body>
       </Drawer>

@@ -4,9 +4,7 @@ import AuctionCard from '../../components/Auction/AuctionCard';
 import Carousel from '../../components/Carousel/Carousel';
 import displayBanner from '../../assets/images/display.png';
 const Home = ({ data }) => {
-  // const user = useSelector(selectUser);
-  // console.log(user);
-
+  //console.log(JSON.parse(localStorage.getItem('auth')).token);
   return (
     <Layout title="Home">
       {/* <div className="flex flex-col justify-center items-center min-h-screen my-auto text-2xl space-y-2">

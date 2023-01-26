@@ -58,10 +58,9 @@ export default function ArtistProfileDashboard() {
       });
     }
   };
-
   useEffect(() => {
-    fetchArtistData();
     fetchArtworks();
+    fetchArtistData();
   }, []);
   const logoutuser = () => {
     const auth = getAuth();

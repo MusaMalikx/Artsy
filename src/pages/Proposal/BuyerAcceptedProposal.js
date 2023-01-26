@@ -7,7 +7,7 @@ const BuyerAcceptedProposal = () => {
   return (
     <Layout title="Listed Auctions">
       <HeaderLayout title="Accepted Proposals" />
-      <div>
+      <div className="w-full min-h-screen">
         <ProposalTable />
       </div>
     </Layout>

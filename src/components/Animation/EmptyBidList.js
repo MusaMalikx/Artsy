@@ -1,12 +1,11 @@
-import Lottie from 'lottie-react';
+import Lottie from 'react-lottie-player';
 import React from 'react';
 import BidList from '../../assets/json/BidList.json';
 const EmptyBidList = () => {
-  console.log('JAAAAAAAAAAAAAWa');
   return (
     <div className="h-full w-full p-4">
       <div className="flex justify-center items center w-full h-80">
-        <Lottie animationData={BidList} loop={true} />
+        <Lottie loop animationData={BidList} play />
       </div>
       <div className="text-center">
         <p className="text-lg text-red-500 font-semibold">Your Bid list is empty!</p>
