@@ -4,6 +4,7 @@ import { FaUserEdit, FaMoneyBillWave } from 'react-icons/fa';
 import { useToaster } from 'rsuite';
 import Toaster from '../Common/Toaster';
 import API from '../../api/server';
+import EmptyList from '../Animation/EmptyList';
 
 const ProposalAcceptedTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -78,17 +79,19 @@ const ProposalAcceptedTable = () => {
               </th>
             </thead>
             <tbody>
-              {proposalList.length > 0
-                ? proposalList.map((p) => (
-                    <ProposalTableItem
-                      proposalId={p.proposalId}
-                      updateList={getProposals}
-                      alterDeleteList={selectRowForDelete}
-                      proposal={p}
-                      key={p._id}
-                    />
-                  ))
-                : ''}
+              {proposalList.length > 0 ? (
+                proposalList.map((p) => (
+                  <ProposalTableItem
+                    proposalId={p.proposalId}
+                    updateList={getProposals}
+                    alterDeleteList={selectRowForDelete}
+                    proposal={p}
+                    key={p._id}
+                  />
+                ))
+              ) : (
+                <EmptyList />
+              )}
             </tbody>
           </table>
         </div>

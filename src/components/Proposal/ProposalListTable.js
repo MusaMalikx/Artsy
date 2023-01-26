@@ -4,6 +4,7 @@ import { MdOutlineCreate } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+import EmptyList from '../Animation/EmptyList';
 import Toaster from '../Common/Toaster';
 
 const ProposalTable = () => {
@@ -70,24 +71,26 @@ const ProposalTable = () => {
         <div className="mt-7 overflow-x-auto">
           <table className="w-full whitespace-nowrap">
             <thead>
-              <th className="focus:outline-none h-16 rounded flex w-full p-5 uppercase text-left ">
-                <td className="w-3/12">Select</td>
-                <td className="w-3/12">Title</td>
-                <td className="w-3/12 pl-5">Date Created</td>
-                <td className="w-3/12 pl-7">Total Bids</td>
-                <td className="pr-2">Action</td>
+              <th className="focus:outline-none h-16 rounded flex w-full p-5 justify-between uppercase text-left ">
+                <td className="">Select</td>
+                <td className="w-36">Title</td>
+                <td className="w-36">Date Created</td>
+                <td className="w-48">Total Bids</td>
+                <td className="">Action</td>
               </th>
             </thead>
             <tbody>
-              {proposalList.length > 0
-                ? proposalList.map((p) => (
-                    <ProposalTableItem
-                      alterDeleteList={selectRowForDelete}
-                      proposal={p}
-                      key={p._id}
-                    />
-                  ))
-                : ''}
+              {proposalList.length > 0 ? (
+                proposalList.map((p) => (
+                  <ProposalTableItem
+                    alterDeleteList={selectRowForDelete}
+                    proposal={p}
+                    key={p._id}
+                  />
+                ))
+              ) : (
+                <EmptyList />
+              )}
             </tbody>
           </table>
         </div>
@@ -114,14 +117,14 @@ const ProposalTableItem = ({ proposal, alterDeleteList }) => {
           />
         </div>
       </td>
-      <td className="">
+      <td className="w-36">
         <p className="text-base font-medium text-gray-700">{proposal.title}</p>
       </td>
-      <td className="flex items-center">
+      <td className="flex items-center w-36">
         <MdOutlineCreate />
         <p className="text-sm leading-none text-gray-600 ml-2">{proposal.dateCreated}</p>
       </td>
-      <td className="flex items-center">
+      <td className="flex items-center w-36">
         {<BsChatLeftDots />}
         <p className="text-sm leading-none text-gray-600 ml-2">
           {proposal.artistProposals.length} Bids

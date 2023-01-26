@@ -15,6 +15,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -209,14 +210,18 @@ export default function ArtistProfileDashboard() {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {profileInfo.artworks?.map((artwork) => (
-                        <motion.div
-                          key={artwork._id}
-                          animate={{ x: [-2000, 350, 0] }}
-                          transition={{ duration: 1.5, delay: 0 }}>
-                          <ProfileAuctionCard key={artwork._id} artwork={artwork} />
-                        </motion.div>
-                      ))}
+                      {profileInfo.artworks ? (
+                        profileInfo.artworks.map((artwork) => (
+                          <motion.div
+                            key={artwork._id}
+                            animate={{ x: [-2000, 350, 0] }}
+                            transition={{ duration: 1.5, delay: 0 }}>
+                            <ProfileAuctionCard key={artwork._id} artwork={artwork} />
+                          </motion.div>
+                        ))
+                      ) : (
+                        <EmptyProfileAuctions />
+                      )}
                       <div></div>
                     </div>
                   </div>

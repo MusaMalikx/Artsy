@@ -16,6 +16,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
 
 export default function BuyerProfileDashboard({ data }) {
   const toaster = useToaster();
@@ -198,14 +199,18 @@ export default function BuyerProfileDashboard({ data }) {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {data?.map((photo) => (
-                        <motion.div
-                          key={photo.id}
-                          animate={{ x: [-2000, 350, 0] }}
-                          transition={{ duration: 1.5, delay: 0 }}>
-                          <ProfileWonAuctionCard key={photo.id} photo={photo} />
-                        </motion.div>
-                      ))}
+                      {data ? (
+                        data.map((photo) => (
+                          <motion.div
+                            key={photo.id}
+                            animate={{ x: [-2000, 350, 0] }}
+                            transition={{ duration: 1.5, delay: 0 }}>
+                            <ProfileWonAuctionCard key={photo.id} photo={photo} />
+                          </motion.div>
+                        ))
+                      ) : (
+                        <EmptyProfileAuctions />
+                      )}
                       <div></div>
                     </div>
                   </div>
