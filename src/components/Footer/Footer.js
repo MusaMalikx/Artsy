@@ -5,73 +5,101 @@ import { FaFacebookF } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <div className="bg-primary relative z-10">
-      <div className="lg:px-40 py-5 flex text-center md:text-left justify-around flex-col-reverse md:flex-row">
-        <div className="md:max-w-lg w-full">
-          <h2 className="text-white font-bold text-2xl uppercase tracking-widest">
-            Get your auctions today
-          </h2>
-          <button
-            className="btn bg-green-600 rounded-3xl px-4 py-2 my-5 text-white btn-outline-primary"
-            // onClick={() => router.push('/get-in-touch')}
-          >
-            Get in touch
-          </button>
-          <div className="flex justify-between flex-col md:flex-row">
-            <div className="space-y-3 mt-4 text-[12px] uppercase text-white font-[500]">
-              <p className="hover:underline underline-offset-1 cursor-pointer">Company</p>
-              <p className="hover:underline underline-offset-1 cursor-pointer">About Auctions</p>
-              <p className="hover:underline underline-offset-1 cursor-pointer">Our Services</p>
-              <p className="hover:underline underline-offset-1 cursor-pointer">Why Us</p>
-              <p className="hover:underline underline-offset-1 cursor-pointer">How It Works</p>
-              <p className="hover:underline underline-offset-1 cursor-pointer">Auction Packages</p>
-              <p className="hover:underline underline-offset-1 cursor-pointer">Sample Auctions</p>
+    <footer className="relative bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-cyan-200 via-primary to-cyan-200 pt-8 pb-6">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-wrap text-left lg:text-left">
+          <div className="w-full lg:w-6/12 px-4">
+            <h4 className="text-3xl fonat-semibold text-blueGray-700 uppercase">
+              Get your artworks today!
+            </h4>
+            <h5 className="text-lg mt-0 mb-2 text-blueGray-600">
+              Find us on any of these platforms, we respond within 24 hours.
+            </h5>
+            <div className="mt-6 lg:mb-0 mb-6">
+              <button
+                className="bg-white text-lightBlue-400 shadow-lg font-normal h-10 w-10 rounded-full outline-none focus:outline-none mr-2"
+                type="button">
+                <BsTwitter className="w-full" />
+              </button>
+              <button
+                className="bg-white text-lightBlue-600 shadow-lg font-normal h-10 w-10 rounded-full outline-none focus:outline-none mr-2"
+                type="button">
+                <FaFacebookF className="w-full" />
+              </button>
+              <button
+                className="bg-white text-pink-600 shadow-lg font-normal h-10 w-10  rounded-full outline-none focus:outline-none mr-2"
+                type="button">
+                <AiOutlineInstagram className="w-full" />
+              </button>
+              <button
+                className="bg-white text-green-800 shadow-lg font-normal h-10 w-10 rounded-full outline-none focus:outline-none mr-2"
+                type="button">
+                <BsWhatsapp className="w-full" />
+              </button>
             </div>
-            <div className="space-y-3 mt-4 text-[12px] uppercase text-white font-[500]">
-              <p className="hover:underline underline-offset-1 cursor-pointer">Quick Links</p>
-              <p
-                className="hover:underline underline-offset-1 cursor-pointer"
-                // onClick={() => router.push('/careers')}
-              >
-                Careers
-              </p>
-              <p className="hover:underline underline-offset-1 cursor-pointer">
-                Frequently Asked Questions
-              </p>
-              <p
-                className="hover:underline underline-offset-1 cursor-pointer"
-                // onClick={() => router.push('/terms-and-conditions')}
-              >
-                Terms & Conditions
-              </p>
-              <p
-                className="hover:underline underline-offset-1 cursor-pointer"
-                // onClick={() => router.push('/privacy-policy')}
-              >
-                Privacy Policy
-              </p>
+          </div>
+          <div className="w-full lg:w-6/12 px-4">
+            <div className="flex flex-wrap items-top mb-6">
+              <div className="w-full lg:w-4/12 px-4 ml-auto">
+                <span className="block uppercase  text-blueGray-700 text-sm font-semibold mb-2">
+                  Company
+                </span>
+                <ul className="list-unstyled">
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    About Auctions
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Our Services
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Why Us
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    How it Works
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Auction Packages
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Sample Auctions
+                  </li>
+                </ul>
+              </div>
+              <div className="w-full lg:w-4/12 px-4">
+                <span className="block uppercase  text-blueGray-700 text-sm font-semibold mb-2">
+                  Other Resources
+                </span>
+                <ul className="list-unstyled">
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    About Us
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Careers
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Frequently Asked Questions
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Terms & Conditions
+                  </li>
+                  <li className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm">
+                    Privacy Policy
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-        <div className="mb-10">
-          {/* <img src="" alt="icon" width={100} height={50} /> */}
-          <div className="flex justify-center md:justify-end flex-wrap gap-3 mt-10 text-primary">
-            <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <AiOutlineInstagram size={15} />
-            </div>
-            <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <FaFacebookF size={15} />
-            </div>
-            <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <BsTwitter size={15} />
-            </div>
-            <div className="bg-white p-2 rounded-full cursor-pointer hover:bg-green-200">
-              <BsWhatsapp size={15} />
+        <hr className="my-6 border-blueGray-300" />
+        <div className="flex flex-wrap items-center md:justify-between justify-center">
+          <div className="w-full md:w-4/12 px-4 mx-auto text-center">
+            <div className="text-sm  text-blueGray-700 font-semibold py-1">
+              Copyright © <span id="get-current-year">2023 by Artsy Auction</span> .
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

@@ -21,7 +21,7 @@ const Bids = () => {
   return (
     <Layout title="Bids">
       <HeaderLayout title="Bids" />
-      <div className="flex-grow flex justify-center mb-5">
+      <div className="flex-grow min-h-screen flex justify-center mb-5">
         <div className="max-w-5xl w-full bg-gray-100 h-fit px-10 py-6 rounded-xl">
           {bidList.length > 0 ? (
             bidList.map((art) => <BidItem key={art._id} artwork={art} />)
