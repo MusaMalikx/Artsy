@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import AuctionCard from '../../components/Auction/AuctionCard';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import AutomateBid from '../../components/Modals/AutomateBid';
@@ -10,6 +9,8 @@ import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import Timer from '../../components/Common/Timer/AuctionItemTimer';
+import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
+//import AuctionCard from '../../components/Auction/AuctionCard';
 
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
@@ -284,16 +285,17 @@ const AuctionItem = ({ data }) => {
         </div>
       )}
 
-      <div className="mx-5 py-10 bg-gray-100 border border-gray-400 rounded-lg mb-20 md:my-20">
+      {/* <div className="mx-5 py-10 bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-gray-300 via-gray-100 to-gray-300 border-gray-400 border rounded-lg mb-20 md:my-20">
         <div className="flex justify-center items-center mb-10">
-          <p className="font-semibold   text-2xl">Similar Auctions Items</p>
+          <p className="font-semibold uppercase text-3xl">Similar Auctions Items</p>
         </div>
-        <div className="flex items-center flex-wrap justifayy-center ">
+        <div className="flex items-center flex-wrap justify-center ">
           {data?.slice(4, 9).map((photo) => (
             <AuctionCard key={photo.id} artwork={photo} />
           ))}
         </div>
-      </div>
+      </div> */}
+      <SimilarAuctions data={data} />
     </Layout>
   );
 };

@@ -26,7 +26,11 @@ const AuctionItemTimer = ({ endDate }) => {
     };
   });
 
-  return <div>{timer}</div>;
+  return (
+    <div className={`${timer.localeCompare('Auction Closed') === 0 ? 'text-red-500' : ''}`}>
+      {timer}
+    </div>
+  );
 };
 
 export default AuctionItemTimer;

@@ -15,7 +15,7 @@ export default function AutomateBid({ open, setOpen, bidInfo, setBidInfo, artId 
     const inputMaxAmount = parseFloat(maxAmount.current.value);
     const inputIncrement = parseFloat(increment.current.value);
 
-    if (inputMaxAmount >= 0 && inputIncrement >= 0) {
+    if (inputMaxAmount > 0 && inputIncrement > 0) {
       if (
         (currentBid > basePrice && inputMaxAmount >= currentBid + inputIncrement) ||
         (currentBid < basePrice && basePrice + inputIncrement <= inputMaxAmount)
@@ -46,7 +46,7 @@ export default function AutomateBid({ open, setOpen, bidInfo, setBidInfo, artId 
         maxAmount.current.setCustomValidity('Invalid Max Bid! Increase Max Bid!');
       }
     } else {
-      if (increment.current.value !== '')
+      if (maxAmount.current.value === '' || maxAmount.current.value === 0)
         maxAmount.current.setCustomValidity('Enter a valid amount!');
       else increment.current.setCustomValidity('Enter a valid amount!');
     }
