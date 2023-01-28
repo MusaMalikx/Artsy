@@ -16,6 +16,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+import ReactJdenticon from 'react-jdenticon';
 
 export default function BuyerProfileDashboard({ data }) {
   const toaster = useToaster();
@@ -98,12 +99,15 @@ export default function BuyerProfileDashboard({ data }) {
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
-                      <img
+                      <div className="shadow-xl object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200 bg-white">
+                        <ReactJdenticon size="200" value={auth?.user.email} />
+                      </div>
+                      {/* <img
                         src={profileInfo.profileImage}
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
                         alt="profile"
                         srcSet=""
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
