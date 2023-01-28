@@ -31,6 +31,31 @@ const Auctions = () => {
       });
   }, []);
 
+  const getCategoryArtworks = async (value) => {
+    if (value !== null) {
+      const selectedCategory = value;
+      await API.get(`/api/artworks/all/category?category=${selectedCategory}`)
+        .then((res) => {
+          setArtworks(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          Toaster(toaster, 'error', err.response.data.message);
+        });
+    }
+  };
+
+  const getAllArtworks = async () => {
+    await API.get('/api/artworks/all')
+      .then((res) => {
+        setArtworks(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        Toaster(toaster, 'error', err.response.data.message);
+      });
+  };
+
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title={'Auctions'} />
@@ -40,6 +65,8 @@ const Auctions = () => {
             data={dat}
             searchable={false}
             placeholder="Select Category"
+            onChange={getCategoryArtworks}
+            onClean={getAllArtworks}
             style={{ width: 224 }}
           />
         </div>
