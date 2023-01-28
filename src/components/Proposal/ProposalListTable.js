@@ -11,7 +11,9 @@ const ProposalTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [proposalList, setProposalList] = useState([]);
   const [deletePropsalList, setDeletePropsalList] = useState([]);
+  const [isDeleted, setIsDelete] = useState(false);
   const toaster = useToaster();
+
   const getProposals = async () => {
     const res = await API.get('/api/users/proposal', {
       headers: {
@@ -38,7 +40,8 @@ const ProposalTable = () => {
         );
         if (res.data) {
           setDeletePropsalList([]);
-          getProposals();
+          setIsDelete(true);
+          // getProposals();
           Toaster(toaster, 'success', 'Successfully deleted proposals!');
         }
       }
@@ -55,8 +58,11 @@ const ProposalTable = () => {
   };
 
   useEffect(() => {
+    console.log('effect');
     getProposals();
-  }, []);
+  }, [isDeleted]);
+
+  console.log('proposal', proposalList, 'deleted', deletePropsalList);
 
   return (
     <div className="sm:px-6 w-full min-h-screen">
