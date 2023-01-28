@@ -9,8 +9,9 @@ import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import Timer from '../../components/Common/Timer/AuctionItemTimer';
-import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
-//import AuctionCard from '../../components/Auction/AuctionCard';
+//import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
+import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
+import AuctionCard from '../../components/Auction/AuctionCard';
 
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
@@ -179,11 +180,12 @@ const AuctionItem = ({ data }) => {
         // If real data was used
         <div className="py-10 px-5">
           <div className="flex flex-col lg:flex-row mt-20">
-            <img
+            {/* <img
               src={`http://localhost:8080/api/artworks/image?filename=${state.artwork.images[0]}`}
               className="w-96 h-96 rounded-md mx-auto"
               alt={state.artwork.title}
-            />
+            /> */}
+            <AuctionItemCarousel images={state.artwork.images} />
             <div className="flex-grow mx-10 flex flex-col justify-between my-10 lg:my-0 space-y-3 lg:space-y-0">
               <div className="flex flex-wrap items-center w-full justify-between">
                 <p className="font-mono mr-auto text-gray-600 text-4xl font-bold uppercase">
@@ -285,7 +287,7 @@ const AuctionItem = ({ data }) => {
         </div>
       )}
 
-      {/* <div className="mx-5 py-10 bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-gray-300 via-gray-100 to-gray-300 border-gray-400 border rounded-lg mb-20 md:my-20">
+      <div className="mx-5 py-10  border-gray-400 border rounded-lg mb-20 md:my-20">
         <div className="flex justify-center items-center mb-10">
           <p className="font-semibold uppercase text-3xl">Similar Auctions Items</p>
         </div>
@@ -294,8 +296,9 @@ const AuctionItem = ({ data }) => {
             <AuctionCard key={photo.id} artwork={photo} />
           ))}
         </div>
-      </div> */}
-      <SimilarAuctions data={data} />
+      </div>
+
+      {/* <SimilarAuctions data={data} /> */}
     </Layout>
   );
 };
