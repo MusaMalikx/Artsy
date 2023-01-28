@@ -6,6 +6,7 @@ import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
+import EmptyAuction from '../../components/Animation/EmptyAuctions';
 
 const Auctions = () => {
   const toaster = useToaster();
@@ -34,23 +35,27 @@ const Auctions = () => {
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title={'Auctions'} />
-      <div className="container mx-auto">
-        <div className="flex justify-center items-center my-10">
-          <SelectPicker
-            data={dat}
-            searchable={false}
-            placeholder="Select Category"
-            style={{ width: 224 }}
-          />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5">
-          {/* {data?.map((photo) => (
-            <AuctionCard key={photo.id} photo={photo} />
-          ))} */}
-          {artworks?.map((artwork) => (
-            <AuctionCard key={artwork._id} artwork={artwork} />
-          ))}
-        </div>
+      <div className="container min-h-screen mx-auto">
+        {artworks.length > 0 ? (
+          <>
+            <div className="flex justify-center items-center my-10">
+              <SelectPicker
+                data={dat}
+                searchable={false}
+                placeholder="Select Category"
+                style={{ width: 224 }}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5">
+              {artworks.map((artwork) => (
+                <AuctionCard key={artwork._id} artwork={artwork} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <EmptyAuction />
+        )}
       </div>
     </Layout>
   );

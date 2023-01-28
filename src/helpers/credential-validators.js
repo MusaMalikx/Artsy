@@ -9,8 +9,10 @@ const passValidate = (password) => {
 };
 
 const nameValidate = (name) => {
-  const currentName = name.replace(' ', '');
-  return validator.isAlpha(currentName) && validator.isLength(currentName, { min: 3, max: 30 });
+  return (
+    validator.isAlphanumeric(validator.blacklist(name, ' ')) &&
+    validator.isLength(name, { min: 3, max: 30 })
+  );
 };
 
 const phoneValidate = (phone) => {

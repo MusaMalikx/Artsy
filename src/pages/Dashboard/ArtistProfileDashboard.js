@@ -15,6 +15,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,38 +31,19 @@ export default function ArtistProfileDashboard() {
       'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg',
     artworks: []
   });
-  const fetchArtworks = async () => {
-    const res = await API.get(`/api/artworks/artist/${currentUserID}`);
-    if (res.data) {
-      setProfileInfo((info) => {
-        return {
-          ...info,
-          artworks: res.data
-        };
-      });
-    }
-  };
 
   const fetchArtistData = async () => {
-    if (auth.user._id !== currentUserID) {
-      const res = await API.get(`/api/artists/find/${currentUserID}`);
-      if (res.data) {
-        setProfileInfo({
-          artistName: res.data.name !== '' ? res.data.name : profileInfo.buyerName,
-          profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage
-        });
-      }
-    } else {
+    const res = await API.get(`/api/artworks/artist/${currentUserID}`);
+    if (res.data) {
       setProfileInfo({
-        artistName: auth.user.name ? auth.user.name : profileInfo.buyerName,
-        profileImage: auth.user.imageURL !== '' ? auth.user.imageURL : profileInfo.profileImage
+        artistName: res.data.name !== '' ? res.data.name : profileInfo.artistName,
+        profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage,
+        artworks: res.data.artworks
       });
     }
   };
-
   useEffect(() => {
     fetchArtistData();
-    fetchArtworks();
   }, []);
   const logoutuser = () => {
     const auth = getAuth();
@@ -210,14 +192,18 @@ export default function ArtistProfileDashboard() {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {profileInfo.artworks?.map((artwork) => (
-                        <motion.div
-                          key={artwork._id}
-                          animate={{ x: [-2000, 350, 0] }}
-                          transition={{ duration: 1.5, delay: 0 }}>
-                          <ProfileAuctionCard key={artwork._id} artwork={artwork} />
-                        </motion.div>
-                      ))}
+                      {profileInfo.artworks ? (
+                        profileInfo.artworks.map((artwork) => (
+                          <motion.div
+                            key={artwork._id}
+                            animate={{ x: [-2000, 350, 0] }}
+                            transition={{ duration: 1.5, delay: 0 }}>
+                            <ProfileAuctionCard key={artwork._id} artwork={artwork} />
+                          </motion.div>
+                        ))
+                      ) : (
+                        <EmptyProfileAuctions />
+                      )}
                       <div></div>
                     </div>
                   </div>

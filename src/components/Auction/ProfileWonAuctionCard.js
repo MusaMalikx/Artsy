@@ -1,25 +1,36 @@
 import React from 'react';
 
 export default function ProfileWonAuctionCard({ photo }) {
+  const handleClick = (e) => {
+    e.preventDefault();
+  };
   const { user, urls } = photo;
   return (
     <div className="py-6 flex justify-center hover:scale-105 transition-all">
-      <div className="flex w-3/4 items-center bg-white shadow-lg rounded-lg overflow-hidden">
-        <div
-          className="w-32 h-44 md:h-32 bg-center bg-cover"
-          style={{
-            backgroundImage: `url('${urls.thumb}')`
-          }}></div>
+      <div className="flex lg:flex-row flex-col w-full items-center bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
+          <div
+            className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
+            style={{
+              backgroundImage: `url('${urls.thumb}')`
+            }}></div>
+        </div>
         <div className="w-full h-full hover:bg-slate-100 p-4 text-left flex flex-col justify-between">
-          <div className="flex  w-full md:justify-between md:flex-row flex-col gap-2 md:gap-0 justify-center">
-            <h1 className="text-gray-900 font-bold text-2xl">{user.username}</h1>
-            <p className="font-bold text-xl text-black">2nd January, 2022</p>
-          </div>
-          <div className="flex md:justify-between md:flex-row flex-col justify-center gap-2 md:gap-0 mt-3">
-            <h1 className="text-gray-700 text-base font-light">
-              Winning Bid : <span className="font-bold text-green-500 "> $70</span>
+          <div className="flex  w-full sm:justify-around sm:flex-row flex-col gap-2 md:gap-0 justify-center items-center sm:items-start lg:justify-between text-center">
+            <h1 className="text-gray-700 font-bold sm:text-xl text-base capitalize ">
+              {user.name}
             </h1>
-            <button className="px-3 py-2 bg-primary text-white text-xs font-bold uppercase rounded focus:outline-none active:bg-cyan-700">
+            <h1 className="font-bold sm:text-xl text-base text-gray-700">
+              Highest Bid : <span className="font-bold text-green-500 "> PKR 7000</span>
+            </h1>
+          </div>
+          <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
+            <p className="text-md mb-0 font-mono text-red-700 sm:text-xl text-base font-bold">
+              2nd January, 2022
+            </p>
+            <button
+              onClick={handleClick}
+              className="px-3 py-2 bg-primary text-white text-xs font-bold uppercase rounded focus:outline-none active:bg-cyan-700">
               View Artwork
             </button>
           </div>

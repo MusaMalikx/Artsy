@@ -1,15 +1,43 @@
 import React, { useRef } from 'react';
-import { Modal } from 'rsuite';
+import { Modal, useToaster } from 'rsuite';
+import API from '../../api/server';
 import {
   titleValidate,
   amountValidate,
   descriptionValidate
 } from '../../helpers/proposal-validators';
+import Toaster from '../Common/Toaster';
 
-export default function ArtistProposal({ isOpen, setIsOpen }) {
+export default function ArtistProposal({ isOpen, setIsOpen, proposalId, updateProposalList }) {
   const title = useRef();
   const amount = useRef();
   const description = useRef();
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const toaster = useToaster();
+  const placeBidProposal = async () => {
+    try {
+      const res = await API.post(
+        `/api/artists/proposal/bid/${proposalId}`,
+        {
+          title: title.current.value,
+          description: description.current.value,
+          bidAmount: amount.current.value
+        },
+        {
+          headers: {
+            token: 'Bearer ' + auth.token
+          }
+        }
+      );
+      if (res.data) {
+        updateProposalList();
+        Toaster(toaster, 'success', 'Succesfully placed a bid!');
+        setIsOpen(false);
+      }
+    } catch (error) {
+      Toaster(toaster, 'error', 'Failed to place bid!');
+    }
+  };
 
   const sendProposal = (e) => {
     if (
@@ -18,10 +46,7 @@ export default function ArtistProposal({ isOpen, setIsOpen }) {
       amountValidate(amount.current.value)
     ) {
       e.preventDefault();
-
-      ///Write Axios API code Here
-
-      setIsOpen(false);
+      placeBidProposal();
     } else {
       !titleValidate(title.current.value)
         ? title.current.setCustomValidity(
