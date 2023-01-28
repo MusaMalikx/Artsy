@@ -59,7 +59,7 @@ const Auctions = () => {
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title={'Auctions'} />
-      <div className="container mx-auto">
+      <div className="container min-h-screen mx-auto">
         <div className="flex justify-center items-center my-10">
           <SelectPicker
             data={dat}
