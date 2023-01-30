@@ -1,15 +1,42 @@
 import React, { useRef } from 'react';
-import { Modal } from 'rsuite';
+import { Modal, useToaster } from 'rsuite';
+import API from '../../api/server';
 import {
   titleValidate,
   amountValidate,
   descriptionValidate
 } from '../../helpers/proposal-validators';
+import Toaster from '../Common/Toaster';
 
 export default function BuyerProposal({ isOpen, setIsOpen }) {
   const title = useRef();
   const amount = useRef();
   const description = useRef();
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const toaster = useToaster();
+  const createProposal = async () => {
+    try {
+      const res = await API.post(
+        '/api/users/proposal/create',
+        {
+          title: title.current.value,
+          description: description.current.value,
+          expectedAmount: parseFloat(amount.current.value)
+        },
+        {
+          headers: {
+            token: 'Bearer ' + auth.token
+          }
+        }
+      );
+      if (res.data) {
+        Toaster(toaster, 'success', 'Proposal created successfully!');
+        setIsOpen(false);
+      }
+    } catch (error) {
+      Toaster(toaster, 'error', 'Failed to create a proposal!');
+    }
+  };
 
   const sendProposal = (e) => {
     if (
@@ -18,10 +45,7 @@ export default function BuyerProposal({ isOpen, setIsOpen }) {
       amountValidate(amount.current.value)
     ) {
       e.preventDefault();
-
-      ///Write Axios API code Here
-
-      setIsOpen(false);
+      createProposal();
     } else {
       !titleValidate(title.current.value)
         ? title.current.setCustomValidity(

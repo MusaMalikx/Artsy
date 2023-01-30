@@ -15,6 +15,8 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
+import ReactJdenticon from 'react-jdenticon';
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,38 +32,19 @@ export default function ArtistProfileDashboard() {
       'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg',
     artworks: []
   });
-  const fetchArtworks = async () => {
-    const res = await API.get(`/api/artworks/artist/${currentUserID}`);
-    if (res.data) {
-      setProfileInfo((info) => {
-        return {
-          ...info,
-          artworks: res.data
-        };
-      });
-    }
-  };
 
   const fetchArtistData = async () => {
-    if (auth.user._id !== currentUserID) {
-      const res = await API.get(`/api/artists/find/${currentUserID}`);
-      if (res.data) {
-        setProfileInfo({
-          artistName: res.data.name !== '' ? res.data.name : profileInfo.buyerName,
-          profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage
-        });
-      }
-    } else {
+    const res = await API.get(`/api/artworks/artist/${currentUserID}`);
+    if (res.data) {
       setProfileInfo({
-        artistName: auth.user.name ? auth.user.name : profileInfo.buyerName,
-        profileImage: auth.user.imageURL !== '' ? auth.user.imageURL : profileInfo.profileImage
+        artistName: res.data.name !== '' ? res.data.name : profileInfo.artistName,
+        profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage,
+        artworks: res.data.artworks
       });
     }
   };
-
   useEffect(() => {
     fetchArtistData();
-    fetchArtworks();
   }, []);
   const logoutuser = () => {
     const auth = getAuth();
@@ -109,13 +92,16 @@ export default function ArtistProfileDashboard() {
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
-                      <img
+                      <div className="shadow-xl object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200 bg-white">
+                        <ReactJdenticon size="200" value={auth?.user.email} />
+                      </div>
+                      {/* <img
                         referrerPolicy="no-referrer"
                         alt="..."
                         src={profileInfo.profileImage}
                         // src="https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg"
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -210,14 +196,18 @@ export default function ArtistProfileDashboard() {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {profileInfo.artworks?.map((artwork) => (
-                        <motion.div
-                          key={artwork._id}
-                          animate={{ x: [-2000, 350, 0] }}
-                          transition={{ duration: 1.5, delay: 0 }}>
-                          <ProfileAuctionCard key={artwork._id} artwork={artwork} />
-                        </motion.div>
-                      ))}
+                      {profileInfo.artworks ? (
+                        profileInfo.artworks.map((artwork) => (
+                          <motion.div
+                            key={artwork._id}
+                            animate={{ x: [-2000, 350, 0] }}
+                            transition={{ duration: 1.5, delay: 0 }}>
+                            <ProfileAuctionCard key={artwork._id} artwork={artwork} />
+                          </motion.div>
+                        ))
+                      ) : (
+                        <EmptyProfileAuctions />
+                      )}
                       <div></div>
                     </div>
                   </div>

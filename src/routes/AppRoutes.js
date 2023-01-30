@@ -104,7 +104,7 @@ const AppRoutes = () => {
                 <Route path="view/buyer/proposal" element={<BuyerProposal />} />
                 {/* <Route path="buyer/profile" element={<BuyerProfileDashboard data={data} />} /> */}
                 <Route path="view/buyer/created/proposal" element={<BuyerCreatedProposal />} />
-                <Route path="view/artist/proposal" element={<ArtistProposal />} />
+                <Route path="view/artist/proposal/:proposalId" element={<ArtistProposal />} />
                 <Route path="view/buyer/accepted/proposal" element={<BuyerAcceptedProposal />} />
               </>
             )}

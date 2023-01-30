@@ -16,6 +16,8 @@ import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
+import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
+import ReactJdenticon from 'react-jdenticon';
 
 export default function BuyerProfileDashboard({ data }) {
   const toaster = useToaster();
@@ -34,7 +36,7 @@ export default function BuyerProfileDashboard({ data }) {
 
   const fetchBuyerData = async () => {
     if (auth.user._id !== currentUserID) {
-      const res = await API.get(`/api/users/${currentUserID}`);
+      const res = await API.get(`/api/users/find/${currentUserID}`);
       if (res.data) {
         setProfileInfo({
           buyerName: res.data.name !== '' ? res.data.name : profileInfo.buyerName,
@@ -98,12 +100,15 @@ export default function BuyerProfileDashboard({ data }) {
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
-                      <img
+                      <div className="shadow-xl object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200 bg-white">
+                        <ReactJdenticon size="200" value={auth?.user.email} />
+                      </div>
+                      {/* <img
                         src={profileInfo.profileImage}
                         className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
                         alt="profile"
                         srcSet=""
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -198,14 +203,18 @@ export default function BuyerProfileDashboard({ data }) {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {data?.map((photo) => (
-                        <motion.div
-                          key={photo.id}
-                          animate={{ x: [-2000, 350, 0] }}
-                          transition={{ duration: 1.5, delay: 0 }}>
-                          <ProfileWonAuctionCard key={photo.id} photo={photo} />
-                        </motion.div>
-                      ))}
+                      {data ? (
+                        data.map((photo) => (
+                          <motion.div
+                            key={photo.id}
+                            animate={{ x: [-2000, 350, 0] }}
+                            transition={{ duration: 1.5, delay: 0 }}>
+                            <ProfileWonAuctionCard key={photo.id} photo={photo} />
+                          </motion.div>
+                        ))
+                      ) : (
+                        <EmptyProfileAuctions />
+                      )}
                       <div></div>
                     </div>
                   </div>
