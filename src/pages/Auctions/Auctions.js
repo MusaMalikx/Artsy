@@ -32,27 +32,52 @@ const Auctions = () => {
       });
   }, []);
 
+  const getCategoryArtworks = async (value) => {
+    if (value !== null) {
+      const selectedCategory = value;
+      await API.get(`/api/artworks/all/category?category=${selectedCategory}`)
+        .then((res) => {
+          setArtworks(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          Toaster(toaster, 'error', err.response.data.message);
+        });
+    }
+  };
+
+  const getAllArtworks = async () => {
+    await API.get('/api/artworks/all')
+      .then((res) => {
+        setArtworks(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        Toaster(toaster, 'error', err.response.data.message);
+      });
+  };
+
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title={'Auctions'} />
       <div className="container min-h-screen mx-auto">
-        {artworks.length > 0 ? (
-          <>
-            <div className="flex justify-center items-center my-10">
-              <SelectPicker
-                data={dat}
-                searchable={false}
-                placeholder="Select Category"
-                style={{ width: 224 }}
-              />
-            </div>
+        <div className="flex justify-center items-center my-10">
+          <SelectPicker
+            data={dat}
+            searchable={false}
+            placeholder="Select Category"
+            style={{ width: 224 }}
+            onChange={getCategoryArtworks}
+            onClean={getAllArtworks}
+          />
+        </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5">
-              {artworks.map((artwork) => (
-                <AuctionCard key={artwork._id} artwork={artwork} />
-              ))}
-            </div>
-          </>
+        {artworks.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5">
+            {artworks.map((artwork) => (
+              <AuctionCard key={artwork._id} artwork={artwork} />
+            ))}
+          </div>
         ) : (
           <EmptyAuction />
         )}
