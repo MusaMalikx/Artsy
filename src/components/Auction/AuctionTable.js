@@ -118,7 +118,7 @@ const renderIconButton = (props, ref) => {
 
 const Drop = () => {
   return (
-    <Dropdown renderToggle={renderIconButton}>
+    <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
       <Dropdown.Item>View Artwork</Dropdown.Item>
       <Dropdown.Item>Edit Artwork</Dropdown.Item>
       <Dropdown.Item>Delete Artwork</Dropdown.Item>
