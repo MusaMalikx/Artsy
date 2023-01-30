@@ -32,12 +32,12 @@ const AuctionTable = () => {
           <table className="w-full whitespace-nowrap">
             <thead>
               <th className="focus:outline-none h-16 rounded flex w-full p-5 justify-between uppercase text-left ">
-                <td className="">Action</td>
-                <td className="w-w-40">Title</td>
-                <td className="ml-12 w-40">Date Created</td>
-                <td className=" w-40">Total Bids</td>
-                <td className="mr-24 w-70">Status</td>
+                <td className="w-32">Title</td>
+                <td className="ml-12 w-48">Date Created</td>
+                <td className=" w-48">Total Bids</td>
+                <td className="mr-24 w-32">Status</td>
                 <td className="">Payment</td>
+                <td className="">Action</td>
               </th>
             </thead>
             <tbody>
@@ -58,17 +58,7 @@ const AuctionTableItem = () => {
       <tr
         tabIndex="0"
         className="focus:outline-none h-16 border my-2 border-gray-100 rounded flex w-full justify-between p-5 transition-all">
-        <td className="">
-          {/* <div className="bg-gray-200 rounded-sm w-5  h-5 flex flex-shrink-0 justify-center items-center relative">
-            <input
-              placeholder="checkbox"
-              type="checkbox"
-              className=" checked:bg-primary checked:border-primary "
-            />
-          </div> */}
-          <Drop />
-        </td>
-        <td className="flex items-center w-40">
+        <td className="flex items-center">
           <FaPaintBrush />
           <p className="text-base ml-2  capitalize font-medium text-gray-700">The art of ocean</p>
         </td>
@@ -87,6 +77,16 @@ const AuctionTableItem = () => {
         <td className="flex items-center">
           {<MdPayment />}
           <p className="text-sm capitalize leading-none text-gray-600 ml-2">Pending</p>
+        </td>
+        <td className="">
+          {/* <div className="bg-gray-200 rounded-sm w-5  h-5 flex flex-shrink-0 justify-center items-center relative">
+            <input
+              placeholder="checkbox"
+              type="checkbox"
+              className=" checked:bg-primary checked:border-primary "
+            />
+          </div> */}
+          <Drop />
         </td>
       </tr>
     </>
