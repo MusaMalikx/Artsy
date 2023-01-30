@@ -23,7 +23,7 @@ const SideNav = () => {
   const [expanded, setExpanded] = useState(false);
   const [activeKey, setActiveKey] = useState('1');
   return (
-    <div className="relative">
+    <div className="relative z-30">
       <div className={`${expanded && 'w-60'} fixed z-10 shadow-md`}>
         <Sidenav className="min-h-screen" expanded={expanded} defaultOpenKeys={['3', '4']}>
           <Sidenav.Body className="">

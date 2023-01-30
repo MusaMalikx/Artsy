@@ -18,6 +18,7 @@ const Bids = () => {
   useEffect(() => {
     getBidList();
   }, []);
+
   return (
     <Layout title="Bids">
       <HeaderLayout title="Bids" />
