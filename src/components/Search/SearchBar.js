@@ -1,6 +1,23 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import API from '../../api/server';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
 
-const SearchBar = ({ search }) => {
+const SearchBar = ({ artwork }) => {
+  const search = useRef();
+  const toaster = useToaster();
+  const getSearchedArtworks = async () => {
+    await API.get(`/api/artworks/search?keyword=${search.current.value}`)
+      .then((res) => {
+        artwork(res.data);
+      })
+      .catch((err) => {
+        artwork([]);
+        console.log(err);
+        Toaster(toaster, 'error', err.response.data.message);
+      });
+  };
+
   return (
     <div>
       <div className="flex items-center max-w-2xl mx-auto">
@@ -27,8 +44,9 @@ const SearchBar = ({ search }) => {
             className="bg-gray-50 border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
             placeholder="Search Mockups, Logos, Design Templates..."
             required=""
+            ref={search}
           />
-          <button type="button" className="flex absolute inset-y-0 right-0 items-center pr-3">
+          {/* <button type="button" className="flex absolute inset-y-0 right-0 items-center pr-3">
             <svg
               aria-hidden="true"
               className="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
@@ -40,10 +58,10 @@ const SearchBar = ({ search }) => {
                 d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
                 clipRule="evenodd"></path>
             </svg>
-          </button>
+          </button> */}
         </div>
         <button
-          onClick={() => search(true)}
+          onClick={getSearchedArtworks}
           className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-primary border border-primary hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary">
           <svg
             aria-hidden="true"
