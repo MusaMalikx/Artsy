@@ -31,7 +31,21 @@ export default function NewAuction() {
   const [startLoader, setStartLoader] = useState(false);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+
   const AddArtwork = async (e) => {
+    // const startDate = new Date(startdate);
+    // const endDate = new Date(enddate);
+    // const currentDate = new Date();
+
+    // const startdatestring = startdate.toLocaleString();
+    // const startdateDate = new Date(startdatestring);
+
+    // console.log('startDate:- ', startDate);
+    // console.log('startdate:-', startdate);
+    // console.log('current date:- ', currentDate);
+    // console.log('start date:- ', startDate);
+    // console.log('difference:- ', startDate - currentDate);
+
     if (
       //Also Add check if files are selected or not , and max limit for pictures are 3 for now, change limit in backend in artworks.js in /add api
       titleValidate(title.current.value) &&
@@ -66,8 +80,8 @@ export default function NewAuction() {
               formData.append('title', title.current.value);
               formData.append('baseprice', baseprice.current.value);
               formData.append('description', description.current.value);
-              formData.append('startdate', startdate);
-              formData.append('enddate', enddate);
+              formData.append('startdate', startdate.toLocaleString());
+              formData.append('enddate', enddate.toLocaleString());
               formData.append('category', category);
 
               const config = {
@@ -107,7 +121,7 @@ export default function NewAuction() {
       setStartLoader(false);
       !titleValidate(title.current.value)
         ? title.current.setCustomValidity(
-            'Title must contain only alphabets and length should be greater than or equal to 10'
+            'Title must contain only alphabets and length should be greater than or equal to 4'
           )
         : title.current.setCustomValidity('');
       !amountValidate(baseprice.current.value)
@@ -145,7 +159,7 @@ export default function NewAuction() {
               <label className=" text-lg font-bold my-2" htmlFor="start-date">
                 Start Date
               </label>
-              <DatePicker onChange={(e) => setStartDate(e.toDateString())} />
+              <DatePicker format="yyyy-MM-dd HH:mm" onChange={(date) => setStartDate(date)} />
             </div>
             <div className="flex flex-col w-full">
               <label className=" text-lg font-bold my-2" htmlFor="bid-artwork">
@@ -161,7 +175,7 @@ export default function NewAuction() {
               <label className=" text-lg font-bold my-2" htmlFor="end-date">
                 End Date
               </label>
-              <DatePicker onChange={(e) => setEndDate(e.toDateString())} />
+              <DatePicker format="yyyy-MM-dd HH:mm" onChange={(date) => setEndDate(date)} />
             </div>
           </div>
           <label className="text-lg font-bold my-2" htmlFor="bid-artwork">
