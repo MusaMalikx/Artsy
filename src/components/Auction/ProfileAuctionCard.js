@@ -32,7 +32,7 @@ export default function ProfileAuctionCard({ artwork }) {
           </div>
           <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
             <p className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
-              <AuctionItemTimer endDate={artwork.enddate} />
+              <AuctionItemTimer endDate={artwork.enddate} startDate={artwork.startdate} />
             </p>
             <button
               onClick={handleClick}

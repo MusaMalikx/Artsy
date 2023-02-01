@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-const AuctionItemTimer = ({ endDate }) => {
+const AuctionItemTimer = ({ endDate, startDate }) => {
   const [timer, setTimer] = useState('00:00:00');
   useEffect(() => {
     const interval = setInterval(() => {
-      const date1 = new Date(endDate);
-      const date2 = new Date();
-      if (date1 - date2 > 0) {
+      const date1 = new Date(endDate); //end date
+      const date2 = new Date(); //current date
+      const startdate = new Date(startDate); //start date
+      if (date1 - date2 > 0 && startdate - date2 <= 0) {
         const diffInSeconds = Math.abs(date1 - date2) / 1000;
         let days = Math.floor(diffInSeconds / 60 / 60 / 24);
         let hours = Math.floor((diffInSeconds / 60 / 60) % 24);
@@ -16,6 +17,8 @@ const AuctionItemTimer = ({ endDate }) => {
         minutes = minutes.toString().length == 1 ? `0${minutes}` : minutes;
         seconds = seconds.toString().length == 1 ? `0${seconds}` : seconds;
         setTimer(`${days}:${hours}:${minutes}:${seconds}`);
+      } else if (startdate - date2 > 0) {
+        setTimer('Auction Comming Soon');
       } else {
         setTimer('Auction Closed');
       }
@@ -27,7 +30,14 @@ const AuctionItemTimer = ({ endDate }) => {
   });
 
   return (
-    <div className={`${timer.localeCompare('Auction Closed') === 0 ? 'text-red-500' : ''}`}>
+    <div
+      className={`${
+        timer.localeCompare('Auction Closed') === 0
+          ? 'text-red-500'
+          : timer.localeCompare('Comming Soon') === 0
+          ? 'text-green-500'
+          : ''
+      }`}>
       {timer}
     </div>
   );

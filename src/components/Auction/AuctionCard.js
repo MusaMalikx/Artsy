@@ -108,7 +108,7 @@ const AuctionCard = ({ artwork }) => {
               />
             </div>
           </div>
-          <AuctionCardTimer endDate={artwork.enddate} />
+          <AuctionCardTimer endDate={artwork.enddate} startDate={artwork.startdate} />
           <hr />
           <div className="uppercase">
             <p className="font-extrabold text-black text-xl text-center">{artwork.title}</p>

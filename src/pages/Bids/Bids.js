@@ -92,7 +92,7 @@ const BidItem = ({ artwork }) => {
               <span className="font-bold text-green-500 "> PKR {artwork.currentbid}</span>
             </h1>
             <p className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
-              <AuctionItemTimer endDate={artwork.enddate} />
+              <AuctionItemTimer endDate={artwork.enddate} startDate={artwork.startdate} />
             </p>
           </div>
         </div>

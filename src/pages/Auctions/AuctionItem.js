@@ -122,7 +122,9 @@ const AuctionItem = ({ data }) => {
                   {state.user.name}
                 </p>
                 <p className="text-xl font-mono text-green-600">
-                  <Timer enddate={state.artwowrk.enddate} />
+                  {/* <Timer enddate={state.artwowrk.enddate} /> */}
+                  {/* this section was for sample artwork/data from unsplash so state.artwork will throw error */}
+                  21:21:00
                 </p>
               </div>
               <p className="text-base ">
@@ -169,7 +171,7 @@ const AuctionItem = ({ data }) => {
                       className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold">
                       Automated Bid
                     </button>
-                    {<AutomateBid open={openAutoBid} setOpen={setOpenAutoBid} />}
+                    {/* {<AutomateBid open={openAutoBid} setOpen={setOpenAutoBid} />} */}
                   </div>
                 </>
               )}
@@ -192,7 +194,7 @@ const AuctionItem = ({ data }) => {
                   {state.artwork.title}
                 </p>
                 <p className="text-xl font-mono text-green-600">
-                  <Timer endDate={state.artwork.enddate} />
+                  <Timer endDate={state.artwork.enddate} startDate={state.artwork.startdate} />
                 </p>
               </div>
               <p className="text-base ">
