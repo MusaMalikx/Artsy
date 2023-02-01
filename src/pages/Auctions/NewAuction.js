@@ -8,13 +8,13 @@ import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import API from '../../api/server';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/reducer/userReducer';
+import { ClipLoader } from 'react-spinners';
 import {
   titleValidate,
   amountValidate,
   descriptionValidate,
   dateValidate
 } from '../../helpers/proposal-validators.js';
-import Loader from '../../components/Loader/Loader';
 import { useNavigate } from 'react-router-dom';
 import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
 
@@ -242,15 +242,13 @@ export default function NewAuction() {
             }}
             multiple
           /> */}
-          {startLoader ? (
-            <Loader />
-          ) : (
-            <button
-              onClick={AddArtwork}
-              className="focus:outline-none bg-black text-white mx-auto my-5 px-2 py-3 w-4/12 font-bold ">
-              List Artwork
-            </button>
-          )}
+
+          <button
+            onClick={AddArtwork}
+            className="mx-auto my-5 w-4/12 flex justify-center text-center items-center px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out ">
+            {startLoader && <ClipLoader size={20} color="#fff" className="mr-2" />}
+            List Artwork
+          </button>
         </form>
         <ArtworkImageUploader
           setImageList={(files) => {

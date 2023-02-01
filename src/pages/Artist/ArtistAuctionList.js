@@ -7,7 +7,7 @@ const ArtistAuctionList = () => {
   return (
     <Layout title="Listed Auctions">
       <HeaderLayout title="Artist Listed Auctions" />
-      <div>
+      <div className="min-h-[600px]">
         <AuctionTable />
       </div>
     </Layout>

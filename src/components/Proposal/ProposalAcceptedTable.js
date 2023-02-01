@@ -11,6 +11,8 @@ const ProposalAcceptedTable = () => {
   const [proposalList, setProposalList] = useState([]);
   const [deletePropsalList, setDeletePropsalList] = useState([]);
   const toaster = useToaster();
+  const [isDeleted, setIsDelete] = useState(false);
+
   const getProposals = async () => {
     const res = await API.get('/api/users/proposal/accepted', {
       headers: {
@@ -37,7 +39,8 @@ const ProposalAcceptedTable = () => {
         );
         if (res.data) {
           setDeletePropsalList([]);
-          getProposals();
+          // getProposals();
+          setIsDelete(true);
           Toaster(toaster, 'success', 'Successfully deleted!');
         }
       }
@@ -55,7 +58,8 @@ const ProposalAcceptedTable = () => {
 
   useEffect(() => {
     getProposals();
-  }, []);
+  }, [isDeleted]);
+
   return (
     <div className="sm:px-6 w-full">
       <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">

@@ -182,11 +182,6 @@ const AuctionItem = ({ data }) => {
         // If real data was used
         <div className="py-10 px-5">
           <div className="flex flex-col lg:flex-row mt-20">
-            {/* <img
-              src={`http://localhost:8080/api/artworks/image?filename=${state.artwork.images[0]}`}
-              className="w-96 h-96 rounded-md mx-auto"
-              alt={state.artwork.title}
-            /> */}
             <AuctionItemCarousel images={state.artwork.images} />
             <div className="flex-grow mx-10 flex flex-col justify-between my-10 lg:my-0 space-y-3 lg:space-y-0">
               <div className="flex flex-wrap items-center w-full justify-between">
