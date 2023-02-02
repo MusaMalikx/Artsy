@@ -26,15 +26,15 @@ const dateValidate = (startdate, enddate, toaster) => {
   const currentDate = new Date();
   currentDate.setMinutes(currentDate.getMinutes() - 5);
   const diffInSecondsStart = Math.abs(endDate - startDate) / 1000; //difference in seconds for end and start
-  let daysStart = Math.floor(diffInSecondsStart / 60 / 60 / 24); //difference of end and start in mins
+  let daysStart = Math.floor(diffInSecondsStart / 60 / 60 / 24); //difference of end and start in days
 
   const diffInSecondsCur = Math.abs(endDate - currentDate) / 1000; //difference in seconds for end and current
-  let daysCur = Math.floor(diffInSecondsCur / 60 / 60 / 24); //difference of end and current  in mins
+  let daysCur = Math.floor(diffInSecondsCur / 60 / 60 / 24); //difference of end and current  in days
 
-  console.log('end date:- ', endDate);
-  console.log('start date:- ', startDate);
-  console.log('difference:- ', endDate - startDate);
-  console.log('diff in days:- ', daysStart);
+  // console.log('end date:- ', endDate);
+  // console.log('start date:- ', startDate);
+  // console.log('difference:- ', endDate - startDate);
+  // console.log('diff in days:- ', daysStart);
 
   if (startDate - currentDate >= 0 && endDate - currentDate > 0 && daysCur !== 0) {
     if (endDate - startDate > 0 && daysStart !== 0) {

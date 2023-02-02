@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-const AuctionCardTimer = ({ endDate, startDate }) => {
+import Toaster from '../Toaster';
+import API from '../../../api/server';
+import { useToaster } from 'rsuite';
+
+const AuctionCardTimer = ({ endDate, startDate, artwork }) => {
+  const toaster = useToaster();
   const [timer, setTimer] = useState({
     start: 'true',
     days: '00',
@@ -7,6 +12,18 @@ const AuctionCardTimer = ({ endDate, startDate }) => {
     minutes: '00',
     seconds: '00'
   });
+  const updateStatus = async () => {
+    if (timer.start !== 'close') {
+      await API.put(`/api/artworks/status/${artwork}`, { status: 'closed' })
+        .then((res) => {
+          console.log('status Changed', res.status);
+        })
+        .catch((err) => {
+          console.log(err);
+          Toaster(toaster, 'error', err.response.data.message);
+        });
+    }
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       const date1 = new Date(endDate); //end date
@@ -38,6 +55,7 @@ const AuctionCardTimer = ({ endDate, startDate }) => {
           seconds: '00'
         });
       } else {
+        updateStatus();
         setTimer({
           start: 'close',
           days: '00',

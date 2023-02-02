@@ -1,6 +1,23 @@
 import React, { useEffect, useState } from 'react';
-const AuctionItemTimer = ({ endDate, startDate }) => {
+import API from '../../../api/server';
+import Toaster from '../Toaster';
+import { useToaster } from 'rsuite';
+
+const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
+  const toaster = useToaster();
   const [timer, setTimer] = useState('00:00:00');
+  const updateStatus = async () => {
+    if (timer.localeCompare('Auction Closed') !== 0) {
+      await API.put(`/api/artworks/status/${artwork}`, { status: 'closed' })
+        .then((res) => {
+          console.log('status Changed', res.status);
+        })
+        .catch((err) => {
+          console.log(err);
+          Toaster(toaster, 'error', err.response.data.message);
+        });
+    }
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       const date1 = new Date(endDate); //end date
@@ -20,6 +37,7 @@ const AuctionItemTimer = ({ endDate, startDate }) => {
       } else if (startdate - date2 > 0) {
         setTimer('Auction Comming Soon');
       } else {
+        updateStatus();
         setTimer('Auction Closed');
       }
     }, 1000);

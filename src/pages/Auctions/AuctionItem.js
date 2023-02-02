@@ -189,7 +189,11 @@ const AuctionItem = ({ data }) => {
                   {state.artwork.title}
                 </p>
                 <p className="text-xl font-mono text-green-600">
-                  <Timer endDate={state.artwork.enddate} startDate={state.artwork.startdate} />
+                  <Timer
+                    endDate={state.artwork.enddate}
+                    startDate={state.artwork.startdate}
+                    artwork={state.artwork._id}
+                  />
                 </p>
               </div>
               <p className="text-base ">
