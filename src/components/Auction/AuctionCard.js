@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/reducer/userReducer';
 import AuctionCardTimer from '../Common/Timer/AuctionCardTimer';
 
-const AuctionCard = ({ artwork }) => {
+const AuctionCard = ({ artwork, updateList }) => {
   // const { user, urls } = photo;
   const navigate = useNavigate();
   const usr = useSelector(selectUser);
@@ -109,6 +109,7 @@ const AuctionCard = ({ artwork }) => {
             </div>
           </div>
           <AuctionCardTimer
+            updateList={updateList}
             endDate={artwork.enddate}
             startDate={artwork.startdate}
             artwork={artwork._id}

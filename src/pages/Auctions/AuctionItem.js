@@ -33,6 +33,11 @@ const AuctionItem = ({ data }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const artId = location.pathname.split('/')[2];
+  let artworkObj;
+  if (state.artwork) {
+    artworkObj = { id: state.artwork._id, status: state.artwork.status };
+  }
+
   const placeAutoBid = (e) => {
     e.preventDefault();
     setOpenAutoBid(true);
@@ -192,7 +197,7 @@ const AuctionItem = ({ data }) => {
                   <Timer
                     endDate={state.artwork.enddate}
                     startDate={state.artwork.startdate}
-                    artwork={state.artwork._id}
+                    artwork={artworkObj}
                   />
                 </p>
               </div>

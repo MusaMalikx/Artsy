@@ -63,6 +63,7 @@ const Bids = () => {
 
 const BidItem = ({ artwork }) => {
   const navigate = useNavigate();
+  const artworkObj = { id: artwork._id, status: artwork.status };
   const handleClick = () => {
     navigate(`/auctions/${artwork._id}`, { state: { artwork } });
   };
@@ -96,7 +97,7 @@ const BidItem = ({ artwork }) => {
               <AuctionItemTimer
                 endDate={artwork.enddate}
                 startDate={artwork.startdate}
-                artwork={artwork._id}
+                artwork={artworkObj}
               />
             </p>
           </div>

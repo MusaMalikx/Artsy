@@ -6,9 +6,11 @@ import { useToaster } from 'rsuite';
 const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
   const toaster = useToaster();
   const [timer, setTimer] = useState('00:00:00');
-  const updateStatus = async () => {
-    if (timer.localeCompare('Auction Closed') !== 0) {
-      await API.put(`/api/artworks/status/${artwork}`, { status: 'closed' })
+  const [status, setStatus] = useState(artwork.status);
+  const [isStop, setIsStop] = useState(false);
+  const updateStatusClosed = async () => {
+    if (timer.localeCompare('Auction Closed') !== 0 && status !== 'closed') {
+      await API.put(`/api/artworks/status/${artwork.id}`, { status: 'closed' })
         .then((res) => {
           console.log('status Changed', res.status);
         })
@@ -18,12 +20,28 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
         });
     }
   };
+
+  const updateStatusLive = async () => {
+    if (status === 'comming soon') {
+      await API.put(`/api/artworks/status/${artwork.id}`, { status: 'live' })
+        .then((res) => {
+          console.log('status Changed to live', res.status);
+          setStatus('live');
+        })
+        .catch((err) => {
+          console.log(err);
+          Toaster(toaster, 'error', err.response.data.message);
+        });
+    }
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       const date1 = new Date(endDate); //end date
       const date2 = new Date(); //current date
       const startdate = new Date(startDate); //start date
       if (date1 - date2 > 0 && startdate - date2 <= 0) {
+        updateStatusLive();
         const diffInSeconds = Math.abs(date1 - date2) / 1000;
         let days = Math.floor(diffInSeconds / 60 / 60 / 24);
         let hours = Math.floor((diffInSeconds / 60 / 60) % 24);
@@ -37,15 +55,22 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
       } else if (startdate - date2 > 0) {
         setTimer('Auction Comming Soon');
       } else {
-        updateStatus();
+        updateStatusClosed();
+        setStatus('closed');
         setTimer('Auction Closed');
+        setIsStop(true);
       }
     }, 1000);
+
+    if (isStop) {
+      clearInterval(interval);
+      return;
+    }
 
     return () => {
       clearInterval(interval);
     };
-  });
+  }, [isStop, status]);
 
   return (
     <div

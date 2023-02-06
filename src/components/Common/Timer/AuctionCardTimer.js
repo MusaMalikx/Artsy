@@ -3,7 +3,7 @@ import Toaster from '../Toaster';
 import API from '../../../api/server';
 import { useToaster } from 'rsuite';
 
-const AuctionCardTimer = ({ endDate, startDate, artwork }) => {
+const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
   const toaster = useToaster();
   const [timer, setTimer] = useState({
     start: 'true',
@@ -56,6 +56,7 @@ const AuctionCardTimer = ({ endDate, startDate, artwork }) => {
         });
       } else {
         updateStatus();
+        if (updateList !== null) updateList();
         setTimer({
           start: 'close',
           days: '00',
