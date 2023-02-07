@@ -54,7 +54,7 @@ export default function Notification({ isOpen, handleClose }) {
     //     date: Timestamp.now()
     //   })
     // });
-    await sendNotification(auth, uuid(), sentence());
+    await sendNotification(auth?.user.firebaseid, uuid(), sentence());
     Toaster(toaster, 'success', 'Notification has been sent');
     getNotifications();
   };
