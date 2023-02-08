@@ -10,6 +10,8 @@ import { sentence } from 'txtgen';
 import Toaster from '../Common/Toaster';
 import { format } from 'timeago.js';
 import { sendNotification } from '../../helpers/notifications';
+import Lottie from 'react-lottie-player';
+import listLoading from '../../assets/json/emptyNotification';
 
 export default function Notification({ isOpen, handleClose }) {
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
@@ -80,7 +82,7 @@ export default function Notification({ isOpen, handleClose }) {
       </Modal.Title>
       <Modal.Body className=" w-full h-96 overflow-hidden overflow-y-scroll">
         {notifications?.length === 0 ? (
-          <div>empty</div>
+          <EmptyNotifications />
         ) : (
           <>
             {notifications
@@ -94,6 +96,20 @@ export default function Notification({ isOpen, handleClose }) {
     </Modal>
   );
 }
+
+const EmptyNotifications = () => {
+  return (
+    <div className="w-full p-20 relative h-full flex flex-col justify-center items-center">
+      <div className="text-center w-full whitespace-nowrap">
+        <p className="text-lg text-red-500 font-semibold">No Notification!</p>
+        <p className=" text-center">You have no notifications at the moment.</p>
+      </div>
+      <div className="w-56 pt-8">
+        <Lottie play animationData={listLoading} loop />
+      </div>
+    </div>
+  );
+};
 
 const NotificationMessage = ({ notify }) => {
   // console.log(notify);
