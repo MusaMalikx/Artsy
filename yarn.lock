@@ -9680,6 +9680,11 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
+txtgen@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/txtgen/-/txtgen-3.0.4.tgz#8328cc9a822875ec6c49489e16d1a7292d39e99d"
+  integrity sha512-15UBmauZ4Ceq3UPEae9gaRo7g1c5AR6qyRRaF9TIXXMTEfCxo1h+fAsgl21Zqvad9gNhvEt0XTGKsTXy2PydeA==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.npmjs.org/type-check/-/type-check-0.4.0.tgz"

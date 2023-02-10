@@ -7,6 +7,7 @@ import { CgProfile } from 'react-icons/cg';
 import { BsSearch } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import Notification from '../Modals/Notification';
+import { BsBell } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/reducer/userReducer';
 import Wallet from '../Modals/Wallet';
@@ -16,12 +17,16 @@ const SideNav = () => {
   const user = useSelector(selectUser);
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleWalletOpen = () => setOpen(true);
+  const handleWalletClose = () => setOpen(false);
+  const [openNotification, setNotificationOpen] = useState(false);
+  const handleNotificationOpen = () => setNotificationOpen(true);
+  const handleNotificationClose = () => setNotificationOpen(false);
   // console.log(user);
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [activeKey, setActiveKey] = useState('1');
+
   return (
     <div className="relative z-30">
       <div className={`${expanded && 'w-60'} fixed z-10 shadow-md`}>
@@ -43,15 +48,19 @@ const SideNav = () => {
                 icon={<Icon as={BsSearch} />}>
                 Search
               </Nav.Item>
-              <Notification />
-              <Nav.Item onClick={handleOpen} eventKey="4" icon={<Icon as={BiWallet} />}>
+
+              <Nav.Item onClick={handleNotificationOpen} eventKey="4" icon={<Icon as={BsBell} />}>
+                Notification
+              </Nav.Item>
+              <Notification isOpen={openNotification} handleClose={handleNotificationClose} />
+              <Nav.Item onClick={handleWalletOpen} eventKey="5" icon={<Icon as={BiWallet} />}>
                 Wallet
               </Nav.Item>
-              <Wallet open={open} handleClose={handleClose} />
+              <Wallet open={open} handleClose={handleWalletClose} />
               {user.buyer && (
                 <Nav.Item
                   onClick={() => navigate(`/buyer/profile/${auth.user._id}`)}
-                  eventKey="5"
+                  eventKey="6"
                   icon={<Icon as={CgProfile} />}>
                   Buyer Profile
                 </Nav.Item>
@@ -59,7 +68,7 @@ const SideNav = () => {
               {user.artist && (
                 <Nav.Item
                   onClick={() => navigate(`/artist/profile/${auth.user._id}`)}
-                  eventKey="5"
+                  eventKey="7"
                   icon={<Icon as={CgProfile} />}>
                   Artist Profile
                 </Nav.Item>
