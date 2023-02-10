@@ -9,6 +9,7 @@ export default function ProfileAuctionCard({ artwork }) {
   const handleClick = () => {
     navigate(`/auctions/${artwork._id}`, { state: { artwork } });
   };
+  const artworkObj = { id: artwork._id, status: artwork.status };
 
   return (
     <div className="py-6 flex justify-center hover:scale-105 transition-all">
@@ -32,7 +33,11 @@ export default function ProfileAuctionCard({ artwork }) {
           </div>
           <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
             <p className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
-              <AuctionItemTimer endDate={artwork.enddate} />
+              <AuctionItemTimer
+                endDate={artwork.enddate}
+                startDate={artwork.startdate}
+                artwork={artworkObj}
+              />
             </p>
             <button
               onClick={handleClick}

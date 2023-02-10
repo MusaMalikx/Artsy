@@ -22,14 +22,7 @@ const Auctions = () => {
   const [artworks, setArtworks] = useState([]);
 
   useEffect(() => {
-    API.get('/api/artworks/all')
-      .then((res) => {
-        setArtworks(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        Toaster(toaster, 'error', err.response.data.message);
-      });
+    getAllArtworks();
   }, []);
 
   const getCategoryArtworks = async (value) => {
@@ -75,7 +68,7 @@ const Auctions = () => {
         {artworks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-5">
             {artworks.map((artwork) => (
-              <AuctionCard key={artwork._id} artwork={artwork} />
+              <AuctionCard updateList={getAllArtworks} key={artwork._id} artwork={artwork} />
             ))}
           </div>
         ) : (
