@@ -8,7 +8,7 @@ import { selectUser } from '../../redux/features/reducer/userReducer';
 import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
-import Timer from '../../components/Common/Timer/AuctionItemTimer';
+import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
 //import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
 import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
 import AuctionCard from '../../components/Auction/AuctionCard';
@@ -35,7 +35,11 @@ const AuctionItem = ({ data }) => {
   const artId = location.pathname.split('/')[2];
   let artworkObj;
   if (state.artwork) {
-    artworkObj = { id: state.artwork._id, status: state.artwork.status };
+    artworkObj = {
+      id: state.artwork._id,
+      status: state.artwork.status,
+      title: state.artwork.title
+    };
   }
 
   const placeAutoBid = (e) => {
@@ -127,7 +131,7 @@ const AuctionItem = ({ data }) => {
                   {state.user.name}
                 </p>
                 <p className="text-xl font-mono text-green-600">
-                  {/* <Timer enddate={state.artwowrk.enddate} /> */}
+                  {/* <AuctionItemTimer enddate={state.artwowrk.enddate} /> */}
                   {/* this section was for sample artwork/data from unsplash so state.artwork will throw error */}
                   21:21:00
                 </p>
@@ -194,7 +198,7 @@ const AuctionItem = ({ data }) => {
                   {state.artwork.title}
                 </p>
                 <p className="text-xl font-mono text-green-600">
-                  <Timer
+                  <AuctionItemTimer
                     endDate={state.artwork.enddate}
                     startDate={state.artwork.startdate}
                     artwork={artworkObj}

@@ -9,7 +9,7 @@ export default function ProfileAuctionCard({ artwork }) {
   const handleClick = () => {
     navigate(`/auctions/${artwork._id}`, { state: { artwork } });
   };
-  const artworkObj = { id: artwork._id, status: artwork.status };
+  const artworkObj = { id: artwork._id, status: artwork.status, title: artwork.title };
 
   return (
     <div className="py-6 flex justify-center hover:scale-105 transition-all">

@@ -2,12 +2,47 @@ import React, { useEffect, useState } from 'react';
 import API from '../../../api/server';
 import Toaster from '../Toaster';
 import { useToaster } from 'rsuite';
+import { v4 as uuid } from 'uuid';
+import { sendNotification } from '../../../helpers/notifications';
 
 const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
   const toaster = useToaster();
   const [timer, setTimer] = useState('00:00:00');
   const [status, setStatus] = useState(artwork.status);
   const [isStop, setIsStop] = useState(false);
+  const notifyUsers = async () => {
+    const res = await API.get(`/api/artworks/bidderlist/${artwork.id}`);
+    if (res) {
+      let bidInfo = res.data;
+      let totalBidders = bidInfo.losers.length;
+      if (bidInfo.winner !== '') {
+        await sendNotification(
+          bidInfo.winner,
+          uuid(),
+          `Congratulations! You have won the artwork ${artwork.title}`
+        );
+        totalBidders += 1;
+      }
+      if (bidInfo.losers.length > 0) {
+        bidInfo.losers.forEach(async (loserFid) => {
+          await sendNotification(
+            loserFid,
+            uuid(),
+            `The bidding time period for artwork ${artwork.title} is over! Unfortunately, you were not able to win. Thanks for participating.`
+          );
+        });
+      }
+
+      if (bidInfo.artistFid) {
+        await sendNotification(
+          bidInfo.artistFid,
+          uuid(),
+          `The bidding time period for artwork ${artwork.title} is over! Total ${totalBidders} buyers bidded for the auction!`
+        );
+      }
+    }
+  };
+
   const updateStatusClosed = async () => {
     if (timer.localeCompare('Auction Closed') !== 0 && status !== 'closed') {
       await API.put(`/api/artworks/status/${artwork.id}`, { status: 'closed' })
@@ -55,6 +90,7 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
       } else if (startdate - date2 > 0) {
         setTimer('Auction Comming Soon');
       } else {
+        notifyUsers();
         updateStatusClosed();
         setStatus('closed');
         setTimer('Auction Closed');

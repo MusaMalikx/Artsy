@@ -115,7 +115,7 @@ const NotificationMessage = ({ notify }) => {
   // console.log(notify);
   return (
     <div className="hover:shadow-xl hover:bg-slate-100 hover:scale-95 cursor-pointer transition-all ease-in-out py-2 px-5 mb-1">
-      <p className="font-extralight text-sm text-slate-500">{notify.text}</p>
+      <p className="font-extralight text-sm text-slate-500 text-justify">{notify.text}</p>
       <p className="font-bold text-teal-800">{format(notify.date.toDate())}</p>
     </div>
   );
