@@ -12,7 +12,7 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
   const [isStop, setIsStop] = useState(false);
   const notifyUsers = async () => {
     const res = await API.get(`/api/artworks/bidderlist/${artwork.id}`);
-    if (res) {
+    if (res && artwork.status.localeCompare('closed') !== 0) {
       let bidInfo = res.data;
       let totalBidders = bidInfo.losers.length;
       if (bidInfo.winner !== '') {

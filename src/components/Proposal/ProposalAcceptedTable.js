@@ -5,6 +5,8 @@ import { useToaster } from 'rsuite';
 import Toaster from '../Common/Toaster';
 import API from '../../api/server';
 import EmptyList from '../Animation/EmptyList';
+import { sendNotification } from '../../helpers/notifications';
+import { v4 as uuid } from 'uuid';
 
 const ProposalAcceptedTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -106,6 +108,26 @@ const ProposalAcceptedTable = () => {
 
 const ProposalTableItem = ({ proposal, alterDeleteList, proposalId, updateList }) => {
   const toaster = useToaster();
+
+  const notifyUsers = async (transaction) => {
+    if (transaction) {
+      if (transaction.sender.fid) {
+        await sendNotification(
+          transaction.sender.fid,
+          uuid(),
+          `Transaction was succesfully performed! Amount PKR ${transaction.amount} was sent to the Artist ${transaction.receiver.name}.`
+        );
+      }
+      if (transaction.receiver.fid) {
+        await sendNotification(
+          transaction.receiver.fid,
+          uuid(),
+          `Amount PKR ${transaction.amount} has been added into your wallet! Received PKR ${transaction.amount} from the Buyer ${transaction.sender.name}.`
+        );
+      }
+    }
+  };
+
   const releasePayment = async (e) => {
     e.preventDefault();
     if (proposal.paid === false) {
@@ -117,6 +139,7 @@ const ProposalTableItem = ({ proposal, alterDeleteList, proposalId, updateList }
           }
         });
         if (res.status === 200) {
+          notifyUsers(res.data);
           updateList();
           Toaster(toaster, 'success', 'Payment sent succesfully!');
         }
