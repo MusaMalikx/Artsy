@@ -36,10 +36,11 @@ html {
 @tailwind components;
 @tailwind utilities;
 
-/* .dark {
-  @apply bg-gray-800 text-zinc-50
+@layer components {
+  .hide {
+    @apply focus:ring-2 focus:ring-offset-2 border-0 focus:outline-none focus:ring-primary;
+  }
+  .hide-red {
+    @apply focus:ring-2 focus:ring-offset-2 border-0 focus:outline-none focus:ring-red-500;
+  }
 }
-
-.light {
-  @apply bg-white text-black
-} */

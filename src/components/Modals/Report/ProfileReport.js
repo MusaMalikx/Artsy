@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { Checkbox, Modal } from 'rsuite';
 import { AiFillFlag } from 'react-icons/ai';
 import { useToaster } from 'rsuite';
-import Toaster from '../Common/Toaster';
-import { descriptionValidate } from '../../helpers/proposal-validators';
+import Toaster from '../../Common/Toaster';
+import { descriptionValidate } from '../../../helpers/proposal-validators';
 
 export default function ProfileReport({ open, setOpen }) {
   const handleClose = () => setOpen(false);

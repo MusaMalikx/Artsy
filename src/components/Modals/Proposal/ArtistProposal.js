@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import { Modal, useToaster } from 'rsuite';
-import API from '../../api/server';
+import API from '../../../api/server';
 import {
   titleValidate,
   amountValidate,
   descriptionValidate
-} from '../../helpers/proposal-validators';
-import Toaster from '../Common/Toaster';
+} from '../../../helpers/proposal-validators';
+import Toaster from '../../Common/Toaster';
 
 export default function ArtistProposal({ isOpen, setIsOpen, proposalId, updateProposalList }) {
   const title = useRef();

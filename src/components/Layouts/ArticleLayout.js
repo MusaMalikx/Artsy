@@ -34,14 +34,12 @@ const ArticleLayout = ({ children, title, bool }) => {
         // }}
         // variants={variants}
         style={{ position: 'relative' }}>
-        <div className="flex">
+        <div className="flex flex-col min-h-screen">
           <div className="flex flex-col">
             <SideNav />
           </div>
-          <div className={`flex-grow ml-14 ${bool && 'container'}`}>
-            {children}
-            <Footer />
-          </div>
+          <div className={`flex-grow ml-14 ${bool && 'container'}`}>{children}</div>
+          <Footer />
         </div>
       </motion.article>
     </div>

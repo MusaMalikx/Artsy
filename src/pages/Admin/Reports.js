@@ -3,7 +3,7 @@ import { SlCalender } from 'react-icons/sl';
 import { FaUserShield, FaUserSlash } from 'react-icons/fa';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import AdminLayout from '../../components/Layouts/AdminLayout';
-import ReportDetail from '../../components/Modals/ReportDetail';
+import ReportDetail from '../../components/Modals/Report/ReportDetail';
 const rows = [
   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },

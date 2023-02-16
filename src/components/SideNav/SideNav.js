@@ -10,7 +10,7 @@ import Notification from '../Modals/Notification';
 import { BsBell } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/reducer/userReducer';
-import Wallet from '../Modals/Wallet';
+import Wallet from '../Modals/Payment/Wallet';
 import { BiWallet } from 'react-icons/bi';
 
 const SideNav = () => {

@@ -5,12 +5,12 @@ import { motion } from 'framer-motion';
 import { RiMessage2Fill } from 'react-icons/ri';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useLocation, useNavigate } from 'react-router-dom';
-import BuyerProposal from '../../components/Modals/BuyerProposal';
-import ProfileReport from '../../components/Modals/ProfileReport';
+import BuyerProposal from '../../components/Modals/Proposal/BuyerProposal';
+import ProfileReport from '../../components/Modals/Report/ProfileReport';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/reducer/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
-import BuyerReview from '../../components/Modals/BuyerReview';
+import BuyerReview from '../../components/Modals/Review/BuyerReview';
 import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCard';
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
@@ -25,6 +25,7 @@ export default function BuyerProfileDashboard({ data }) {
   const dispatch = useDispatch();
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
+
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [profileInfo, setProfileInfo] = useState({
     buyerName: 'Unknown',
@@ -82,7 +83,7 @@ export default function BuyerProfileDashboard({ data }) {
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
             <div className="flex justify-end m-5" onClick={logoutuser}>
-              <Button color="red" appearance="primary">
+              <Button className="hide-red" color="red" appearance="primary">
                 Logout
               </Button>
             </div>
@@ -229,7 +230,7 @@ export default function BuyerProfileDashboard({ data }) {
 }
 
 const renderIconButton = (props, ref) => {
-  return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
+  return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle className="hide" />;
 };
 
 const Drop = () => {
@@ -238,6 +239,7 @@ const Drop = () => {
   return (
     <Dropdown renderToggle={renderIconButton}>
       <Dropdown.Item onClick={() => navigate('/bids')}>Bids</Dropdown.Item>
+      <Dropdown.Item onClick={() => navigate('/bids/won')}> Bids Won</Dropdown.Item>
       <Dropdown.Item onClick={() => setOpenField(true)}>Add Proposals</Dropdown.Item>
       {<BuyerProposal isOpen={openField} setIsOpen={setOpenField} />}
       <Dropdown.Item onClick={() => navigate('/view/buyer/created/proposal')}>
