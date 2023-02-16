@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Drawer } from 'rsuite';
-import ArtistProposal from '../../Modals/ArtistProposal';
+import ArtistProposal from '../../Modals/Proposal/ArtistProposal';
 export default function ProposalDrawer({ setOpen, proposal, updateProposalList }) {
   const [openField, setOpenField] = useState(false);
   const navigate = useNavigate();

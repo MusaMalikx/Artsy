@@ -8,11 +8,11 @@ import {
   cardNumberValidate,
   amountValidate,
   secruityCodeValidate
-} from '../../helpers/wallet-validators';
-import Toaster from '../Common/Toaster';
-import API from '../../api/server';
+} from '../../../helpers/wallet-validators';
+import Toaster from '../../Common/Toaster';
+import API from '../../../api/server';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/features/reducer/userReducer';
+import { selectUser } from '../../../redux/features/reducer/userReducer';
 
 const AddMoney = ({ open, handleClose, setNewAmount }) => {
   const holderName = useRef();

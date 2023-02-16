@@ -3,9 +3,9 @@ import Layout from '../../components/Layouts/ArticleLayout';
 import { AiFillStar, AiOutlineStar, AiFillFlag } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
 import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
-import BuyerReview from '../../components/Modals/BuyerReview';
+import BuyerReview from '../../components/Modals/Review/BuyerReview';
 import { motion } from 'framer-motion';
-import ProfileReport from '../../components/Modals/ProfileReport';
+import ProfileReport from '../../components/Modals/Report/ProfileReport';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/reducer/userReducer';
@@ -17,6 +17,7 @@ import { useToaster } from 'rsuite';
 import API from '../../api/server';
 import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
 import ReactJdenticon from 'react-jdenticon';
+
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

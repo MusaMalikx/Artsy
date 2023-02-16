@@ -27,6 +27,7 @@ import AdminChat from '../pages/Admin/AdminChat';
 import AdminUsers from '../pages/Admin/AdminUsers';
 import AdminSignIn from '../pages/Registration/AdminSignIn';
 import AdminSignUp from '../pages/Registration/AdminSignup';
+import BidsWon from '../pages/Bids/BidsWon';
 
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
@@ -101,6 +102,7 @@ const AppRoutes = () => {
             {user.buyer && (
               <>
                 <Route path="bids" element={<Bids data={data} />} />
+                <Route path="bids/won" element={<BidsWon data={data} />} />
                 <Route path="view/buyer/proposal" element={<BuyerProposal />} />
                 {/* <Route path="buyer/profile" element={<BuyerProfileDashboard data={data} />} /> */}
                 <Route path="view/buyer/created/proposal" element={<BuyerCreatedProposal />} />
