@@ -112,7 +112,7 @@ const AuctionCard = ({ artwork, updateList }) => {
             updateList={updateList}
             endDate={artwork.enddate}
             startDate={artwork.startdate}
-            artwork={artwork._id}
+            artwork={artwork}
           />
           <hr />
           <div className="uppercase">

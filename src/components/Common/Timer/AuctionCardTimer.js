@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Toaster from '../Toaster';
 import API from '../../../api/server';
 import { useToaster } from 'rsuite';
+import { v4 as uuid } from 'uuid';
+import { sendNotification } from '../../../helpers/notifications';
 
 const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
   const toaster = useToaster();
+  const [isStop, setIsStop] = useState(false);
   const [timer, setTimer] = useState({
     start: 'true',
     days: '00',
@@ -12,10 +15,45 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
     minutes: '00',
     seconds: '00'
   });
+
+  const notifyUsers = async () => {
+    const res = await API.get(`/api/artworks/bidderlist/${artwork._id}`);
+    if (res && artwork.status.localeCompare('closed') !== 0) {
+      let bidInfo = res.data;
+      let totalBidders = bidInfo.losers.length;
+      if (bidInfo.winner !== '') {
+        await sendNotification(
+          bidInfo.winner,
+          uuid(),
+          `Congratulations! You have won the artwork ${artwork.title}. Claim the won auction as soon as possible!`
+        );
+        totalBidders += 1;
+      }
+      if (bidInfo.losers.length > 0) {
+        bidInfo.losers.forEach(async (loserFid) => {
+          await sendNotification(
+            loserFid,
+            uuid(),
+            `The bidding time period for artwork ${artwork.title} is over! Unfortunately, you were not able to win. Thanks for participating.`
+          );
+        });
+      }
+
+      if (bidInfo.artistFid) {
+        await sendNotification(
+          bidInfo.artistFid,
+          uuid(),
+          `The bidding time period for artwork ${artwork.title} is over! Total ${totalBidders} buyers placed their bid for the artwork auction!`
+        );
+      }
+    }
+  };
+
   const updateStatus = async () => {
     if (timer.start !== 'close') {
-      await API.put(`/api/artworks/status/${artwork}`, { status: 'closed' })
-        .then((res) => {
+      await API.put(`/api/artworks/status/${artwork._id}`, { status: 'closed' })
+        .then(async (res) => {
+          if (updateList !== null) await updateList();
           console.log('status Changed', res.status);
         })
         .catch((err) => {
@@ -55,8 +93,6 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
           seconds: '00'
         });
       } else {
-        updateStatus();
-        if (updateList !== null) updateList();
         setTimer({
           start: 'close',
           days: '00',
@@ -64,13 +100,21 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
           minutes: '00',
           seconds: '00'
         });
+        updateStatus();
+        notifyUsers();
+        setIsStop(true);
       }
     }, 1000);
+
+    if (isStop) {
+      clearInterval(interval);
+      return;
+    }
 
     return () => {
       clearInterval(interval);
     };
-  });
+  }, [isStop]);
 
   return (
     <>
@@ -106,7 +150,7 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
           <p>Auction Comming Soon</p>
         </div>
       ) : (
-        <div className="flex flex-col justify-center items-center my-3 text-red-500 font-semibold text-lg">
+        <div className="flex flex-col py-5 justify-center items-center my-3 text-red-500 font-semibold text-lg">
           <p>Auction Closed</p>
         </div>
       )}

@@ -22,6 +22,7 @@ export default function NewAuction() {
   const [category, setCategory] = useState('Modern');
   const toaster = useToaster();
   const auth = JSON.parse(localStorage.getItem('auth'));
+  console.log(auth.token);
   const title = useRef();
   const baseprice = useRef();
   const [startdate, setStartDate] = useState('');
