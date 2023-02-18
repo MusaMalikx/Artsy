@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown, IconButton, SelectPicker } from 'rsuite';
 
 import { FaPaintBrush } from 'react-icons/fa';
 import { MdOutlineCreate, MdPayment } from 'react-icons/md';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { BsChatLeftDots, BsThreeDotsVertical } from 'react-icons/bs';
+import API from '../../api/server';
 
 const rows = [
   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
@@ -24,6 +25,29 @@ const rows = [
 ];
 
 const AuctionTable = () => {
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const [artworks, setArtworks] = useState([]);
+  const getAllArtworks = async () => {
+    await API.get('api/artworks/artistlist', {
+      headers: {
+        token: 'Bearer ' + auth.token
+      }
+    })
+      .then((res) => {
+        setArtworks(res.data);
+        console.log(res.data);
+        // const singleartwork = res.data[0];
+        // console.log(singleartwork);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getAllArtworks();
+  }, []);
+
   return (
     <div className="sm:px-6 w-full">
       <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
@@ -41,8 +65,8 @@ const AuctionTable = () => {
               </th>
             </thead>
             <tbody>
-              {rows.map((row, i) => (
-                <AuctionTableItem key={i} />
+              {artworks.map((artwork) => (
+                <AuctionTableItem key={artwork._id} data={artwork} />
               ))}
             </tbody>
           </table>
@@ -52,7 +76,11 @@ const AuctionTable = () => {
   );
 };
 
-const AuctionTableItem = () => {
+const AuctionTableItem = (data) => {
+  const endDate = data.data.enddate.split(',')[0];
+  const [paymentStatus, setPaymentStatus] = useState('NA');
+
+  console.log(data.data.title);
   return (
     <>
       <tr
@@ -60,23 +88,29 @@ const AuctionTableItem = () => {
         className="focus:outline-none h-16 border my-2 border-gray-100 rounded flex w-full justify-between p-5 transition-all">
         <td className="flex items-center">
           <FaPaintBrush />
-          <p className="text-base ml-2  capitalize font-medium text-gray-700">The art of ocean</p>
+          <p className="text-base ml-2  capitalize font-medium text-gray-700">{data.data.title}</p>
         </td>
         <td className="flex items-center w-40">
           <MdOutlineCreate />
-          <p className="text-sm leading-none text-gray-600 ml-2">24/2/2021</p>
+          <p className="text-sm leading-none text-gray-600 ml-2">{endDate}</p>
         </td>
         <td className="flex items-center w-40">
           {<BsChatLeftDots />}
-          <p className="text-sm leading-none text-gray-600 ml-2">4 Bids</p>
+          <p className="text-sm leading-none text-gray-600 ml-2">{data.data.totalBids}</p>
         </td>
         <td className="flex items-center w-40">
           {<AiOutlineExclamationCircle />}
-          <p className="text-sm capitalize leading-none text-gray-600 ml-2">Closed</p>
+          <p className="text-sm capitalize leading-none text-gray-600 ml-2">{data.data.status}</p>
         </td>
         <td className="flex items-center">
           {<MdPayment />}
-          <p className="text-sm capitalize leading-none text-gray-600 ml-2">Pending</p>
+          <p className="text-sm capitalize leading-none text-gray-600 ml-2">
+            {data.data.paymentStatus === null
+              ? 'NA'
+              : data.data.paymentStatus === true
+              ? 'Paid'
+              : 'Pending'}
+          </p>
         </td>
         <td className="">
           {/* <div className="bg-gray-200 rounded-sm w-5  h-5 flex flex-shrink-0 justify-center items-center relative">
