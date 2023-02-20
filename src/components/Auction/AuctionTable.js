@@ -1,34 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown, IconButton, SelectPicker } from 'rsuite';
-
+import { useNavigate } from 'react-router-dom';
 import { FaPaintBrush } from 'react-icons/fa';
 import { MdOutlineCreate, MdPayment } from 'react-icons/md';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { BsChatLeftDots, BsThreeDotsVertical } from 'react-icons/bs';
 import API from '../../api/server';
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 }
-];
-
 const AuctionTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [artworks, setArtworks] = useState([]);
-  const getAllArtworks = async () => {
-    await API.get('api/artworks/artistlist', {
+  const [status, setStatus] = useState('All');
+  const getAllArtworks = async (status) => {
+    await API.get(`/api/artworks/artistlist?status=${status}`, {
       headers: {
         token: 'Bearer ' + auth.token
       }
@@ -45,13 +29,13 @@ const AuctionTable = () => {
   };
 
   useEffect(() => {
-    getAllArtworks();
-  }, []);
+    getAllArtworks(status);
+  }, [status]);
 
   return (
     <div className="sm:px-6 w-full">
       <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-        <SortTable />
+        <SortTable updateStatus={setStatus} />
         <div className="mt-7 overflow-x-auto">
           <table className="w-full whitespace-nowrap">
             <thead>
@@ -78,9 +62,6 @@ const AuctionTable = () => {
 
 const AuctionTableItem = (data) => {
   const endDate = data.data.enddate.split(',')[0];
-  const [paymentStatus, setPaymentStatus] = useState('NA');
-
-  console.log(data.data.title);
   return (
     <>
       <tr
@@ -120,14 +101,14 @@ const AuctionTableItem = (data) => {
               className=" checked:bg-primary checked:border-primary "
             />
           </div> */}
-          <Drop />
+          <Drop artworkId={data.data._id} />
         </td>
       </tr>
     </>
   );
 };
 
-const SortTable = () => {
+const SortTable = ({ updateStatus }) => {
   const data = ['All', 'Live', 'Closed'].map((item) => ({ label: item, value: item }));
   return (
     <div className="flex flex-grow justify-end">
@@ -136,6 +117,7 @@ const SortTable = () => {
         defaultValue="All"
         onChange={(value) => {
           //Make API calls based on values
+          updateStatus(value);
           console.log(value);
         }}
         searchable={false}
@@ -150,13 +132,24 @@ const renderIconButton = (props, ref) => {
   return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
 };
 
-const Drop = () => {
+const Drop = ({ artworkId }) => {
+  const navigate = useNavigate();
+  const handleViewArtworkClick = async () => {
+    // call your API here
+    const res = await API.get(`/api/artworks/artwork/${artworkId}`);
+    if (res.data) {
+      const artwork = res.data[0];
+      navigate(`/auctions/${artworkId}`, { state: { artwork } });
+    }
+  };
   return (
-    <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
-      <Dropdown.Item>View Artwork</Dropdown.Item>
-      <Dropdown.Item>Edit Artwork</Dropdown.Item>
-      <Dropdown.Item>Delete Artwork</Dropdown.Item>
-    </Dropdown>
+    <>
+      <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
+        <Dropdown.Item onClick={handleViewArtworkClick}>View Artwork</Dropdown.Item>
+        <Dropdown.Item>Edit Artwork</Dropdown.Item>
+        <Dropdown.Item>Delete Artwork</Dropdown.Item>
+      </Dropdown>
+    </>
   );
 };
 
