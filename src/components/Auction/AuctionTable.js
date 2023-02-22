@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown, IconButton, SelectPicker } from 'rsuite';
+import { Dropdown, IconButton, SelectPicker, useToaster } from 'rsuite';
 import { useNavigate } from 'react-router-dom';
 import { FaPaintBrush } from 'react-icons/fa';
 import { MdOutlineCreate, MdPayment } from 'react-icons/md';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { BsChatLeftDots, BsThreeDotsVertical } from 'react-icons/bs';
 import API from '../../api/server';
+import Toaster from '../Common/Toaster';
 
 const AuctionTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -50,7 +51,7 @@ const AuctionTable = () => {
             </thead>
             <tbody>
               {artworks.map((artwork) => (
-                <AuctionTableItem key={artwork._id} data={artwork} />
+                <AuctionTableItem key={artwork._id} data={artwork} updateList={getAllArtworks} />
               ))}
             </tbody>
           </table>
@@ -60,8 +61,8 @@ const AuctionTable = () => {
   );
 };
 
-const AuctionTableItem = (data) => {
-  const endDate = data.data.enddate.split(',')[0];
+const AuctionTableItem = ({ data, updateList }) => {
+  const endDate = data.enddate.split(',')[0];
   return (
     <>
       <tr
@@ -69,7 +70,7 @@ const AuctionTableItem = (data) => {
         className="focus:outline-none h-16 border my-2 border-gray-100 rounded flex w-full justify-between p-5 transition-all">
         <td className="flex items-center">
           <FaPaintBrush />
-          <p className="text-base ml-2  capitalize font-medium text-gray-700">{data.data.title}</p>
+          <p className="text-base ml-2  capitalize font-medium text-gray-700">{data.title}</p>
         </td>
         <td className="flex items-center w-40">
           <MdOutlineCreate />
@@ -77,20 +78,16 @@ const AuctionTableItem = (data) => {
         </td>
         <td className="flex items-center w-40">
           {<BsChatLeftDots />}
-          <p className="text-sm leading-none text-gray-600 ml-2">{data.data.totalBids}</p>
+          <p className="text-sm leading-none text-gray-600 ml-2">{data.totalBids}</p>
         </td>
         <td className="flex items-center w-40">
           {<AiOutlineExclamationCircle />}
-          <p className="text-sm capitalize leading-none text-gray-600 ml-2">{data.data.status}</p>
+          <p className="text-sm capitalize leading-none text-gray-600 ml-2">{data.status}</p>
         </td>
         <td className="flex items-center">
           {<MdPayment />}
           <p className="text-sm capitalize leading-none text-gray-600 ml-2">
-            {data.data.paymentStatus === null
-              ? 'NA'
-              : data.data.paymentStatus === true
-              ? 'Paid'
-              : 'Pending'}
+            {data.paymentStatus === null ? 'NA' : data.paymentStatus === true ? 'Paid' : 'Pending'}
           </p>
         </td>
         <td className="">
@@ -101,7 +98,7 @@ const AuctionTableItem = (data) => {
               className=" checked:bg-primary checked:border-primary "
             />
           </div> */}
-          <Drop artworkId={data.data._id} />
+          <Drop artworkId={data._id} updateList={updateList} />
         </td>
       </tr>
     </>
@@ -132,7 +129,9 @@ const renderIconButton = (props, ref) => {
   return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
 };
 
-const Drop = ({ artworkId }) => {
+const Drop = ({ artworkId, updateList }) => {
+  const toaster = useToaster();
+  const auth = JSON.parse(localStorage.getItem('auth'));
   const navigate = useNavigate();
   const handleViewArtworkClick = async () => {
     // call your API here
@@ -142,12 +141,27 @@ const Drop = ({ artworkId }) => {
       navigate(`/auctions/${artworkId}`, { state: { artwork } });
     }
   };
+  const handleDeleteArtworkClick = async () => {
+    await API.delete(`/api/artworks/artwork/delete/${artworkId}`, {
+      headers: {
+        token: 'Bearer ' + auth.token
+      }
+    })
+      .then(async (res) => {
+        if (updateList !== null) await updateList('All');
+        console.log(res.data);
+        Toaster(toaster, 'success', 'Artwork Deleted');
+      })
+      .catch((err) => {
+        console.log(err);
+        Toaster(toaster, 'error', err.response.data.message);
+      });
+  };
   return (
     <>
       <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
         <Dropdown.Item onClick={handleViewArtworkClick}>View Artwork</Dropdown.Item>
-        <Dropdown.Item>Edit Artwork</Dropdown.Item>
-        <Dropdown.Item>Delete Artwork</Dropdown.Item>
+        <Dropdown.Item onClick={handleDeleteArtworkClick}>Delete Artwork</Dropdown.Item>
       </Dropdown>
     </>
   );
