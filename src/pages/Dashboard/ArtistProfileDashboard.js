@@ -235,6 +235,9 @@ const Drop = () => {
       <Dropdown.Item onClick={() => navigate('/view/buyer/proposal')}>
         Buyer Proposals
       </Dropdown.Item>
+      <Dropdown.Item onClick={() => navigate('/view/artist/accepted/bids')}>
+        Accepted Bids
+      </Dropdown.Item>
     </Dropdown>
   );
 };

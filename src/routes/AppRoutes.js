@@ -28,6 +28,7 @@ import AdminUsers from '../pages/Admin/AdminUsers';
 import AdminSignIn from '../pages/Registration/AdminSignIn';
 import AdminSignUp from '../pages/Registration/AdminSignup';
 import BidsWon from '../pages/Bids/BidsWon';
+import ArtistAcceptedBids from '../pages/Proposal/ArtistAcceptedBids';
 
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
@@ -97,6 +98,7 @@ const AppRoutes = () => {
                 <Route path="artist/auctions" element={<ArtistAuctionList />} />
                 {/* <Route path="artist/profile" element={<ArtistProfileDashboard />} /> */}
                 <Route path="view/buyer/proposal" element={<BuyerProposal data={data} />} />
+                <Route path="view/artist/accepted/bids" element={<ArtistAcceptedBids />} />
               </>
             )}
             {user.buyer && (
