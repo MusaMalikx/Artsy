@@ -1,32 +1,35 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function ProfileWonAuctionCard({ photo }) {
+export default function ProfileWonAuctionCard({ artwork }) {
+  const navigate = useNavigate();
   const handleClick = (e) => {
     e.preventDefault();
+    navigate(`/auctions/${artwork._id}`, { state: { artwork } });
   };
-  const { user, urls } = photo;
   return (
     <div className="py-6 flex justify-center hover:scale-105 transition-all">
       <div className="flex lg:flex-row flex-col w-full items-center bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
-          <div
+          <img
             className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
-            style={{
-              backgroundImage: `url('${urls.thumb}')`
-            }}></div>
+            src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+            alt={artwork.title}
+          />
         </div>
         <div className="w-full h-full hover:bg-slate-100 p-4 text-left flex flex-col justify-between">
           <div className="flex  w-full sm:justify-around sm:flex-row flex-col gap-2 md:gap-0 justify-center items-center sm:items-start lg:justify-between text-center">
             <h1 className="text-gray-700 font-bold sm:text-xl text-base capitalize ">
-              {user.name}
+              {artwork.title}
             </h1>
             <h1 className="font-bold sm:text-xl text-base text-gray-700">
-              Highest Bid : <span className="font-bold text-green-500 "> PKR 7000</span>
+              Winning Bid :{' '}
+              <span className="font-bold text-green-500 "> PKR {artwork.currentbid}</span>
             </h1>
           </div>
           <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
             <p className="text-md mb-0 font-mono text-red-700 sm:text-xl text-base font-bold">
-              2nd January, 2022
+              {artwork.enddate.split(',')[0]}
             </p>
             <button
               onClick={handleClick}

@@ -7,6 +7,7 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { BsChatLeftDots, BsThreeDotsVertical } from 'react-icons/bs';
 import API from '../../api/server';
 import Toaster from '../Common/Toaster';
+import EmptyList from '../Animation/EmptyList';
 
 const AuctionTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -50,9 +51,13 @@ const AuctionTable = () => {
               </th>
             </thead>
             <tbody>
-              {artworks.map((artwork) => (
-                <AuctionTableItem key={artwork._id} data={artwork} updateList={getAllArtworks} />
-              ))}
+              {artworks.length > 0 ? (
+                artworks.map((artwork) => (
+                  <AuctionTableItem key={artwork._id} data={artwork} updateList={getAllArtworks} />
+                ))
+              ) : (
+                <EmptyList />
+              )}
             </tbody>
           </table>
         </div>

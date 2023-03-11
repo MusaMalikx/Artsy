@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
-import { AiFillFlag, AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import { AiFillFlag } from 'react-icons/ai';
 import { motion } from 'framer-motion';
 import { RiMessage2Fill } from 'react-icons/ri';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -10,7 +10,7 @@ import ProfileReport from '../../components/Modals/Report/ProfileReport';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/reducer/userReducer';
 import { Button, Dropdown, IconButton } from 'rsuite';
-import BuyerReview from '../../components/Modals/Review/BuyerReview';
+//import BuyerReview from '../../components/Modals/Review/BuyerReview';
 import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCard';
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
@@ -19,13 +19,13 @@ import API from '../../api/server';
 import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
 import ReactJdenticon from 'react-jdenticon';
 
-export default function BuyerProfileDashboard({ data }) {
+export default function BuyerProfileDashboard() {
   const toaster = useToaster();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [openReview, setOpenReview] = useState(false);
+  const [wonArt, setWonArt] = useState([]);
+  // const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
-
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [profileInfo, setProfileInfo] = useState({
     buyerName: 'Unknown',
@@ -34,6 +34,11 @@ export default function BuyerProfileDashboard({ data }) {
   });
   const location = useLocation();
   const currentUserID = location.pathname.split('/')[3];
+
+  const getWonArtworks = async () => {
+    const res = await API.get(`/api/users/find/artworks/won/${auth.user._id}`);
+    setWonArt(res.data);
+  };
 
   const fetchBuyerData = async () => {
     if (auth.user._id !== currentUserID) {
@@ -54,6 +59,7 @@ export default function BuyerProfileDashboard({ data }) {
 
   useEffect(() => {
     fetchBuyerData();
+    getWonArtworks();
   }, []);
   const logoutuser = () => {
     const auth = getAuth();
@@ -114,7 +120,7 @@ export default function BuyerProfileDashboard({ data }) {
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                     <div className="py-6 px-3 mt-32 sm:mt-0 flex justify-between">
-                      <div className="text-center">
+                      {/* <div className="text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           <div className="flex text-yellow-500">
                             <AiFillStar />
@@ -136,8 +142,8 @@ export default function BuyerProfileDashboard({ data }) {
                             {<BuyerReview open={openReview} setOpen={setOpenReview} />}
                           </div>
                         </span>
-                      </div>
-                      <div>
+                      </div>*/}
+                      <div className="flex justify-end items-end w-full">
                         <button
                           className="bg-primary active:bg-cyan-700 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
@@ -167,7 +173,7 @@ export default function BuyerProfileDashboard({ data }) {
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          10
+                          {wonArt.length}
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Won</span>
                       </div>
@@ -204,13 +210,13 @@ export default function BuyerProfileDashboard({ data }) {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {data ? (
-                        data.map((photo) => (
+                      {wonArt.length > 0 ? (
+                        wonArt.map((artwork) => (
                           <motion.div
-                            key={photo.id}
+                            key={artwork._id}
                             animate={{ x: [-2000, 350, 0] }}
                             transition={{ duration: 1.5, delay: 0 }}>
-                            <ProfileWonAuctionCard key={photo.id} photo={photo} />
+                            <ProfileWonAuctionCard key={artwork._id} artwork={artwork} />
                           </motion.div>
                         ))
                       ) : (

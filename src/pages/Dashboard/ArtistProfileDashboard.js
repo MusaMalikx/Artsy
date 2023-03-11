@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
-import { AiFillStar, AiOutlineStar, AiFillFlag } from 'react-icons/ai';
+import { AiFillFlag } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
 import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
 import BuyerReview from '../../components/Modals/Review/BuyerReview';
@@ -9,7 +9,7 @@ import ProfileReport from '../../components/Modals/Report/ProfileReport';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/reducer/userReducer';
-import { Button, Dropdown, IconButton } from 'rsuite';
+import { Button, Dropdown, IconButton, Rate } from 'rsuite';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
@@ -24,6 +24,10 @@ export default function ArtistProfileDashboard() {
   const toaster = useToaster();
   const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
+  const [rating, setRating] = useState({
+    total: 0,
+    average: 0
+  });
   const location = useLocation();
   const currentUserID = location.pathname.split('/')[3];
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
@@ -44,8 +48,20 @@ export default function ArtistProfileDashboard() {
       });
     }
   };
+
+  const fetchAverageRating = async () => {
+    const res = await API.get(`/api/artists/rating/average/${currentUserID}`);
+    if (res.status === 200) {
+      setRating({
+        total: res.data.totalRatings,
+        average: res.data.averageRating
+      });
+    }
+  };
+
   useEffect(() => {
     fetchArtistData();
+    fetchAverageRating();
   }, []);
   const logoutuser = () => {
     const auth = getAuth();
@@ -110,14 +126,17 @@ export default function ArtistProfileDashboard() {
                       <div className="text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           <div className="flex text-yellow-500">
+                            {/* <AiFillStar />
                             <AiFillStar />
                             <AiFillStar />
                             <AiFillStar />
-                            <AiFillStar />
-                            <AiOutlineStar />
+                            <AiOutlineStar /> */}
+                            <Rate value={rating.average} readOnly size="xs" />
                           </div>
                         </span>
-                        <span className="text-sm text-blueGray-400 block">12 Reviews</span>
+                        <span className="text-sm text-blueGray-400 block">
+                          {rating.total} Reviews
+                        </span>
                         <span className="text-sm text-blueGray-400">
                           <div className="mt-2 flex w-full justify-center">
                             <button
@@ -126,11 +145,17 @@ export default function ArtistProfileDashboard() {
                               onClick={() => setOpenReview(true)}>
                               View
                             </button>
-                            {<BuyerReview open={openReview} setOpen={setOpenReview} />}
+                            {
+                              <BuyerReview
+                                artistId={currentUserID}
+                                open={openReview}
+                                setOpen={setOpenReview}
+                              />
+                            }
                           </div>
                         </span>
                       </div>
-                      <div>
+                      <div className="flex w-full justify-end items-start">
                         <button
                           onClick={() => navigate('/chat')}
                           className="bg-primary active:bg-cyan-700 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
@@ -154,7 +179,7 @@ export default function ArtistProfileDashboard() {
                       )}
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          22
+                          {profileInfo.artworks.length}
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Live</span>
                       </div>
@@ -197,7 +222,7 @@ export default function ArtistProfileDashboard() {
                   </div>
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
-                      {profileInfo.artworks ? (
+                      {profileInfo.artworks.length > 0 ? (
                         profileInfo.artworks.map((artwork) => (
                           <motion.div
                             key={artwork._id}
