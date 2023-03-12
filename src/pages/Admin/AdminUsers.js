@@ -1,7 +1,7 @@
 import AdminLayout from '../../components/Layouts/AdminLayout';
 import { FaGoogle } from 'react-icons/fa';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
-import { RiDeleteBin6Fill } from 'react-icons/ri';
+// import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { BsViewList } from 'react-icons/bs';
 import ReactJdenticon from 'react-jdenticon';
 import { AiOutlineMail } from 'react-icons/ai';
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import API from '../../api/server';
 import { useNavigate } from 'react-router-dom';
 import Toaster from '../../components/Common/Toaster';
-import { Loader, useToaster } from 'rsuite';
+import { useToaster } from 'rsuite';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState();
@@ -96,6 +96,7 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
   };
 
   const deleteUser = async () => {
+    console.log(delLoading);
     setDelLoading(true);
     await API.delete(
       `/api/${status === 'Artist' ? 'artists' : status === 'Buyer' && 'users'}/${user._id}`
@@ -146,11 +147,12 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
           className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-primary active:bg-cyan-700 hover:bg-cyan-700">
           <BsViewList />
         </button>
-        <button
+        {/* <button
           onClick={deleteUser}
           className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-red-500 active:bg-red-700 hover:bg-red-700">
           {delLoading ? <Loader /> : <RiDeleteBin6Fill />}
-        </button>
+        </button> */}
+        <div className="invisible hidden" onClick={deleteUser} />
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import React from 'react';
 import { RiAuctionLine } from 'react-icons/ri';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
