@@ -11,7 +11,8 @@ import { useToaster } from 'rsuite';
 import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
 //import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
 import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
-import AuctionCard from '../../components/Auction/AuctionCard';
+// import AuctionCard from '../../components/Auction/AuctionCard';
+import ThumnailCarousel from '../../components/Carousel/ThumnailCarousel';
 
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
@@ -300,12 +301,12 @@ const AuctionItem = ({ data }) => {
         <div className="flex justify-center items-center mb-10">
           <p className="font-semibold uppercase text-3xl">Similar Auctions Items</p>
         </div>
-        <div className="flex items-center flex-wrap justify-center ">
-          {data?.slice(4, 9).map((photo) => (
-            <AuctionCard key={photo.id} artwork={photo} />
-          ))}
+        <div className="">
+          <ThumnailCarousel data={data} />
         </div>
       </div>
+      {/* <div>
+      </div> */}
 
       {/* <SimilarAuctions data={data} /> */}
     </Layout>

@@ -27,10 +27,10 @@ const AuctionCard = ({ artwork, updateList }) => {
   };
 
   return (
-    <>
+    <div className="pt-5">
       {artwork.urls ? (
         <div
-          className="mx-auto hover:scale-90 transition-all p-5 mb-10 border hover:border-gray-900 rounded-md"
+          className="mx-auto hover:scale-105 hover:shadow-all transition-all p-5 mb-10 border rounded-md"
           onClick={handleClick}>
           <div className="flex space-x-4">
             <div className="space-y-2">
@@ -87,7 +87,7 @@ const AuctionCard = ({ artwork, updateList }) => {
         </div>
       ) : (
         <div
-          className="mx-auto hover:scale-90 transition-all p-5 mb-10 border hover:border-gray-900 rounded-md"
+          className="mx-auto hover:scale-105 hover:shadow-all transition-all p-5 mb-10 border rounded-md"
           onClick={handleClickrealauctions}>
           <div className="flex space-x-4">
             <div className="space-y-2">
@@ -123,7 +123,7 @@ const AuctionCard = ({ artwork, updateList }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

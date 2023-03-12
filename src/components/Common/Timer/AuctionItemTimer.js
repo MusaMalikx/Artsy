@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import API from '../../../api/server';
 import Toaster from '../Toaster';
-import { useToaster } from 'rsuite';
+import { Loader, useToaster } from 'rsuite';
 import { v4 as uuid } from 'uuid';
 import { sendNotification } from '../../../helpers/notifications';
 
@@ -10,6 +10,7 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
   const [timer, setTimer] = useState('00:00:00');
   const [status, setStatus] = useState(artwork.status);
   const [isStop, setIsStop] = useState(false);
+  const [loader, setLoader] = useState(true);
   const notifyUsers = async () => {
     const res = await API.get(`/api/artworks/bidderlist/${artwork.id}`);
     if (res && artwork.status.localeCompare('closed') !== 0) {
@@ -86,10 +87,13 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
         hours = hours.toString().length == 1 ? `0${hours}` : hours;
         minutes = minutes.toString().length == 1 ? `0${minutes}` : minutes;
         seconds = seconds.toString().length == 1 ? `0${seconds}` : seconds;
+        setLoader(false);
         setTimer(`${days}:${hours}:${minutes}:${seconds}`);
       } else if (startdate - date2 > 0) {
+        setLoader(false);
         setTimer('Auction Comming Soon');
       } else {
+        setLoader(false);
         notifyUsers();
         updateStatusClosed();
         setStatus('closed');
@@ -109,16 +113,22 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
   }, [isStop, status]);
 
   return (
-    <div
-      className={`${
-        timer.localeCompare('Auction Closed') === 0
-          ? 'text-red-500'
-          : timer.localeCompare('Comming Soon') === 0
-          ? 'text-green-500'
-          : ''
-      }`}>
-      {timer}
-    </div>
+    <>
+      {loader ? (
+        <Loader />
+      ) : (
+        <div
+          className={`${
+            timer.localeCompare('Auction Closed') === 0
+              ? 'text-red-500'
+              : timer.localeCompare('Comming Soon') === 0
+              ? 'text-green-500'
+              : ''
+          }`}>
+          {timer}
+        </div>
+      )}
+    </>
   );
 };
 
