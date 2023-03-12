@@ -3,11 +3,25 @@ import ArrowRightLineIcon from '@rsuite/icons/ArrowRightLine';
 import { useState } from 'react';
 import ProposalDrawer from './Drawer/BuyerProposalDrawer';
 export default function ProposalCard({ proposal, updateProposals }) {
+  const auth = JSON.parse(localStorage.getItem('auth'));
   const [showDrawer, SetShowDrawer] = useState(false);
+  const [checkBid, setCheckBid] = useState(false);
+  const openDrawer = () => {
+    //This also checks if artist has already placed a bid on this proposal
+    SetShowDrawer(true);
+    let flag = false;
+    proposal.artistProposals.forEach((artistBid) => {
+      if (artistBid.artistId === auth.user._id) {
+        flag = true;
+        return;
+      }
+    });
+    setCheckBid(flag);
+  };
   return (
     <>
       <div
-        onClick={() => SetShowDrawer(true)}
+        onClick={openDrawer}
         className="border hover:scale-105 transition-all  my-5 p-5 hover:cursor-pointer hover:shadow-xl hover:bg-slate-100">
         <div className="flex lg:flex-row flex-col justify-center text-center lg:text-left items-center gap-6">
           <div className=" rounded-full relative w-24 h-24 overflow-hidden">
@@ -47,6 +61,7 @@ export default function ProposalCard({ proposal, updateProposals }) {
           proposal={proposal}
           setOpen={SetShowDrawer}
           updateProposalList={updateProposals}
+          bidPlaced={checkBid}
         />
       ) : (
         ''

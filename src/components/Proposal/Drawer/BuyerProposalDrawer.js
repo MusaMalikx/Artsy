@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Drawer } from 'rsuite';
 import ArtistProposal from '../../Modals/Proposal/ArtistProposal';
-export default function ProposalDrawer({ setOpen, proposal, updateProposalList }) {
+export default function ProposalDrawer({ setOpen, proposal, updateProposalList, bidPlaced }) {
   const [openField, setOpenField] = useState(false);
+  const [openBidPlaced, setOpenBidPlaced] = useState(false);
   const navigate = useNavigate();
   return (
     <>
@@ -45,17 +46,32 @@ export default function ProposalDrawer({ setOpen, proposal, updateProposalList }
               <p className="text-lg font-bold mt-6"> {proposal.title}</p>
               <p className="text-justify">{proposal.description}</p>
             </div>
-            <button
-              onClick={() => setOpenField(true)}
-              className="mt-10 w-full focus:outline-none border py-3 rounded-lg bg-primary hover:bg-cyan-700 text-white font-bold ">
-              Bid Now
-            </button>
+            {bidPlaced == true ? (
+              <button
+                onClick={() => {
+                  setOpenField(true);
+                  setOpenBidPlaced(true);
+                }}
+                className="mt-10 w-full focus:outline-none border py-3 rounded-lg bg-primary hover:bg-cyan-700 text-white font-bold ">
+                You Already Placed Bid
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setOpenField(true);
+                  setOpenBidPlaced(false);
+                }}
+                className="mt-10 w-full focus:outline-none border py-3 rounded-lg bg-primary hover:bg-cyan-700 text-white font-bold ">
+                Bid Now
+              </button>
+            )}
             {
               <ArtistProposal
                 isOpen={openField}
                 setIsOpen={setOpenField}
                 updateProposalList={updateProposalList}
-                proposalId={proposal._id}
+                proposalId={proposal}
+                isBidPlaced={openBidPlaced}
               />
             }
           </div>
