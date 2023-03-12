@@ -14,7 +14,8 @@ export default function ArtistProposal({
   setIsOpen,
   proposalId,
   updateProposalList,
-  isBidPlaced
+  isBidPlaced,
+  setIsOpenDrawer
 }) {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
@@ -59,6 +60,7 @@ export default function ArtistProposal({
         updateProposalList();
         Toaster(toaster, 'success', 'Succesfully placed a bid!');
         setIsOpen(false);
+        setIsOpenDrawer(false);
       }
     } catch (error) {
       Toaster(toaster, 'error', 'Failed to place bid!');

@@ -72,6 +72,7 @@ export default function ProposalDrawer({ setOpen, proposal, updateProposalList, 
                 updateProposalList={updateProposalList}
                 proposalId={proposal}
                 isBidPlaced={openBidPlaced}
+                setIsOpenDrawer={setOpen}
               />
             }
           </div>
