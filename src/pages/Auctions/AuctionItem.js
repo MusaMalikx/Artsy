@@ -112,7 +112,6 @@ const AuctionItem = ({ data }) => {
       getHighBidInfo();
     }
   }, []);
-
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title="Auction Item" />
@@ -239,7 +238,7 @@ const AuctionItem = ({ data }) => {
                   </span>
                 </div>
               </div>
-              {us.buyer && (
+              {us.buyer && state.artwork.status !== 'closed' && (
                 <>
                   <form>
                     <div className="mb-4">

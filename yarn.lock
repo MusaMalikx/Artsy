@@ -9435,7 +9435,7 @@ thunky@^1.0.2:
 
 timeago.js@^4.0.2:
   version "4.0.2"
-  resolved "https://registry.yarnpkg.com/timeago.js/-/timeago.js-4.0.2.tgz#724e8c8833e3490676c7bb0a75f5daf20e558028"
+  resolved "https://registry.npmjs.org/timeago.js/-/timeago.js-4.0.2.tgz"
   integrity sha512-a7wPxPdVlQL7lqvitHGGRsofhdwtkoSXPGATFuSOA2i1ZNQEPLrGnj68vOp2sOJTCFAQVXPeNMX/GctBaO9L2w==
 
 tmpl@1.0.5:
@@ -9528,7 +9528,7 @@ tsutils@^3.21.0:
 
 txtgen@^3.0.4:
   version "3.0.4"
-  resolved "https://registry.yarnpkg.com/txtgen/-/txtgen-3.0.4.tgz#8328cc9a822875ec6c49489e16d1a7292d39e99d"
+  resolved "https://registry.npmjs.org/txtgen/-/txtgen-3.0.4.tgz"
   integrity sha512-15UBmauZ4Ceq3UPEae9gaRo7g1c5AR6qyRRaF9TIXXMTEfCxo1h+fAsgl21Zqvad9gNhvEt0XTGKsTXy2PydeA==
 
 type-check@^0.4.0, type-check@~0.4.0:

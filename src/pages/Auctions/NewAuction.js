@@ -81,8 +81,8 @@ export default function NewAuction() {
               formData.append('title', title.current.value);
               formData.append('baseprice', baseprice.current.value);
               formData.append('description', description.current.value);
-              formData.append('startdate', startdate.toLocaleString());
-              formData.append('enddate', enddate.toLocaleString());
+              formData.append('startdate', startdate.toLocaleString('en-US'));
+              formData.append('enddate', enddate.toLocaleString('en-US'));
               formData.append('category', category);
 
               const config = {

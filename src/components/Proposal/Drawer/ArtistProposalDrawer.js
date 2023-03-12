@@ -29,7 +29,6 @@ export default function ArtistDrawer({ setOpen, proposalInfo }) {
           }
         }
       );
-      console.log(res);
       if (res.status === 200) {
         navigate('/view/buyer/accepted/proposal');
         Toaster(toaster, 'success', 'Proposal succesfully accepted!');
