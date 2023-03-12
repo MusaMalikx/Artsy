@@ -410,7 +410,9 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
             <div
               key={user._id}
               onClick={() => setSelect(user)}
-              className="flex items-center px-10 transition-all ease-in-out cursor-pointer py-5 hover:bg-primary/10 rounded">
+              className={`flex items-center border px-10 transition-all ease-in-out cursor-pointer py-5 hover:bg-primary/10 rounded ${
+                select?._id === user._id ? 'border-primary' : 'border-white'
+              }`}>
               <ReactJdenticon size="50" value={user?.email} />
               {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
               <div className="flex-grow ml-3">

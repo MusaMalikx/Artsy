@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Toaster from '../Toaster';
 import API from '../../../api/server';
-import { useToaster } from 'rsuite';
+import { Loader, useToaster } from 'rsuite';
 import { v4 as uuid } from 'uuid';
 import { sendNotification } from '../../../helpers/notifications';
 
@@ -12,9 +12,9 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
     start: 'true',
     days: '00',
     hours: '00',
-    minutes: '00',
-    seconds: '00'
+    minutes: '00'
   });
+  const [loader, setLoader] = useState(true);
 
   const notifyUsers = async () => {
     const res = await API.get(`/api/artworks/bidderlist/${artwork._id}`);
@@ -77,6 +77,7 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
         hours = hours.toString().length == 1 ? `0${hours}` : hours;
         minutes = minutes.toString().length == 1 ? `0${minutes}` : minutes;
         seconds = seconds.toString().length == 1 ? `0${seconds}` : seconds;
+        setLoader(false);
         setTimer({
           start: 'true',
           days: days,
@@ -85,6 +86,7 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
           seconds: seconds
         });
       } else if (startdate - date2 > 0) {
+        setLoader(false);
         setTimer({
           start: 'next',
           days: '00',
@@ -93,6 +95,7 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
           seconds: '00'
         });
       } else {
+        setLoader(false);
         setTimer({
           start: 'close',
           days: '00',
@@ -118,7 +121,11 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
 
   return (
     <>
-      {timer.start === 'true' ? (
+      {loader ? (
+        <div className="my-5 flex justify-center items-center w-full">
+          <Loader size="md" />
+        </div>
+      ) : timer.start === 'true' ? (
         <div className="flex flex-col my-5 border rounded-md uppercase">
           <p className="text-gray-500 text-center font-semibold mt-2">Time left</p>
           <div className="flex items-center justify-around">
