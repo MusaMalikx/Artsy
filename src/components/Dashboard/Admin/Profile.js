@@ -36,8 +36,8 @@ const Profile = () => {
     <div>
       <section className="font-medium sticky top-10">
         <section className="w-64 bg-[#FAF8F1] rounded-2xl px-8 py-6 shadow-lg">
-          <div className="shadow-all w-fit mx-auto align-middle border-none bg-white">
-            <ReactJdenticon size="150" value={auth?.user.email} />
+          <div className="shadow-all rounded-xl w-fit mx-auto align-middle border-none bg-white">
+            <ReactJdenticon className="rounded-xl" size="150" value={auth?.user.email} />
           </div>
 
           <div className="mt-8 ">

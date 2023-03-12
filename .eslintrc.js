@@ -5,7 +5,7 @@ module.exports = {
     es2021: true
   },
   extends: [
-    'eslint:recommended',
+    // 'eslint:recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
     'prettier'

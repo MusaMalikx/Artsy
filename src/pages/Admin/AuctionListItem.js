@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
-import AuctionCard from '../../components/Auction/AuctionCard';
 import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
+import ThumnailCarousel from '../../components/Carousel/ThumnailCarousel';
 import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
 import Toaster from '../../components/Common/Toaster';
 import AdminLayout from '../../components/Layouts/AdminLayout';
@@ -113,7 +113,7 @@ const AuctionListItem = ({ data }) => {
   }, []);
 
   return (
-    <AdminLayout title={'Auctions'}>
+    <AdminLayout title={'Auctions'} bool>
       <HeaderLayout title="Auction Item" />
 
       <div className="py-10 px-5">
@@ -223,14 +223,12 @@ const AuctionListItem = ({ data }) => {
         </div>
       </div>
 
-      <div className="mx-5 py-10 bg-gray-100 border border-gray-400 rounded-lg mb-20 md:my-20">
+      <div className="mx-5 py-10  border-gray-400 border rounded-lg mb-20 md:my-20">
         <div className="flex justify-center items-center mb-10">
-          <p className="font-semibold   text-2xl">Similar Auctions Items</p>
+          <p className="font-semibold uppercase text-3xl">Similar Auctions Items</p>
         </div>
-        <div className="flex items-center flex-wrap justify-center ">
-          {data?.slice(4, 9).map((photo) => (
-            <AuctionCard key={photo.id} artwork={photo} />
-          ))}
+        <div className="">
+          <ThumnailCarousel data={data} />
         </div>
       </div>
     </AdminLayout>
