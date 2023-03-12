@@ -8,7 +8,8 @@ module.exports = {
         montserrat: 'Montserrat'
       },
       boxShadow: {
-        'all-rounded': '0px 0px 4px 3px rgba(0, 0, 0, 0.25)'
+        'all-rounded': '0px 0px 4px 3px rgba(0, 0, 0, 0.25)',
+        all: '0 3px 10px rgb(0 0 0 / 0.2)'
       },
       backgroundImage: {
         banner1: "url('/src/assets/images/banner/banner1.jpg')",
