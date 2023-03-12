@@ -7,7 +7,7 @@ const variants = {
   exit: { opacity: 0, x: 0, y: 20 }
 };
 
-const AdminLayout = ({ children, title }) => {
+const AdminLayout = ({ children, title, bool }) => {
   document.title = title + ' | Artsy';
 
   return (
@@ -20,8 +20,8 @@ const AdminLayout = ({ children, title }) => {
         transition={{ duration: 0.45, type: 'easeInOut' }}
         style={{ position: 'relative' }}>
         {children}
-        <div className="fixed bottom-16 flex justify-center w-full">
-          <Navigation />
+        <div className={`fixed ${bool ? 'top-3' : 'bottom-14'} flex justify-center w-full z-10`}>
+          <Navigation bool={bool} />
         </div>
       </motion.article>
     </div>

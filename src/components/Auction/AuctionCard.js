@@ -23,7 +23,8 @@ const AuctionCard = ({ artwork, updateList }) => {
   };
 
   const handleClickrealauctions = () => {
-    navigate(`/auctions/${artwork._id}`, { state: { artwork } });
+    if (usr.admin) navigate(`/admin/view/auctions/${artwork._id}`, { state: { artwork } });
+    else navigate(`/auctions/${artwork._id}`, { state: { artwork } });
   };
 
   return (
