@@ -253,7 +253,7 @@ export default function BuyerProfileDashboard() {
                   </ul>
                 </div>
               </div>
-              <div className="w-full flex flex-col 2xl:w-1/3">
+              <div className="w-full flex flex-col 2xl:w-2/3">
                 <div className="flex-1 bg-white rounded-lg shadow-all p-8">
                   <div className="mt-10 py-10 text-center">
                     <div>
