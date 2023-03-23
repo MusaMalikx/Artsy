@@ -39,7 +39,9 @@ const ArticleLayout = ({ children, title, bool }) => {
             <SideNav />
           </div>
           <div className={`flex-grow ml-14 ${bool && 'container'}`}>{children}</div>
-          <Footer />
+          <div className="ml-14">
+            <Footer />
+          </div>
         </div>
       </motion.article>
     </div>

@@ -35,7 +35,8 @@ export default function ArtistProfileDashboard() {
     artistName: 'Unknown',
     profileImage:
       'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg',
-    artworks: []
+    artworks: [],
+    email: 'Unknown Email'
   });
 
   const fetchArtistData = async () => {
@@ -43,6 +44,7 @@ export default function ArtistProfileDashboard() {
     if (res.data) {
       setProfileInfo({
         artistName: res.data.name !== '' ? res.data.name : profileInfo.artistName,
+        email: res.data.email !== '' ? res.data.email : profileInfo.email,
         profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage,
         artworks: res.data.artworks
       });
@@ -81,20 +83,22 @@ export default function ArtistProfileDashboard() {
   };
   return (
     <Layout title="Profile">
-      <main className="profile-page">
+      <main className="profile-page bg-gray-200">
         <section className="relative block h-500-px">
           <div
-            className="absolute top-0 w-full h-full bg-center bg-cover"
+            className="absolute top-0 w-full h-96 bg-center bg-cover"
             style={{
               backgroundImage:
-                "url('https://img.freepik.com/free-photo/blue-oil-paint-strokes-textured-background_53876-98328.jpg?w=2000')"
+                "url('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80')"
             }}>
             <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
-            <div className="flex justify-end m-5" onClick={logoutuser}>
-              <Button color="red" appearance="primary">
-                Logout
-              </Button>
-            </div>
+            {auth?.user?._id === currentUserID && (
+              <div className="flex justify-end m-5" onClick={logoutuser}>
+                <Button color="red" appearance="primary">
+                  Logout
+                </Button>
+              </div>
+            )}
           </div>
           <div
             className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
@@ -102,15 +106,20 @@ export default function ArtistProfileDashboard() {
               transform: 'translateZ(0px)'
             }}></div>
         </section>
-        <section className="relative py-16 bg-blueGray-200">
+        <section className="relative py-16">
           <div className="container mx-auto px-4">
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-4 shadow-xl rounded-lg -mt-64">
               <div className="px-6">
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative w-full text-center flex justify-center">
                       <div className="shadow-xl object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200 bg-white">
-                        <ReactJdenticon size="200" value={auth?.user.email} />
+                        <ReactJdenticon
+                          size="200"
+                          value={
+                            auth?.user._id === currentUserID ? auth?.user.email : profileInfo.email
+                          }
+                        />
                       </div>
                       {/* <img
                         referrerPolicy="no-referrer"
@@ -207,7 +216,7 @@ export default function ArtistProfileDashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="text-center">
+                <div className="text-center mb-10">
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
                     {profileInfo.artistName}
                   </h3>
@@ -216,25 +225,67 @@ export default function ArtistProfileDashboard() {
                     Lahore, Pakistan
                   </div>
                 </div>
-                <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                  <div>
-                    <p className="text-4xl font-bold">Live Auctions</p>
-                  </div>
-                  <div className="flex flex-wrap justify-center">
-                    <div className="w-full lg:w-9/12 px-4">
-                      {profileInfo.artworks.length > 0 ? (
-                        profileInfo.artworks.map((artwork) => (
-                          <motion.div
-                            key={artwork._id}
-                            animate={{ x: [-2000, 350, 0] }}
-                            transition={{ duration: 1.5, delay: 0 }}>
-                            <ProfileAuctionCard key={artwork._id} artwork={artwork} />
-                          </motion.div>
-                        ))
-                      ) : (
-                        <EmptyProfileAuctions />
-                      )}
-                      <div></div>
+              </div>
+            </div>
+
+            <div className="mb-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
+              <div className="w-full flex flex-col 2xl:w-1/3">
+                <div className="flex-1 bg-white rounded-lg shadow-all p-8">
+                  <h4 className="text-xl text-gray-900 font-bold">Personal Info</h4>
+                  <ul className="mt-2 text-gray-700">
+                    <li className="flex border-y py-2">
+                      <span className="font-bold w-24">Name:</span>
+                      <span className="text-gray-700">Amanda S. Ross</span>
+                    </li>
+                    <li className="flex border-b py-2">
+                      <span className="font-bold w-24">Email:</span>
+                      <span className="text-gray-700">amandaross@example.com</span>
+                    </li>
+                    <li className="flex border-b py-2">
+                      <span className="font-bold w-24">Mobile:</span>
+                      <span className="text-gray-700">+92 321 4532123</span>
+                    </li>
+                    <li className="flex border-b py-2">
+                      <span className="font-bold w-24">Age:</span>
+                      <span className="text-gray-700">10 Jan 2022 (25 days ago)</span>
+                    </li>
+                    <li className="flex border-b py-2">
+                      <span className="font-bold w-24">Gender:</span>
+                      <span className="text-gray-700">Male</span>
+                    </li>
+                    <li className="flex border-b py-2">
+                      <span className="font-bold w-24">Location:</span>
+                      <span className="text-gray-700">Lahore, Punjab</span>
+                    </li>
+                    <li className="flex border-b py-2">
+                      <span className="font-bold w-24">Languages:</span>
+                      <span className="text-gray-700">English, Urdu</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="flex flex-col w-full 2xl:w-2/3">
+                <div className="flex-1 bg-white rounded-lg shadow-all p-8">
+                  <div className="py-10 text-center">
+                    <div>
+                      <p className="text-4xl font-bold">Live Auctions</p>
+                    </div>
+                    <div className="flex flex-wrap justify-center">
+                      <div className="w-full lg:w-9/12 px-4">
+                        {profileInfo.artworks.length > 0 ? (
+                          profileInfo.artworks.map((artwork) => (
+                            <motion.div
+                              key={artwork._id}
+                              animate={{ x: [-2000, 350, 0] }}
+                              transition={{ duration: 1.5, delay: 0 }}>
+                              <ProfileAuctionCard key={artwork._id} artwork={artwork} />
+                            </motion.div>
+                          ))
+                        ) : (
+                          <EmptyProfileAuctions />
+                        )}
+                        <div></div>
+                      </div>
                     </div>
                   </div>
                 </div>

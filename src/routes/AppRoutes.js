@@ -77,6 +77,20 @@ const AppRoutes = () => {
                 <Route path="admin/view/reports" element={<Reports />} />
                 <Route path="admin/view/auctions" element={<AuctionsList data={data} />} />
                 <Route path="admin/view/auctions/:id" element={<AuctionListItem data={data} />} />
+                <Route
+                  path="admin/buyer/profile/:buyerId"
+                  element={<BuyerProfileDashboard data={data} />}
+                />
+                <Route path="admin/artist/profile/:artistId" element={<ArtistProfileDashboard />} />
+              </>
+            )}
+            {(user.artist || user.buyer || user.admin) && (
+              <>
+                <Route
+                  path="buyer/profile/:buyerId"
+                  element={<BuyerProfileDashboard data={data} />}
+                />
+                <Route path="artist/profile/:artistId" element={<ArtistProfileDashboard />} />
               </>
             )}
             {(user.artist || user.buyer) && (
@@ -85,11 +99,6 @@ const AppRoutes = () => {
                 <Route path="search" element={<Search />} />
                 <Route path="auctions" element={<Auctions />} />
                 <Route path="auctions/:id" element={<AuctionItem data={data} />} />
-                <Route
-                  path="buyer/profile/:buyerId"
-                  element={<BuyerProfileDashboard data={data} />}
-                />
-                <Route path="artist/profile/:artistId" element={<ArtistProfileDashboard />} />
               </>
             )}
             {user.artist && (

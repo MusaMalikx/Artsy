@@ -8,6 +8,7 @@ import { store } from './redux/app/store';
 import AppRoutes from './routes/AppRoutes';
 import './index.css';
 import 'rsuite/dist/rsuite.min.css';
+import 'react-multi-carousel/lib/styles.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

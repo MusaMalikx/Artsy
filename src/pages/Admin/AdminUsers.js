@@ -1,265 +1,161 @@
-/* eslint-disable no-unused-vars */
-import { Table, Popover, Whisper, Checkbox, Dropdown, IconButton, Progress } from 'rsuite';
-import MoreIcon from '@rsuite/icons/legacy/More';
-// import { mockUsers } from './mock';
-import { useState } from 'react';
 import AdminLayout from '../../components/Layouts/AdminLayout';
-
-const { Column, HeaderCell, Cell } = Table;
-const data = mockUsers(20);
-
-const NameCell = ({ rowData, dataKey, ...props }) => {
-  const speaker = (
-    <Popover title="Description">
-      <p>
-        <b>Name:</b> {rowData.name}
-      </p>
-      <p>
-        <b>Gender:</b> {rowData.gender}
-      </p>
-      <p>
-        <b>City:</b> {rowData.city}
-      </p>
-      <p>
-        <b>Street:</b> {rowData.street}
-      </p>
-    </Popover>
-  );
-
-  return (
-    <Cell {...props}>
-      <Whisper placement="top" speaker={speaker}>
-        <a>{rowData[dataKey]}</a>
-      </Whisper>
-    </Cell>
-  );
-};
-
-const ImageCell = ({ rowData, dataKey, ...props }) => (
-  <Cell {...props} style={{ padding: 0 }}>
-    <div
-      style={{
-        width: 40,
-        height: 40,
-        background: '#f5f5f5',
-        borderRadius: 6,
-        marginTop: 2,
-        overflow: 'hidden',
-        display: 'inline-block'
-      }}>
-      <img src={rowData.avatar} width="40" />
-    </div>
-  </Cell>
-);
-
-const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
-  <Cell {...props} style={{ padding: 0 }}>
-    <div style={{ lineHeight: '46px' }}>
-      <Checkbox
-        value={rowData[dataKey]}
-        inline
-        onChange={onChange}
-        checked={checkedKeys.some((item) => item === rowData[dataKey])}
-      />
-    </div>
-  </Cell>
-);
-
-const renderMenu = ({ onClose, left, top, className }, ref) => {
-  const handleSelect = (eventKey) => {
-    onClose();
-    console.log(eventKey);
-  };
-  return (
-    <Popover ref={ref} className={className} style={{ left, top }} full>
-      <Dropdown.Menu onSelect={handleSelect}>
-        <Dropdown.Item eventKey={1}>Follow</Dropdown.Item>
-        <Dropdown.Item eventKey={2}>Sponsor</Dropdown.Item>
-        <Dropdown.Item eventKey={3}>Add to friends</Dropdown.Item>
-        <Dropdown.Item eventKey={4}>View Profile</Dropdown.Item>
-        <Dropdown.Item eventKey={5}>Block</Dropdown.Item>
-      </Dropdown.Menu>
-    </Popover>
-  );
-};
-
-const ActionCell = ({ rowData, dataKey, ...props }) => {
-  return (
-    <Cell {...props} className="link-group">
-      <Whisper placement="autoVerticalStart" trigger="click" speaker={renderMenu}>
-        <IconButton appearance="subtle" icon={<MoreIcon />} />
-      </Whisper>
-    </Cell>
-  );
-};
+import { FaGoogle } from 'react-icons/fa';
+import HeaderLayout from '../../components/Layouts/HeaderLayout';
+// import { RiDeleteBin6Fill } from 'react-icons/ri';
+import { BsViewList } from 'react-icons/bs';
+import ReactJdenticon from 'react-jdenticon';
+import { AiOutlineMail } from 'react-icons/ai';
+import { useEffect, useState } from 'react';
+import API from '../../api/server';
+import { useNavigate } from 'react-router-dom';
+import Toaster from '../../components/Common/Toaster';
+import { useToaster } from 'rsuite';
 
 const AdminUsers = () => {
-  const [checkedKeys, setCheckedKeys] = useState([]);
-  let checked = false;
-  let indeterminate = false;
+  const [users, setUsers] = useState();
+  const [artists, setArtists] = useState();
+  const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
 
-  if (checkedKeys.length === data.length) {
-    checked = true;
-  } else if (checkedKeys.length === 0) {
-    checked = false;
-  } else if (checkedKeys.length > 0 && checkedKeys.length < data.length) {
-    indeterminate = true;
-  }
+  const getUsers = async () => {
+    try {
+      const res = await API.get('/api/users');
+      setUsers(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getArtists = async () => {
+    try {
+      const res = await API.get('/api/artists');
+      setArtists(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const handleCheckAll = (value, checked) => {
-    const keys = checked ? data.map((item) => item.id) : [];
-    setCheckedKeys(keys);
-  };
-  const handleCheck = (value, checked) => {
-    const keys = checked ? [...checkedKeys, value] : checkedKeys.filter((item) => item !== value);
-    setCheckedKeys(keys);
-  };
+  useEffect(() => {
+    getUsers();
+    getArtists();
+  }, []);
 
   return (
-    <AdminLayout title="Users">
+    <AdminLayout title="Users" bool>
       <HeaderLayout title="Users" />
-      <div className="container mx-auto">
-        <Table height={650} className=" max-w-4xl mx-auto" data={data} id="table">
-          <Column width={50} align="center">
-            <HeaderCell style={{ padding: 0 }}>
-              <div style={{ lineHeight: '40px' }}>
-                <Checkbox
-                  inline
-                  checked={checked}
-                  indeterminate={indeterminate}
-                  onChange={handleCheckAll}
-                />
+      <div className="sm:px-6 w-full">
+        <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
+          <div className="mt-7 overflow-x-auto">
+            <div className="w-[80rem] overflow-x-scroll mx-auto whitespace-nowrap">
+              <div>
+                <div className="focus:outline-none grid grid-cols-10 h-16 rounded w-full p-5 justify-between uppercase font-bold">
+                  <div className="">Id</div>
+                  <div className="col-span-3">Name</div>
+                  <div className="col-span-4">Email</div>
+                  <div className="">Google</div>
+                  <div className="">Action</div>
+                </div>
               </div>
-            </HeaderCell>
-            <CheckCell dataKey="id" checkedKeys={checkedKeys} onChange={handleCheck} />
-          </Column>
-          <Column width={80} align="center">
-            <HeaderCell>Avartar</HeaderCell>
-            <ImageCell dataKey="avartar" />
-          </Column>
-
-          <Column width={160}>
-            <HeaderCell>Name</HeaderCell>
-            <NameCell dataKey="name" />
-          </Column>
-
-          <Column width={230}>
-            <HeaderCell>Skill Proficiency</HeaderCell>
-            <Cell style={{ padding: '10px 0' }}>
-              {(rowData) => <Progress percent={rowData.progress} showInfo={false} />}
-            </Cell>
-          </Column>
-
-          <Column width={100}>
-            <HeaderCell>Rating</HeaderCell>
-            <Cell>
-              {(rowData) =>
-                Array.from({ length: rowData.rating }).map((_, i) => <span key={i}>⭐️</span>)
-              }
-            </Cell>
-          </Column>
-
-          <Column width={100}>
-            <HeaderCell>Income</HeaderCell>
-            <Cell>{(rowData) => `$${rowData.amount}`}</Cell>
-          </Column>
-
-          <Column width={120}>
-            <HeaderCell>
-              <MoreIcon />
-            </HeaderCell>
-            <ActionCell dataKey="id" />
-          </Column>
-        </Table>
+              <div>
+                {users?.map(
+                  (user) =>
+                    user._id !== auth?.user?._id && (
+                      <ProposaldivItem
+                        key={user._id}
+                        user={user}
+                        status={user.isAdmin ? 'Admin' : 'Buyer'}
+                        getUsers={getUsers}
+                        getArtists={getArtists}
+                      />
+                    )
+                )}
+                {artists?.map((user) => (
+                  <ProposaldivItem
+                    key={user._id}
+                    user={user}
+                    status="Artist"
+                    getUsers={getUsers}
+                    getArtists={getArtists}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </AdminLayout>
   );
 };
 
-import { faker } from '@faker-js/faker/locale/en';
-import HeaderLayout from '../../components/Layouts/HeaderLayout';
-function mockUsers(length) {
-  const createRowData = (rowIndex) => {
-    const firstName = faker.name.firstName();
-    const lastName = faker.name.lastName();
-    const gender = faker.name.gender(true);
-    const name = faker.name.findName(firstName, lastName, gender);
-    const avatar = faker.image.avatar();
+const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
+  const navigate = useNavigate();
+  const toaster = useToaster();
+  const [delLoading, setDelLoading] = useState(false);
 
-    const city = faker.address.city();
-    const street = faker.address.street();
-    const email = faker.internet.email();
-    const postcode = faker.address.zipCode();
-    const phone = faker.phone.number();
-    const amount = faker.finance.amount(1000, 90000);
-
-    const age = Math.floor(Math.random() * 30) + 18;
-    const stars = Math.floor(Math.random() * 10000);
-    const followers = Math.floor(Math.random() * 10000);
-    const rating = 2 + Math.floor(Math.random() * 3);
-    const progress = Math.floor(Math.random() * 100);
-
-    return {
-      id: rowIndex + 1,
-      name,
-      firstName,
-      lastName,
-      avatar,
-      city,
-      street,
-      postcode,
-      email,
-      phone,
-      gender,
-      age,
-      stars,
-      followers,
-      rating,
-      progress,
-      amount
-    };
+  const viewUser = () => {
+    if (status === 'Buyer') navigate(`/buyer/profile/${user._id}`);
+    else if (status === 'Artist') navigate(`/artist/profile/${user._id}`);
   };
 
-  return Array.from({ length }).map((_, index) => {
-    return createRowData(index);
-  });
-}
-
-export function mockTreeData(options) {
-  const { limits, labels, getRowData } = options;
-  const depth = limits.length;
-
-  const data = [];
-  const mock = (list, parentValue, layer = 0) => {
-    const length = limits[layer];
-    Array.from({ length }).forEach((_, index) => {
-      const value = parentValue ? parentValue + '-' + (index + 1) : index + 1 + '';
-      const children = [];
-      const label = Array.isArray(labels) ? labels[layer] : labels;
-      let row = {
-        label: typeof label === 'function' ? label(layer, value, faker) : label + ' ' + value,
-        value
-      };
-
-      if (getRowData) {
-        row = {
-          ...row,
-          ...getRowData(layer, value)
-        };
-      }
-
-      list.push(row);
-
-      if (layer < depth - 1) {
-        row.children = children;
-        mock(children, value, layer + 1);
-      }
-    });
+  const deleteUser = async () => {
+    console.log(delLoading);
+    setDelLoading(true);
+    await API.delete(
+      `/api/${status === 'Artist' ? 'artists' : status === 'Buyer' && 'users'}/${user._id}`
+    )
+      .then(async (res) => {
+        console.log(res.data);
+        Toaster(toaster, 'success', 'User Deleted');
+        setDelLoading(false);
+        if (status === 'Artist') getArtists();
+        if (status === 'Buyer') getUsers();
+      })
+      .catch((err) => {
+        console.log(err);
+        Toaster(toaster, 'error', err.response.data.message);
+        setDelLoading(false);
+      });
   };
 
-  mock(data);
-
-  return data;
-}
+  return (
+    <div
+      tabIndex="0"
+      className={`focus:outline-none items-center border my-2 border-gray-100 rounded w-full justify-between p-5 transition-all grid grid-cols-10
+   `}>
+      <div className="">
+        <div className="bg-gray-100 w-fit text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
+          {status}
+        </div>
+      </div>
+      <div className="flex items-center space-x-2 col-span-3">
+        <div className="flex overflow-hidden shadow-all">
+          <ReactJdenticon size="40" value={user?.email} />
+        </div>
+        <p className="text-base capitalize font-medium text-gray-700">{user?.name}</p>
+      </div>
+      <div className="flex items-center col-span-4">
+        {<AiOutlineMail />}
+        <p className="text-sm leading-none text-gray-600 ml-2">{user?.email}</p>
+      </div>
+      <div className="flex items-center">
+        <FaGoogle />
+        <p className="text-sm capitalize leading-none text-gray-600 ml-2">
+          {user?.fromGoogle ? 'true' : 'false'}
+        </p>
+      </div>
+      <div className="flex space-x-2 items-center">
+        <button
+          onClick={viewUser}
+          className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-primary active:bg-cyan-700 hover:bg-cyan-700">
+          <BsViewList />
+        </button>
+        {/* <button
+          onClick={deleteUser}
+          className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-red-500 active:bg-red-700 hover:bg-red-700">
+          {delLoading ? <Loader /> : <RiDeleteBin6Fill />}
+        </button> */}
+        <div className="invisible hidden" onClick={deleteUser} />
+      </div>
+    </div>
+  );
+};
 
 export default AdminUsers;

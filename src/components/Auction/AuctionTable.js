@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown, IconButton, SelectPicker, useToaster } from 'rsuite';
+import { Loader, SelectPicker, useToaster } from 'rsuite';
 import { useNavigate } from 'react-router-dom';
 import { FaPaintBrush } from 'react-icons/fa';
 import { MdOutlineCreate, MdPayment } from 'react-icons/md';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
-import { BsChatLeftDots, BsThreeDotsVertical } from 'react-icons/bs';
+import { BsChatLeftDots, BsViewList } from 'react-icons/bs';
 import API from '../../api/server';
 import Toaster from '../Common/Toaster';
 import EmptyList from '../Animation/EmptyList';
+import { RiDeleteBin6Fill } from 'react-icons/ri';
 
 const AuctionTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -22,8 +23,6 @@ const AuctionTable = () => {
       .then((res) => {
         setArtworks(res.data);
         console.log(res.data);
-        // const singleartwork = res.data[0];
-        // console.log(singleartwork);
       })
       .catch((err) => {
         console.log(err);
@@ -39,18 +38,18 @@ const AuctionTable = () => {
       <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
         <SortTable updateStatus={setStatus} />
         <div className="mt-7 overflow-x-auto">
-          <table className="w-full whitespace-nowrap">
-            <thead>
-              <th className="focus:outline-none h-16 rounded flex w-full p-5 justify-between uppercase text-left ">
-                <td className="w-32">Title</td>
-                <td className="ml-12 w-48">Date Created</td>
-                <td className=" w-48">Total Bids</td>
-                <td className="mr-24 w-32">Status</td>
-                <td className="">Payment</td>
-                <td className="">Action</td>
-              </th>
-            </thead>
-            <tbody>
+          <div className="w-full max-w-[80rem] overflow-x-scroll mx-auto whitespace-nowrap">
+            <div>
+              <div className="focus:outline-none font-bold grid grid-cols-7 rounded w-full p-5 justify-between uppercase text-left ">
+                <div className="col-span-2">Title</div>
+                <div className="">Date Created</div>
+                <div className="">Total Bids</div>
+                <div className="">Status</div>
+                <div className="">Payment</div>
+                <div className="">Action</div>
+              </div>
+            </div>
+            <div>
               {artworks.length > 0 ? (
                 artworks.map((artwork) => (
                   <AuctionTableItem key={artwork._id} data={artwork} updateList={getAllArtworks} />
@@ -58,8 +57,8 @@ const AuctionTable = () => {
               ) : (
                 <EmptyList />
               )}
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -70,42 +69,35 @@ const AuctionTableItem = ({ data, updateList }) => {
   const endDate = data.enddate.split(',')[0];
   return (
     <>
-      <tr
+      <div
         tabIndex="0"
-        className="focus:outline-none h-16 border my-2 border-gray-100 rounded flex w-full justify-between p-5 transition-all">
-        <td className="flex items-center">
+        className="focus:outline-none grid grid-cols-7 border my-2 border-gray-100 rounded w-full justify-between p-5 transition-all">
+        <div className="flex items-center col-span-2">
           <FaPaintBrush />
           <p className="text-base ml-2  capitalize font-medium text-gray-700">{data.title}</p>
-        </td>
-        <td className="flex items-center w-40">
+        </div>
+        <div className="flex items-center">
           <MdOutlineCreate />
           <p className="text-sm leading-none text-gray-600 ml-2">{endDate}</p>
-        </td>
-        <td className="flex items-center w-40">
+        </div>
+        <div className="flex items-center">
           {<BsChatLeftDots />}
           <p className="text-sm leading-none text-gray-600 ml-2">{data.totalBids}</p>
-        </td>
-        <td className="flex items-center w-40">
+        </div>
+        <div className="flex items-center">
           {<AiOutlineExclamationCircle />}
           <p className="text-sm capitalize leading-none text-gray-600 ml-2">{data.status}</p>
-        </td>
-        <td className="flex items-center">
+        </div>
+        <div className="flex items-center">
           {<MdPayment />}
           <p className="text-sm capitalize leading-none text-gray-600 ml-2">
             {data.paymentStatus === null ? 'NA' : data.paymentStatus === true ? 'Paid' : 'Pending'}
           </p>
-        </td>
-        <td className="">
-          {/* <div className="bg-gray-200 rounded-sm w-5  h-5 flex flex-shrink-0 justify-center items-center relative">
-            <input
-              placeholder="checkbox"
-              type="checkbox"
-              className=" checked:bg-primary checked:border-primary "
-            />
-          </div> */}
+        </div>
+        <div className="">
           <Drop artworkId={data._id} updateList={updateList} />
-        </td>
-      </tr>
+        </div>
+      </div>
     </>
   );
 };
@@ -130,14 +122,12 @@ const SortTable = ({ updateStatus }) => {
   );
 };
 
-const renderIconButton = (props, ref) => {
-  return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
-};
-
 const Drop = ({ artworkId, updateList }) => {
   const toaster = useToaster();
   const auth = JSON.parse(localStorage.getItem('auth'));
   const navigate = useNavigate();
+  const [delLoading, setDelLoading] = useState(false);
+
   const handleViewArtworkClick = async () => {
     // call your API here
     const res = await API.get(`/api/artworks/artwork/${artworkId}`);
@@ -146,7 +136,9 @@ const Drop = ({ artworkId, updateList }) => {
       navigate(`/auctions/${artworkId}`, { state: { artwork } });
     }
   };
+
   const handleDeleteArtworkClick = async () => {
+    setDelLoading(true);
     await API.delete(`/api/artworks/artwork/delete/${artworkId}`, {
       headers: {
         token: 'Bearer ' + auth.token
@@ -156,18 +148,28 @@ const Drop = ({ artworkId, updateList }) => {
         if (updateList !== null) await updateList('All');
         console.log(res.data);
         Toaster(toaster, 'success', 'Artwork Deleted');
+        setDelLoading(false);
       })
       .catch((err) => {
         console.log(err);
         Toaster(toaster, 'error', err.response.data.message);
+        setDelLoading(false);
       });
   };
   return (
     <>
-      <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
-        <Dropdown.Item onClick={handleViewArtworkClick}>View Artwork</Dropdown.Item>
-        <Dropdown.Item onClick={handleDeleteArtworkClick}>Delete Artwork</Dropdown.Item>
-      </Dropdown>
+      <div className="flex space-x-2 items-center">
+        <button
+          onClick={handleViewArtworkClick}
+          className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-primary active:bg-cyan-700 hover:bg-cyan-700">
+          <BsViewList />
+        </button>
+        <button
+          onClick={handleDeleteArtworkClick}
+          className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-red-500 active:bg-red-700 hover:bg-red-700">
+          {delLoading ? <Loader /> : <RiDeleteBin6Fill />}
+        </button>
+      </div>
     </>
   );
 };
