@@ -190,11 +190,13 @@ export default function ArtistProfileDashboard() {
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           {profileInfo.artworks.length}
                         </span>
-                        <span className="text-sm text-blueGray-400">Auctions Live</span>
+                        {/* <span className="text-sm text-blueGray-400">Auctions Live</span> */}
+                        {/* Later display correct live auctions and closed auctions for now API is only sending back all auctions */}
+                        <span className="text-sm text-blueGray-400">All Auctions</span>
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          10
+                          0
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Closed</span>
                       </div>
@@ -268,7 +270,7 @@ export default function ArtistProfileDashboard() {
                 <div className="flex-1 bg-white rounded-lg shadow-all p-8">
                   <div className="py-10 text-center">
                     <div>
-                      <p className="text-4xl font-bold">Live Auctions</p>
+                      <p className="text-4xl font-bold">All Auctions</p>
                     </div>
                     <div className="flex flex-wrap justify-center">
                       <div className="w-full lg:w-9/12 px-4">

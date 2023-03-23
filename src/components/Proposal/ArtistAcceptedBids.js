@@ -2,7 +2,7 @@ import { MdOutlineCreate } from 'react-icons/md';
 import { FaMoneyBillWave, FaUserEdit } from 'react-icons/fa';
 import API from '../../api/server';
 import { useState, useEffect } from 'react';
-// import EmptyList from '../Animation/EmptyList';
+import EmptyList from '../Animation/EmptyList';
 
 const ArtistAcceptedBids = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -25,7 +25,7 @@ const ArtistAcceptedBids = () => {
     getProposals();
   }, []);
 
-  console.log(proposalList);
+  // console.log(proposalList);
 
   return (
     <div className="sm:px-6 w-full">
@@ -37,20 +37,20 @@ const ArtistAcceptedBids = () => {
                 <div className="">Title</div>
                 <div className="">Date Created</div>
                 <div className="">Amount</div>
-                <div className="">Artist Name</div>
+                <div className="">Buyer Name</div>
                 <div className="">Chat</div>
               </div>
             </div>
             <div>
-              {/* {proposalList.length > 0 ? (
-            proposalList.map((p, i) => <ProposaldivItem key={i} />)
-          ) : (
-            <EmptyList />
-          )} */}
+              {proposalList.length > 0 ? (
+                proposalList.map((p, i) => <ProposalTableItem key={i} proposal={p} />)
+              ) : (
+                <EmptyList />
+              )}
+              {/* <ProposalTableItem />
               <ProposalTableItem />
               <ProposalTableItem />
-              <ProposalTableItem />
-              <ProposalTableItem />
+              <ProposalTableItem /> */}
             </div>
           </div>
         </div>
@@ -60,26 +60,27 @@ const ArtistAcceptedBids = () => {
 };
 
 const ProposalTableItem = ({ proposal }) => {
-  console.log(proposal);
   return (
     <tr
       tabIndex="0"
       className={`focus:outline-none grid grid-cols-5 border my-2 border-gray-100 rounded w-full justify-between p-5 transition-all
    `}>
       <div className="">
-        <p className="text-base capitalize font-medium text-gray-700">title</p>
+        <p className="text-base capitalize font-medium text-gray-700">{proposal.title}</p>
       </div>
       <div className="flex items-center">
         <MdOutlineCreate />
-        <p className="text-sm leading-none text-gray-600 ml-2">date</p>
+        <p className="text-sm leading-none text-gray-600 ml-2">{proposal.dateCreated}</p>
       </div>
       <div className="flex items-center">
         {<FaMoneyBillWave />}
-        <p className="text-sm leading-none text-gray-600 ml-2">Rs amount</p>
+        <p className="text-sm leading-none text-gray-600 ml-2">{proposal.acceptedAmount}Rs</p>
       </div>
       <div className="flex items-center">
         {<FaUserEdit />}
-        <p className="text-sm capitalize leading-none text-gray-600 ml-2">name</p>
+        <p className="text-sm capitalize leading-none text-gray-600 ml-2">
+          {proposal.buyerId.name}
+        </p>
       </div>
       <div className="flex items-center">
         <button
