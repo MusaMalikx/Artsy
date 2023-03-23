@@ -57,6 +57,7 @@
     artist: 'Salvador Dali',
     image_title: 'The Persistence of Memory',
     image_url: 'https://www.dalipaintings.com/images/paintings/the-persistence-of-memory.jpg',
-    description: 'The Persistence of Memory is a'
+    description: 'The Persistence of Memory is a',
+    category: 'Renaissance'
   }
 ];
