@@ -37,8 +37,13 @@ export default function BuyerProfileDashboard() {
   const currentUserID = location.pathname.split('/')[3];
 
   const getWonArtworks = async () => {
-    const res = await API.get(`/api/users/find/artworks/won/${auth.user._id}`);
-    setWonArt(res.data);
+    await API.get(`/api/users/find/artworks/won/${auth.user._id}`)
+      .then((res) => {
+        setWonArt(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const fetchBuyerData = async () => {

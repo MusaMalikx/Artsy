@@ -1,7 +1,32 @@
 import { MdOutlineCreate } from 'react-icons/md';
 import { FaMoneyBillWave, FaUserEdit } from 'react-icons/fa';
+import API from '../../api/server';
+import { useState, useEffect } from 'react';
+// import EmptyList from '../Animation/EmptyList';
 
 const ArtistAcceptedBids = () => {
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const [proposalList, setProposalList] = useState([]);
+  const getProposals = async () => {
+    await API.get('/api/artists/proposal/accepted', {
+      headers: {
+        token: 'Bearer ' + auth.token
+      }
+    })
+      .then((res) => {
+        setProposalList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getProposals();
+  }, []);
+
+  console.log(proposalList);
+
   return (
     <div className="sm:px-6 w-full">
       <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
@@ -34,7 +59,8 @@ const ArtistAcceptedBids = () => {
   );
 };
 
-const ProposalTableItem = () => {
+const ProposalTableItem = ({ proposal }) => {
+  console.log(proposal);
   return (
     <tr
       tabIndex="0"
