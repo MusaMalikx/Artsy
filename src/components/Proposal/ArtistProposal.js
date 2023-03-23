@@ -2,6 +2,7 @@ import React from 'react';
 import ArrowRightLineIcon from '@rsuite/icons/ArrowRightLine';
 import { useState } from 'react';
 import ProposalDrawer from './Drawer/ArtistProposalDrawer';
+import ReactJdenticon from 'react-jdenticon';
 export default function ArtistProposalCard({ proposalInfo }) {
   const [showDrawer, SetShowDrawer] = useState(false);
   return (
@@ -10,8 +11,11 @@ export default function ArtistProposalCard({ proposalInfo }) {
         onClick={() => SetShowDrawer(true)}
         className="border hover:scale-105 transition-all  my-5 p-5 hover:cursor-pointer hover:shadow-xl hover:bg-slate-100">
         <div className="flex lg:flex-row flex-col justify-center text-center lg:text-left items-center gap-6">
-          <div className=" rounded-full relative w-24 h-24 overflow-hidden">
-            <img
+          {/* <div className=" rounded-full relative w-24 h-24 overflow-hidden"> */}
+          <div className="shadow-xl object-cover align-middle border-none bg-white">
+            <ReactJdenticon size="120" value={proposalInfo.email} />
+          </div>
+          {/* <img
               className=" w-full h-full object-cover "
               src={
                 proposalInfo.artistImage !== ''
@@ -19,8 +23,8 @@ export default function ArtistProposalCard({ proposalInfo }) {
                   : 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg'
               }
               alt="Profile Image"
-            />
-          </div>
+            /> */}
+          {/* </div> */}
           <div className="font-bold flex lg:flex-row flex-col justify-center items-center gap-4 lg:justify-between w-full">
             <div className="w-1/4">
               <p className="text-green-500 capitalize text-lg">{proposalInfo.artistName}</p>
