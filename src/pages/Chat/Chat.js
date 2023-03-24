@@ -406,23 +406,26 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
           <Modal.Title>Select a person to start conversation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {users?.map((user) => (
-            <div
-              key={user._id}
-              onClick={() => setSelect(user)}
-              className={`flex items-center border px-10 transition-all ease-in-out cursor-pointer py-5 hover:bg-primary/10 rounded ${
-                select?._id === user._id ? 'border-primary' : 'border-white'
-              }`}>
-              <ReactJdenticon size="50" value={user?.email} />
-              {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
-              <div className="flex-grow ml-3">
-                <h6>{user?.name}</h6>
-                <div className="text-xs uppercase font-semibold text-gray-400">
-                  {auth.usertype === 'buyer' ? 'Artist' : 'buyer'}
+          {users?.map(
+            (user) =>
+              !user.isAdmin && (
+                <div
+                  key={user._id}
+                  onClick={() => setSelect(user)}
+                  className={`flex items-center border px-10 transition-all ease-in-out cursor-pointer py-5 hover:bg-primary/10 rounded ${
+                    select?._id === user._id ? 'border-primary' : 'border-white'
+                  }`}>
+                  <ReactJdenticon size="50" value={user?.email} />
+                  {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
+                  <div className="flex-grow ml-3">
+                    <h6>{user?.name}</h6>
+                    <div className="text-xs uppercase font-semibold text-gray-400">
+                      {auth.usertype === 'buyer' ? 'Artist' : 'buyer'}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              )
+          )}
           {/* <Placeholder.Paragraph rows={80} /> */}
         </Modal.Body>
         <Modal.Footer>
