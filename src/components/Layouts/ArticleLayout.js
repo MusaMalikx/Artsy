@@ -38,7 +38,7 @@ const ArticleLayout = ({ children, title, bool }) => {
           <div className="flex flex-col">
             <SideNav />
           </div>
-          <div className={`flex-grow ml-14 ${bool && 'container'}`}>{children}</div>
+          <div className={`flex-grow min-h-screen ml-14 ${bool && 'container'}`}>{children}</div>
           <div className="ml-14">
             <Footer />
           </div>

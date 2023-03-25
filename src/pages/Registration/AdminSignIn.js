@@ -127,12 +127,12 @@ const AdminSignIn = () => {
               <p
                 className="flex items-center justify-center mt-4 text-white rounded-lg shadow-all-rounded hover:bg-gray-100 cursor-pointer"
                 onClick={signInwithGoogle}>
-                <div className="px-4 py-3">
+                <p className="px-4 py-3">
                   <FcGoogle size={20} />
-                </div>
-                <h1 className="px-4 py-3 w-5/6 text-base text-center text-gray-600 font-bold">
+                </p>
+                <p className="px-4 m-0 py-3 w-5/6 text-base text-center text-gray-600 font-bold">
                   Sign in with Google
-                </h1>
+                </p>
               </p>
               <form>
                 <div className="mt-4 flex items-center justify-between">
@@ -158,7 +158,9 @@ const AdminSignIn = () => {
                 </div>
                 <div className="mt-4">
                   <div className="flex justify-end">
-                    <p className="text-xs text-gray-500 cursor-pointer hover:underline hover:underline-offset-2">
+                    <p
+                      onClick={() => navigate('/admin/signin/reset-password')}
+                      className="text-xs text-gray-500 cursor-pointer hover:underline hover:underline-offset-2">
                       Forget Password?
                     </p>
                   </div>
