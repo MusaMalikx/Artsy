@@ -29,6 +29,8 @@ import AdminSignIn from '../pages/Registration/AdminSignIn';
 import AdminSignUp from '../pages/Registration/AdminSignup';
 import BidsWon from '../pages/Bids/BidsWon';
 import ArtistAcceptedBids from '../pages/Proposal/ArtistAcceptedBids';
+import Verification from '../pages/Auth/Verification';
+import ForgotPassword from '../pages/Auth/ForgotPassword';
 
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
@@ -91,6 +93,8 @@ const AppRoutes = () => {
                   element={<BuyerProfileDashboard data={data} />}
                 />
                 <Route path="artist/profile/:artistId" element={<ArtistProfileDashboard />} />
+                <Route path="buyer/profile/:buyerId/verify-account" element={<Verification />} />
+                <Route path="artist/profile/:artistId/verify-account" element={<Verification />} />
               </>
             )}
             {(user.artist || user.buyer) && (
@@ -130,6 +134,8 @@ const AppRoutes = () => {
           <Route path="signup" element={<SignUp />} />
           <Route path="admin/signin" element={<AdminSignIn />} />
           <Route path="admin/signup" element={<AdminSignUp />} />
+          <Route path="signin/reset-password" element={<ForgotPassword />} />
+          <Route path="admin/signin/reset-password" element={<ForgotPassword />} />
         </Route>
       </Routes>
     </div>

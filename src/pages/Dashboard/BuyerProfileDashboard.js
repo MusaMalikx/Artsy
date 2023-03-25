@@ -4,12 +4,12 @@ import { AiFillFlag } from 'react-icons/ai';
 import { motion } from 'framer-motion';
 import { RiMessage2Fill } from 'react-icons/ri';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import BuyerProposal from '../../components/Modals/Proposal/BuyerProposal';
 import ProfileReport from '../../components/Modals/Report/ProfileReport';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/reducer/userReducer';
-import { Button, Dropdown, IconButton } from 'rsuite';
+import { Button, Dropdown, IconButton, Popover, Whisper } from 'rsuite';
 //import BuyerReview from '../../components/Modals/Review/BuyerReview';
 import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCard';
 import { getAuth, signOut } from 'firebase/auth';
@@ -18,9 +18,13 @@ import { useToaster } from 'rsuite';
 import API from '../../api/server';
 import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
 import ReactJdenticon from 'react-jdenticon';
+import { GoUnverified, GoVerified } from 'react-icons/go';
+import { useAuthState } from 'react-firebase-hooks/auth';
+// import unVerifiedMessage from '../../constants/UnVerifiedMessage';
 
 export default function BuyerProfileDashboard() {
   const toaster = useToaster();
+  const [user] = useAuthState(getAuth());
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [wonArt, setWonArt] = useState([]);
@@ -210,7 +214,60 @@ export default function BuyerProfileDashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="text-center my-10">
+                <div className="text-center mb-10 lg:my-10">
+                  <div className="flex items-center justify-center">
+                    <div className="bg-gray-100 w-fit mr-3 text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
+                      Buyer
+                    </div>
+                    {user.emailVerified ? (
+                      <Whisper
+                        className="p-0"
+                        placement="right"
+                        trigger="hover"
+                        controlId="control-id-hover"
+                        enterable
+                        speaker={
+                          <Popover title="Account Verified">
+                            <div>Your Account has been verified</div>
+                          </Popover>
+                        }>
+                        {/* <Button>Hover</Button> */}
+                        <IconButton
+                          className="hide"
+                          icon={<GoVerified className="text-green-500 text-xl" />}
+                          circle
+                        />
+                      </Whisper>
+                    ) : (
+                      <Whisper
+                        className="p-0"
+                        placement="right"
+                        trigger="hover"
+                        controlId="control-id-hover"
+                        enterable
+                        speaker={
+                          <Popover title="Account Unverified">
+                            <Link to={`${location.pathname}/verify-account`}>
+                              Verify your account
+                            </Link>
+                          </Popover>
+                        }>
+                        <IconButton
+                          className="hide"
+                          icon={<GoUnverified className="text-yellow-500 text-xl" />}
+                          circle
+                        />
+                      </Whisper>
+                    )}
+                    {/* <Whisper
+                      placement="bottomStart"
+                      controlId="control-id-with-dropdown"
+                      trigger="click"
+                      ref={ref}
+                      speaker={<VerifyPopover onSelect={handleSelectMenu} />}>
+                      <Button>File</Button>
+                    </Whisper> */}
+                  </div>
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
                     {profileInfo.buyerName}
                   </h3>

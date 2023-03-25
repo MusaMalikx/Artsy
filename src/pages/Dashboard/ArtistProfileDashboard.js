@@ -6,10 +6,10 @@ import ProfileAuctionCard from '../../components/Auction/ProfileAuctionCard';
 import BuyerReview from '../../components/Modals/Review/BuyerReview';
 import { motion } from 'framer-motion';
 import ProfileReport from '../../components/Modals/Report/ProfileReport';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/reducer/userReducer';
-import { Button, Dropdown, IconButton, Rate } from 'rsuite';
+import { Button, Dropdown, IconButton, Popover, Rate, Whisper } from 'rsuite';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
@@ -17,9 +17,12 @@ import { useToaster } from 'rsuite';
 import API from '../../api/server';
 import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuctions';
 import ReactJdenticon from 'react-jdenticon';
+import { GoUnverified, GoVerified } from 'react-icons/go';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
+  const [user] = useAuthState(getAuth());
   const dispatch = useDispatch();
   const toaster = useToaster();
   const [openReview, setOpenReview] = useState(false);
@@ -218,9 +221,62 @@ export default function ArtistProfileDashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="text-center mb-10">
+                <div className="text-center mb-10 lg:my-10">
+                  <div className="flex items-center justify-center">
+                    <div className="bg-gray-100 w-fit mr-3 text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
+                      Artist
+                    </div>
+                    {user.emailVerified ? (
+                      <Whisper
+                        className="p-0"
+                        placement="right"
+                        trigger="hover"
+                        controlId="control-id-hover"
+                        enterable
+                        speaker={
+                          <Popover title="Account Verified">
+                            <div>Your Account has been verified</div>
+                          </Popover>
+                        }>
+                        {/* <Button>Hover</Button> */}
+                        <IconButton
+                          className="hide"
+                          icon={<GoVerified className="text-green-500 text-xl" />}
+                          circle
+                        />
+                      </Whisper>
+                    ) : (
+                      <Whisper
+                        className="p-0"
+                        placement="right"
+                        trigger="hover"
+                        controlId="control-id-hover"
+                        enterable
+                        speaker={
+                          <Popover title="Account Unverified">
+                            <Link to={`${location.pathname}/verify-account`}>
+                              Verify your account
+                            </Link>
+                          </Popover>
+                        }>
+                        <IconButton
+                          className="hide"
+                          icon={<GoUnverified className="text-yellow-500 text-xl" />}
+                          circle
+                        />
+                      </Whisper>
+                    )}
+                    {/* <Whisper
+                      placement="bottomStart"
+                      controlId="control-id-with-dropdown"
+                      trigger="click"
+                      ref={ref}
+                      speaker={<VerifyPopover onSelect={handleSelectMenu} />}>
+                      <Button>File</Button>
+                    </Whisper> */}
+                  </div>
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    {profileInfo.artistName}
+                    {profileInfo.buyerName}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>

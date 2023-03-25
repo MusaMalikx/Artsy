@@ -278,11 +278,11 @@ export default function SignIn() {
                       Remember me
                     </label>
                   </div>
-                  <a
-                    href="#!"
-                    className="text-primary hover:text-primary focus:text-primary active:text-primary duration-200 transition ease-in-out">
+                  <p
+                    onClick={() => navigate('/signin/reset-password')}
+                    className="text-primary cursor-pointer hover:underline hover:underline-offset-2 hover:text-primary focus:text-primary active:text-primary duration-200 transition ease-in-out">
                     Forgot Password?
-                  </a>
+                  </p>
                 </div>
                 <button
                   // onClick={signedIn}
