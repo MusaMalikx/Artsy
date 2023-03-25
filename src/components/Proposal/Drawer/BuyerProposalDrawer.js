@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactJdenticon from 'react-jdenticon';
 import { useNavigate } from 'react-router-dom';
 import { Drawer } from 'rsuite';
 import ArtistProposal from '../../Modals/Proposal/ArtistProposal';
@@ -10,9 +11,9 @@ export default function ProposalDrawer({ setOpen, proposal, updateProposalList, 
     <>
       <Drawer size="xs" open={true} onClose={() => setOpen(false)}>
         <Drawer.Body>
-          <div className="   w-full mt-16 rounded-lg flex justify-center flex-col align-middle  ">
+          <div className="w-full mt-16 rounded-lg flex justify-center flex-col align-middle  ">
             <div className="flex flex-col items-center gap-6">
-              <div className=" rounded-full relative w-40 overflow-hidden">
+              {/* <div className=" rounded-full relative w-40 overflow-hidden">
                 <img
                   className=" w-full h-full object-cover "
                   src={
@@ -22,6 +23,9 @@ export default function ProposalDrawer({ setOpen, proposal, updateProposalList, 
                   }
                   alt=""
                 />
+              </div> */}
+              <div className="shadow-all object-cover align-middle border-none bg-white">
+                <ReactJdenticon size="200" value={proposal.buyerInfo.email} />
               </div>
               <div className="font-bold text-center justify-between w-full">
                 <p className="text-green-500 capitalize text-xl">{proposal.buyerInfo.name}</p>
@@ -72,6 +76,7 @@ export default function ProposalDrawer({ setOpen, proposal, updateProposalList, 
                 updateProposalList={updateProposalList}
                 proposalId={proposal}
                 isBidPlaced={openBidPlaced}
+                setIsOpenDrawer={setOpen}
               />
             }
           </div>

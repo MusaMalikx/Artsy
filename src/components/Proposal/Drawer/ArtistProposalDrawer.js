@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactJdenticon from 'react-jdenticon';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Drawer, useToaster } from 'rsuite';
 import API from '../../../api/server';
@@ -46,7 +47,10 @@ export default function ArtistDrawer({ setOpen, proposalInfo }) {
         <Drawer.Body>
           <div className="   w-full mt-16 rounded-lg flex justify-center flex-col align-middle  ">
             <div className="flex flex-col items-center gap-6">
-              <div className=" rounded-full relative w-40 h-40 overflow-hidden">
+              <div className="shadow-all object-cover align-middle border-none bg-white">
+                <ReactJdenticon size="200" value={proposalInfo.email} />
+              </div>
+              {/* <div className=" rounded-full relative w-40 h-40 overflow-hidden">
                 <img
                   className=" w-full h-full object-cover "
                   src={
@@ -56,7 +60,7 @@ export default function ArtistDrawer({ setOpen, proposalInfo }) {
                   }
                   alt="Profile Image"
                 />
-              </div>
+              </div> */}
               <div className="font-bold text-center justify-between w-full">
                 <p className="text-green-500 capitalize text-xl">{proposalInfo.artistName}</p>
                 <p className="font-light">Karachi, Sindh, Pakistan</p>
