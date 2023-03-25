@@ -23,8 +23,12 @@ const phoneValidate = (phone) => {
   );
 };
 
+const textValidate = (text) => {
+  return !validator.equals(text, 'Unknown') && validator.isLength(text, { min: 3, max: 100 });
+};
+
 const cnicValidate = (cnic) => {
   return validator.isNumeric(cnic) && validator.isLength(cnic, { min: 13, max: 13 });
 };
 
-export { emailValidate, passValidate, nameValidate, phoneValidate, cnicValidate };
+export { emailValidate, passValidate, nameValidate, phoneValidate, cnicValidate, textValidate };

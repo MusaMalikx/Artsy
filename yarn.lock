@@ -8450,11 +8450,6 @@ react-spinners@^0.13.7:
   resolved "https://registry.npmjs.org/react-spinners/-/react-spinners-0.13.7.tgz"
   integrity sha512-mRamn56bfxWbGcacif5RT3UbeJaXi2AttjtPwSmomuv2IcxjpbfETCzdTvaQpNDk0E33ENJsStsQeKAZFuJcpA==
 
-react-tiny-popover@^7.2.4:
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/react-tiny-popover/-/react-tiny-popover-7.2.4.tgz#b11fe9b43d1fc8ac46e760419346afd41d6111ee"
-  integrity sha512-T7ZSwXcUtPXCog3Bux9+TjoTvUeMi/+zI0Yv/TkIznZCWUg0XTt2797G0IiT5mTVeJeLivUzdOmKA1hOQdMfOQ==
-
 react-window@^1.8.8:
   version "1.8.8"
   resolved "https://registry.npmjs.org/react-window/-/react-window-1.8.8.tgz"

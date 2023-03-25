@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Layout from '../../components/Layouts/ArticleLayout';
 import { AiFillFlag } from 'react-icons/ai';
 import { RiMessage2Fill } from 'react-icons/ri';
@@ -19,6 +19,13 @@ import EmptyProfileAuctions from '../../components/Animation/EmptyProfileAuction
 import ReactJdenticon from 'react-jdenticon';
 import { GoUnverified, GoVerified } from 'react-icons/go';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Modal, Form } from 'rsuite';
+import {
+  nameValidate,
+  phoneValidate,
+  cnicValidate,
+  textValidate
+} from '../../helpers/credential-validators';
 
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
@@ -41,15 +48,24 @@ export default function ArtistProfileDashboard() {
     artworks: [],
     email: 'Unknown Email'
   });
+  const [openUpdateInfo, setOpenUpdateInfo] = useState(false);
+
+  const handleUpdateInfoOpen = () => setOpenUpdateInfo(true);
+  const handleUpdateInfoClose = () => setOpenUpdateInfo(false);
 
   const fetchArtistData = async () => {
     const res = await API.get(`/api/artworks/artist/${currentUserID}`);
     if (res.data) {
+      console.log(res.data);
       setProfileInfo({
         artistName: res.data.name !== '' ? res.data.name : profileInfo.artistName,
         email: res.data.email !== '' ? res.data.email : profileInfo.email,
         profileImage: res.data.imageURL !== '' ? res.data.imageURL : profileInfo.profileImage,
-        artworks: res.data.artworks
+        artworks: res.data.artworks,
+        phoneNumber: res.data.phonenumber !== '' ? res.data.phonenumber : 'Unknown',
+        cnic: res.data.cnic !== '' ? 'Verified' : 'Not Verified',
+        location: res.data.location !== '' ? res.data.location : 'Unknown',
+        languages: res.data.languages !== '' ? res.data.languages : 'Unknown'
       });
     }
   };
@@ -275,52 +291,88 @@ export default function ArtistProfileDashboard() {
                       <Button>File</Button>
                     </Whisper> */}
                   </div>
-                  <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
-                    {profileInfo.buyerName}
+                  <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 capitalize">
+                    {profileInfo.artistName}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-                    Lahore, Pakistan
+                    {profileInfo.location === 'Unknown'
+                      ? 'Pakistan'
+                      : profileInfo.location + ', Pakistan'}
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="mb-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
-              <div className="w-full flex flex-col 2xl:w-1/3">
-                <div className="flex-1 bg-white rounded-lg shadow-all p-8">
+              <div className="flex-1 bg-white rounded-lg shadow-all p-8">
+                <div className="flex justify-between">
                   <h4 className="text-xl text-gray-900 font-bold">Personal Info</h4>
-                  <ul className="mt-2 text-gray-700">
-                    <li className="flex border-y py-2">
-                      <span className="font-bold w-24">Name:</span>
-                      <span className="text-gray-700">Amanda S. Ross</span>
-                    </li>
-                    <li className="flex border-b py-2">
-                      <span className="font-bold w-24">Email:</span>
-                      <span className="text-gray-700">amandaross@example.com</span>
-                    </li>
-                    <li className="flex border-b py-2">
-                      <span className="font-bold w-24">Mobile:</span>
-                      <span className="text-gray-700">+92 321 4532123</span>
-                    </li>
-                    <li className="flex border-b py-2">
-                      <span className="font-bold w-24">Age:</span>
-                      <span className="text-gray-700">10 Jan 2022 (25 days ago)</span>
-                    </li>
-                    <li className="flex border-b py-2">
-                      <span className="font-bold w-24">Gender:</span>
-                      <span className="text-gray-700">Male</span>
-                    </li>
-                    <li className="flex border-b py-2">
-                      <span className="font-bold w-24">Location:</span>
-                      <span className="text-gray-700">Lahore, Punjab</span>
-                    </li>
-                    <li className="flex border-b py-2">
-                      <span className="font-bold w-24">Languages:</span>
-                      <span className="text-gray-700">English, Urdu</span>
-                    </li>
-                  </ul>
+                  {auth.user._id === currentUserID ? (
+                    <button
+                      onClick={handleUpdateInfoOpen}
+                      className="focus:outline-none bg-primary rounded px-2 py-2 text-xs uppercase font-bold text-white active:bg-cyan-700">
+                      Update
+                    </button>
+                  ) : (
+                    ''
+                  )}
+                  {openUpdateInfo ? (
+                    <UpdateInfo
+                      updateData={fetchArtistData}
+                      user={profileInfo}
+                      handleClose={handleUpdateInfoClose}
+                    />
+                  ) : (
+                    ''
+                  )}
                 </div>
+                <ul className="mt-2 text-gray-700">
+                  <li className="flex border-y py-2">
+                    <span className="font-bold w-24">Name:</span>
+                    <span className="text-gray-700 capitalize">{profileInfo.artistName}</span>
+                  </li>
+                  <li className="flex border-b py-2">
+                    <span className="font-bold w-24">Email:</span>
+                    <span className="text-gray-700">{profileInfo.email}</span>
+                  </li>
+                  <li className="flex border-b py-2">
+                    <span className="font-bold w-24">Mobile:</span>
+                    <span
+                      className={`${
+                        profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                      }`}>
+                      {profileInfo.phoneNumber}
+                    </span>
+                  </li>
+                  <li className="flex border-b py-2">
+                    <span className="font-bold w-24">CNIC:</span>
+                    <span
+                      className={`${
+                        profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
+                      }`}>
+                      {profileInfo.cnic}
+                    </span>
+                  </li>
+                  <li className="flex border-b py-2">
+                    <span className="font-bold w-24">Location:</span>
+                    <span
+                      className={`${
+                        profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                      }`}>
+                      {profileInfo.location}
+                    </span>
+                  </li>
+                  <li className="flex border-b py-2">
+                    <span className="font-bold w-24">Languages:</span>
+                    <span
+                      className={`${
+                        profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                      }`}>
+                      {profileInfo.languages}
+                    </span>
+                  </li>
+                </ul>
               </div>
               <div className="flex flex-col w-full 2xl:w-2/3">
                 <div className="flex-1 bg-white rounded-lg shadow-all p-8">
@@ -373,5 +425,148 @@ const Drop = () => {
         Accepted Bids
       </Dropdown.Item>
     </Dropdown>
+  );
+};
+
+const UpdateInfo = ({ handleClose, user, updateData }) => {
+  const name = useRef();
+  const phonenumber = useRef();
+  const cnicfield = useRef();
+  const location = useRef();
+  const languages = useRef();
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const toaster = useToaster();
+
+  const updateInformation = async (e) => {
+    if (
+      nameValidate(name.current.value === '' ? user.artistName : name.current.value) &&
+      phoneValidate(
+        phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value
+      ) &&
+      (user.cnic === 'Verified' ||
+        cnicValidate(cnicfield.current.value === '' ? user.cnic : cnicfield.current.value)) &&
+      textValidate(location.current.value === '' ? user.location : location.current.value) &&
+      textValidate(languages.current.value === '' ? user.languages : languages.current.value)
+    ) {
+      e.preventDefault();
+      await API.post(
+        '/api/artists/update/info',
+        {
+          name: name.current.value === '' ? user.artistName : name.current.value,
+          phonenumber:
+            phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value,
+          cnic: cnicfield.current.value === '' ? user.cnic : cnicfield.current.value,
+          location: location.current.value === '' ? user.location : location.current.value,
+          languages: languages.current.value === '' ? user.languages : languages.current.value
+        },
+        {
+          headers: {
+            token: 'Bearer ' + auth.token
+          }
+        }
+      );
+      updateData();
+      Toaster(toaster, 'success', 'Updated Succesfully');
+      handleClose();
+    } else {
+      !nameValidate(name.current.value === '' ? user.artistName : name.current.value)
+        ? name.current.setCustomValidity(
+            'Name must contain only alphabets and length should be greater than or equal to 3'
+          )
+        : name.current.setCustomValidity('');
+      !phoneValidate(
+        phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value
+      )
+        ? phonenumber.current.setCustomValidity('Invalid Phone Number')
+        : phonenumber.current.setCustomValidity('');
+      !cnicValidate(cnicfield.current.value === '' ? user.cnic : cnicfield.current.value)
+        ? cnicfield.current.setCustomValidity('Invalid CNIC')
+        : cnicfield.current.setCustomValidity('');
+      !textValidate(location.current.value === '' ? user.location : location.current.value)
+        ? location.current.setCustomValidity('Invalid location')
+        : location.current.setCustomValidity('');
+      !textValidate(languages.current.value === '' ? user.languages : languages.current.value)
+        ? languages.current.setCustomValidity('Invalid language')
+        : languages.current.setCustomValidity('');
+    }
+  };
+  return (
+    <Modal size="xs" open={open} onClose={handleClose}>
+      <Modal.Header className="text-center ">
+        <Modal.Title>Personal Information</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="flex justify-center items-center">
+        <Form>
+          <Form.Group controlId="name">
+            <Form.ControlLabel>Username</Form.ControlLabel>
+            <Form.Control inputRef={name} placeholder={user.artistName} name="name" type="text" />
+          </Form.Group>
+          <Form.Group controlId="phone">
+            <Form.ControlLabel>Phone Number</Form.ControlLabel>
+            <Form.Control
+              inputRef={phonenumber}
+              placeholder={user.phoneNumber === 'Unknown' ? '' : user.phoneNumber}
+              name="phone"
+              type="number"
+              onChange={() => {
+                if (phonenumber.current.value.length > 11)
+                  phonenumber.current.value = phonenumber.current.value.slice(0, 11);
+              }}
+              minLength={11}
+              min={0}
+            />
+          </Form.Group>
+          <Form.Group controlId="cnic">
+            <Form.ControlLabel>CNIC</Form.ControlLabel>
+            <Form.Control
+              inputRef={cnicfield}
+              placeholder={user.cnic === 'Not Verified' ? '' : user.cnic}
+              name="cnic"
+              type="number"
+              onChange={() => {
+                if (cnicfield.current.value.length > 13)
+                  cnicfield.current.value = cnicfield.current.value.slice(0, 13);
+              }}
+              minLength={13}
+              min={0}
+            />
+          </Form.Group>
+          <Form.Group controlId="location">
+            <Form.ControlLabel>Location</Form.ControlLabel>
+            <Form.Control
+              inputRef={location}
+              placeholder={user.location === 'Unknown' ? '' : user.location}
+              name="location"
+              type="text"
+            />
+            <Form.HelpText tooltip>Enter your City name</Form.HelpText>
+          </Form.Group>
+          <Form.Group controlId="language">
+            <Form.ControlLabel>Languages</Form.ControlLabel>
+            <Form.Control
+              inputRef={languages}
+              placeholder={user.languages === 'Unknown' ? '' : user.languages}
+              name="language"
+              type="text"
+            />
+            <Form.HelpText tooltip>Separate languages by ( English, Urdu)</Form.HelpText>
+          </Form.Group>
+          <Form.Group className="flex justify-end gap-2">
+            <Button
+              style={{
+                backgroundColor: '#188796'
+              }}
+              type="submit"
+              onClick={updateInformation}
+              appearance="primary">
+              Ok
+            </Button>
+            <Button onClick={handleClose} appearance="subtle">
+              Cancel
+            </Button>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
