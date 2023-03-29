@@ -16,6 +16,14 @@ const amountValidate = (amount) => {
   );
 };
 
+const categoryValidate = (lenght) => {
+  if (lenght > 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 const descriptionValidate = (desc) => {
   return validator.isLength(desc, { min: 10 });
 };
@@ -50,4 +58,4 @@ const dateValidate = (startdate, enddate, toaster) => {
   return false;
 };
 
-export { titleValidate, amountValidate, descriptionValidate, dateValidate };
+export { titleValidate, amountValidate, descriptionValidate, dateValidate, categoryValidate };
