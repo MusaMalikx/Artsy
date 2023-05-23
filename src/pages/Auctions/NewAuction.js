@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useState } from 'react';
-import { DatePicker, Dropdown, useToaster } from 'rsuite';
+import { DatePicker, TreePicker, useToaster } from 'rsuite';
 // import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
 import Toaster from '../../components/Common/Toaster';
 import Layout from '../../components/Layouts/ArticleLayout';
@@ -17,12 +17,14 @@ import {
 } from '../../helpers/proposal-validators.js';
 import { useNavigate } from 'react-router-dom';
 import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
+import AuctionCategoriesData from '../../constants/AuctionCategoriesData';
 
 export default function NewAuction() {
-  const [category, setCategory] = useState('Modern');
+  const [category, setCategory] = useState();
+  // console.log(category);
   const toaster = useToaster();
   const auth = JSON.parse(localStorage.getItem('auth'));
-  console.log(auth.token);
+  // console.log(auth.token);
   const title = useRef();
   const baseprice = useRef();
   const [startdate, setStartDate] = useState('');
@@ -32,6 +34,7 @@ export default function NewAuction() {
   const [startLoader, setStartLoader] = useState(false);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+  const data = useMemo(() => AuctionCategoriesData, []);
 
   const AddArtwork = async (e) => {
     // const startDate = new Date(startdate);
@@ -57,69 +60,73 @@ export default function NewAuction() {
     ) {
       e.preventDefault();
       if (dateValidate(startdate, enddate, toaster)) {
-        if (images.length > 0) {
-          setStartLoader(true);
-          if (user.artist && auth) {
-            await API.post(
-              '/api/artworks/check',
-              {
-                title: title.current.value,
-                baseprice: baseprice.current.value,
-                description: description.current.value
-              },
-              {
-                headers: {
-                  token: 'Bearer ' + auth.token
-                }
-              }
-            )
-              .then(async (res) => {
-                const formData = new FormData();
-                // formData.append('productImage', images);
-                for (let i = 0; i < images.length && i < 9; i++) {
-                  formData.append('productImage', images[i]);
-                }
-                formData.append('title', title.current.value);
-                formData.append('baseprice', baseprice.current.value);
-                formData.append('description', description.current.value);
-                formData.append('startdate', startdate.toLocaleString('en-US'));
-                formData.append('enddate', enddate.toLocaleString('en-US'));
-                formData.append('category', category);
-
-                const config = {
+        if (category) {
+          if (images.length > 0) {
+            setStartLoader(true);
+            if (user.artist && auth) {
+              await API.post(
+                '/api/artworks/check',
+                {
+                  title: title.current.value,
+                  baseprice: baseprice.current.value,
+                  description: description.current.value
+                },
+                {
                   headers: {
-                    token: 'Bearer ' + auth.token,
-                    'Content-Type': 'multipart/form-data'
+                    token: 'Bearer ' + auth.token
                   }
-                };
+                }
+              )
+                .then(async (res) => {
+                  const formData = new FormData();
+                  // formData.append('productImage', images);
+                  for (let i = 0; i < images.length && i < 9; i++) {
+                    formData.append('productImage', images[i]);
+                  }
+                  formData.append('title', title.current.value);
+                  formData.append('baseprice', baseprice.current.value);
+                  formData.append('description', description.current.value);
+                  formData.append('startdate', startdate.toLocaleString('en-US'));
+                  formData.append('enddate', enddate.toLocaleString('en-US'));
+                  formData.append('category', category);
 
-                console.log(res);
-                await API.post('/api/artworks/add', formData, config)
-                  .then((res) => {
-                    setTimeout(() => {
+                  const config = {
+                    headers: {
+                      token: 'Bearer ' + auth.token,
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  };
+
+                  console.log(res);
+                  await API.post('/api/artworks/add', formData, config)
+                    .then((res) => {
+                      setTimeout(() => {
+                        setStartLoader(false);
+                      }, 2000);
+                      console.log(res);
+                      Toaster(toaster, 'success', 'Artwork Successfully Added');
+                    })
+                    .catch((err) => {
                       setStartLoader(false);
-                    }, 2000);
-                    console.log(res);
-                    Toaster(toaster, 'success', 'Artwork Successfully Added');
-                  })
-                  .catch((err) => {
-                    setStartLoader(false);
-                    console.log(err);
-                    Toaster(toaster, 'error', err.response.data.message);
-                  });
-                navigate(`/artist/profile/${auth.user._id}`);
-              })
-              .catch((err) => {
-                setStartLoader(false);
-                console.log(err);
-                Toaster(toaster, 'error', err.response.data.message);
-              });
+                      console.log(err);
+                      Toaster(toaster, 'error', err.response.data.message);
+                    });
+                  navigate(`/artist/profile/${auth.user._id}`);
+                })
+                .catch((err) => {
+                  setStartLoader(false);
+                  console.log(err);
+                  Toaster(toaster, 'error', err.response.data.message);
+                });
+            } else {
+              setStartLoader(false);
+              Toaster(toaster, 'error', 'Please Signin using Google');
+            }
           } else {
-            setStartLoader(false);
-            Toaster(toaster, 'error', 'Please Signin using Google');
+            Toaster(toaster, 'error', 'Kindly select at least one image');
           }
         } else {
-          Toaster(toaster, 'error', 'Kindly select at least one image');
+          Toaster(toaster, 'error', 'Kindly select category');
         }
       }
     } else {
@@ -186,50 +193,12 @@ export default function NewAuction() {
           <label className="text-lg font-bold my-2" htmlFor="bid-artwork">
             Category
           </label>
-          <Dropdown className="w-full mb-2" size="sm" title={category}>
-            <Dropdown.Item
-              onClick={(e) => {
-                setCategory(e.target.innerText);
-              }}>
-              Modern
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={(e) => {
-                setCategory(e.target.innerText);
-              }}>
-              Religious
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={(e) => {
-                setCategory(e.target.innerText);
-              }}>
-              Calligraphy
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={(e) => {
-                setCategory(e.target.innerText);
-              }}>
-              Cubism
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={(e) => {
-                setCategory(e.target.innerText);
-              }}>
-              Fantasy
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={(e) => {
-                setCategory(e.target.innerText);
-              }}>
-              Graffiti
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={(e) => {
-                setCategory(e.target.innerText);
-              }}>
-              Sculpture
-            </Dropdown.Item>
-          </Dropdown>
+          <TreePicker
+            data={data}
+            style={{ width: 246 }}
+            placeholder="Select Category"
+            onChange={(v) => setCategory(v)}
+          />
 
           <label className=" text-lg font-bold my-2" htmlFor="desc-artwork">
             Description

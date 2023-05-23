@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Loader, SelectPicker } from 'rsuite';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Loader, TreePicker } from 'rsuite';
 import AuctionCard from '../../components/Auction/AuctionCard';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
@@ -7,26 +7,20 @@ import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import EmptyAuction from '../../components/Animation/EmptyAuctions';
+import AuctionCategoriesData from '../../constants/AuctionCategoriesData';
 
 const Auctions = () => {
   const toaster = useToaster();
-  const dat = [
-    'Modern',
-    'Religious',
-    'Calligraphy',
-    'Cubism',
-    'Fantasy',
-    'Grapfitti',
-    'Sculpture'
-  ].map((item) => ({ label: item, value: item }));
   const [artworks, setArtworks] = useState([]);
   const [artloader, setArtLoader] = useState(true);
+  const data = useMemo(() => AuctionCategoriesData, []);
 
   useEffect(() => {
     getAllArtworks();
   }, []);
 
   const getCategoryArtworks = async (value) => {
+    // console.log(value);
     if (value !== null) {
       setArtLoader(true);
       const selectedCategory = value;
@@ -63,11 +57,10 @@ const Auctions = () => {
       <HeaderLayout title={'Auctions'} />
       <div className="container min-h-screen mx-auto">
         <div className="flex justify-center items-center my-10">
-          <SelectPicker
-            data={dat}
-            searchable={false}
+          <TreePicker
+            data={data}
+            style={{ width: 246 }}
             placeholder="Select Category"
-            style={{ width: 224 }}
             onChange={getCategoryArtworks}
             onClean={getAllArtworks}
           />

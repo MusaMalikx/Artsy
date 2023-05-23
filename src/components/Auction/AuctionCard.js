@@ -7,7 +7,6 @@ import { selectUser } from '../../redux/features/reducer/userReducer';
 import AuctionCardTimer from '../Common/Timer/AuctionCardTimer';
 
 const AuctionCard = ({ artwork, updateList }) => {
-  // const { user, urls } = photo;
   const navigate = useNavigate();
   const usr = useSelector(selectUser);
 
@@ -116,7 +115,9 @@ const AuctionCard = ({ artwork, updateList }) => {
           />
           <hr />
           <div className="uppercase">
-            <p className="font-extrabold text-black text-xl text-center">{artwork.title}</p>
+            <p className="font-semibold tracking-wide text-black text-xl text-center w-full text-ellipsis d-block overflow-hidden whitespace-nowrap">
+              {artwork.title}
+            </p>
             <p className="text-center">
               current Bid: <span className="font-bold">PKR {artwork.currentbid}</span>
             </p>
