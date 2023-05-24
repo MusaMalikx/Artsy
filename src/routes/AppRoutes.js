@@ -70,7 +70,7 @@ const AppRoutes = () => {
       <Routes>
         {signedIn ? (
           <Route path="/">
-            <Route index element={<Home data={data} />} />
+            <Route index element={<Home />} />
             {user.admin && (
               <>
                 <Route path="admin/dashboard" element={<AdminDashboard data={data} />} />
