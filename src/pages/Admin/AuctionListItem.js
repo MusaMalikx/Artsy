@@ -136,7 +136,7 @@ const AuctionListItem = ({ data }) => {
               Made by{' '}
               <span
                 onClick={() => {
-                  navigate(`/artist/profile/${state.artwork.artistId}`);
+                  navigate(`/admin/artist/profile/${state.artwork.artistId}`);
                 }}
                 className="font-bold uppercase hover:text-black underline cursor-pointer">
                 {artistname ? artistname : 'Not Found'}

@@ -91,8 +91,8 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
   const [delLoading, setDelLoading] = useState(false);
 
   const viewUser = () => {
-    if (status === 'Buyer') navigate(`/buyer/profile/${user._id}`);
-    else if (status === 'Artist') navigate(`/artist/profile/${user._id}`);
+    if (status === 'Buyer') navigate(`/admin/buyer/profile/${user._id}`);
+    else if (status === 'Artist') navigate(`/admin/artist/profile/${user._id}`);
   };
 
   const deleteUser = async () => {

@@ -182,21 +182,10 @@ const ChatItem = ({ chat }) => {
     <div
       className={`flex items-center py-4 px-2 rounded-lg cursor-pointer hover:bg-primary/10 ${
         chat?.border ? ' border-primary border-2' : 'border-2 border-white'
-      }`}
-      // onClick={() =>
-      //   setList((prev) => {
-      //     return prev.map((c) => {
-      //       if (c.id === chat.id) {
-      //         return { ...c, border: true };
-      //       } else return { ...c, border: false };
-      //     });
-      //   })
-      // }
-    >
+      }`}>
       <div>
         <ReactJdenticon size="48" value={chat?.userInfo.email} />
       </div>
-      {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
       <div className="flex-grow ml-3">
         <h6>{chat?.userInfo.name}</h6>
         <p className="text-xs font-semibold text-gray-400">
@@ -234,8 +223,6 @@ const Messages = ({ messages, user, clickedUser }) => {
 };
 
 const Message = ({ own, message, email, clickedUser }) => {
-  // console.log('time', format(message.date.toDate()));
-
   return (
     <>
       {own ? (
@@ -435,14 +422,12 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
                 select?._id === user._id ? 'border-primary' : 'border-white'
               }`}>
               <ReactJdenticon size="50" value={user?.email} />
-              {/* <img src={chat.imageURL} alt="profile" className="w-14 h-14 bg-black rounded-full" /> */}
               <div className="flex-grow ml-3">
                 <h6>{user?.name}</h6>
                 <div className="text-xs uppercase font-semibold text-gray-400">Artist</div>
               </div>
             </div>
           ))}
-          {/* <Placeholder.Paragraph rows={80} /> */}
         </Modal.Body>
         <Modal.Footer>
           <button
