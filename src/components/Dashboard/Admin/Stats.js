@@ -43,7 +43,7 @@ const StatItem = ({ title, count }) => {
               </div>
             </div>
             <div className="px-3 text-right basis-1/3">
-              <div className="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500">
+              <div className="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-primary to-blue-500">
                 <i className="ni leading-none ni-cart text-lg relative top-3.5 text-white"></i>
               </div>
             </div>
