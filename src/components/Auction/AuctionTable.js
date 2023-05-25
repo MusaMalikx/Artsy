@@ -91,7 +91,13 @@ const AuctionTableItem = ({ data, updateList }) => {
         <div className="flex items-center">
           {<MdPayment />}
           <p className="text-sm capitalize leading-none text-gray-600 ml-2">
-            {data.paymentStatus === null ? 'NA' : data.paymentStatus === true ? 'Paid' : 'Pending'}
+            {data.paymentStatus === 'claim'
+              ? 'Pending'
+              : data.paymentStatus === 'payment'
+              ? 'Claimed'
+              : data.paymentStatus === 'paid'
+              ? 'Paid'
+              : 'NA'}
           </p>
         </div>
         <div className="">

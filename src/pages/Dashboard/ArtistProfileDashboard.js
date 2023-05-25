@@ -38,6 +38,7 @@ export default function ArtistProfileDashboard() {
     total: 0,
     average: 0
   });
+  const [countLive, setCountLive] = useState(0);
   const location = useLocation();
   const currentUserID = location.pathname.split('/')[3];
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
@@ -70,6 +71,18 @@ export default function ArtistProfileDashboard() {
     }
   };
 
+  // /${artistId}?status=${status}`
+
+  const fetchCountLive = async () => {
+    await API.get(`/api/artworks/artist/status/${currentUserID}?status=live`)
+      .then((res) => {
+        setCountLive(res.data.count);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const fetchAverageRating = async () => {
     const res = await API.get(`/api/artists/rating/average/${currentUserID}`);
     if (res.status === 200) {
@@ -83,6 +96,7 @@ export default function ArtistProfileDashboard() {
   useEffect(() => {
     fetchArtistData();
     fetchAverageRating();
+    fetchCountLive();
   }, []);
   const logoutuser = () => {
     const auth = getAuth();
@@ -215,9 +229,9 @@ export default function ArtistProfileDashboard() {
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          0
+                          {countLive}
                         </span>
-                        <span className="text-sm text-blueGray-400">Auctions Closed</span>
+                        <span className="text-sm text-blueGray-400">Live Auctions</span>
                       </div>
                       {auth.user._id !== currentUserID ? (
                         <>

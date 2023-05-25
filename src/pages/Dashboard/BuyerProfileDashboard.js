@@ -193,7 +193,7 @@ export default function BuyerProfileDashboard() {
                       )}
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          22
+                          0
                         </span>
                         <span className="text-sm text-blueGray-400">Live Bidding</span>
                       </div>
