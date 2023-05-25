@@ -12,7 +12,7 @@ export default function ProfileAuctionCard({ artwork }) {
   const artworkObj = { id: artwork._id, status: artwork.status, title: artwork.title };
 
   return (
-    <div className="py-6 flex justify-center hover:scale-105 transition-all">
+    <div className="py-6 flex justify-center w-[35rem] mr-4 hover:scale-95 transition-all">
       <div className="flex lg:flex-row flex-col w-full items-center bg-white shadow-all rounded-lg overflow-hidden">
         <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
           <img

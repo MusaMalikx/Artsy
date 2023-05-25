@@ -49,6 +49,7 @@ export default function ArtistProfileDashboard() {
     email: 'Unknown Email'
   });
   const [openUpdateInfo, setOpenUpdateInfo] = useState(false);
+  const [recommend, setRecommend] = useState([]);
 
   const handleUpdateInfoOpen = () => setOpenUpdateInfo(true);
   const handleUpdateInfoClose = () => setOpenUpdateInfo(false);
@@ -56,7 +57,7 @@ export default function ArtistProfileDashboard() {
   const fetchArtistData = async () => {
     const res = await API.get(`/api/artworks/artist/${currentUserID}`);
     if (res.data) {
-      console.log(res.data);
+      // console.log(res.data);
       setProfileInfo({
         artistName: res.data.name !== '' ? res.data.name : profileInfo.artistName,
         email: res.data.email !== '' ? res.data.email : profileInfo.email,
@@ -80,10 +81,31 @@ export default function ArtistProfileDashboard() {
     }
   };
 
+  const fetchRecommendations = async () => {
+    try {
+      const res = await API.get(
+        `/api/artists/recommendations?artistId=${currentUserID}&buyerId=${auth?.user?._id}`
+      );
+      console.log('recommendations', res);
+      setRecommend(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRecommendationClick = async (id) => {
+    navigate(`/artist/profile/${id}`);
+    fetchArtistData();
+    fetchAverageRating();
+    fetchRecommendations();
+  };
+
   useEffect(() => {
     fetchArtistData();
     fetchAverageRating();
+    fetchRecommendations();
   }, []);
+
   const logoutuser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -380,8 +402,8 @@ export default function ArtistProfileDashboard() {
                     <div>
                       <p className="text-4xl font-bold">All Auctions</p>
                     </div>
-                    <div className="flex flex-wrap justify-center">
-                      <div className="w-full lg:w-9/12 px-4">
+                    <div className="">
+                      <div className="w-full flex overflow-x-scroll overflow-y-hidden px-4">
                         {profileInfo.artworks.length > 0 ? (
                           profileInfo.artworks.map((artwork) => (
                             <motion.div
@@ -394,9 +416,36 @@ export default function ArtistProfileDashboard() {
                         ) : (
                           <EmptyProfileAuctions />
                         )}
-                        <div></div>
+                        {/* <div></div> */}
                       </div>
                     </div>
+                  </div>
+                </div>
+                <div className="flex-1 bg-white rounded-lg shadow-all p-8 mt-4">
+                  <div>
+                    <p className="text-3xl font-bold text-center">All Recommendations</p>
+                  </div>
+                  <div className="mt-5 flex overflow-x-scroll space-x-4 py-4">
+                    {auth?.user._id !== currentUserID && recommend
+                      ? recommend?.map((reco, i) => (
+                          <div
+                            key={i}
+                            className="hover:shadow-all border w-fit items-center cursor-pointer flex p-4"
+                            onClick={() => handleRecommendationClick(reco?._id)}>
+                            <div className="shadow-all w-fit">
+                              <ReactJdenticon size="100" value={reco?.email} />
+                            </div>
+                            <div className="ml-3 text-lg">
+                              <p className="whitespace-nowrap">
+                                <strong>Name:</strong> {reco.name}
+                              </p>
+                              <p className="whitespace-nowrap">
+                                <strong>Email:</strong> {reco.email}
+                              </p>
+                            </div>
+                          </div>
+                        ))
+                      : 'No Recommendations '}
                   </div>
                 </div>
               </div>
