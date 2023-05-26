@@ -38,6 +38,7 @@ export default function BuyerProfileDashboard() {
   // const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
+  // console.log('auth')
   const [profileInfo, setProfileInfo] = useState({
     buyerName: 'Unknown',
     profileImage:
@@ -226,7 +227,7 @@ export default function BuyerProfileDashboard() {
                     <div className="bg-gray-100 w-fit mr-3 text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
                       Buyer
                     </div>
-                    {user.emailVerified ? (
+                    {user?.emailVerified ? (
                       <Whisper
                         className="p-0"
                         placement="right"

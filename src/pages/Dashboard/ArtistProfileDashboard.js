@@ -86,6 +86,7 @@ export default function ArtistProfileDashboard() {
   const fetchAverageRating = async () => {
     const res = await API.get(`/api/artists/rating/average/${currentUserID}`);
     if (res.status === 200) {
+      console.log(res);
       setRating({
         total: res.data.totalRatings,
         average: res.data.averageRating
@@ -256,7 +257,7 @@ export default function ArtistProfileDashboard() {
                     <div className="bg-gray-100 w-fit mr-3 text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
                       Artist
                     </div>
-                    {user.emailVerified ? (
+                    {user?.emailVerified ? (
                       <Whisper
                         className="p-0"
                         placement="right"

@@ -16,7 +16,7 @@ import API from '../../api/server';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUser } from '../../redux/features/reducer/userReducer';
 import Toaster from '../../components/Common/Toaster';
-import { useToaster } from 'rsuite';
+import { Toggle, useToaster } from 'rsuite';
 import { ClipLoader } from 'react-spinners';
 //import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
@@ -37,6 +37,8 @@ export default function SignIn() {
   const password = useRef();
   const navigate = useNavigate();
   const [loadSignIn, setLoadSignIn] = useState(false);
+  const [test, setTest] = useState(false);
+  // console.log(test);
 
   const signInWithGoogle = () => {
     //dispatch(loginStart());        for redux part
@@ -109,7 +111,7 @@ export default function SignIn() {
       });
   };
 
-  const signInWithEmailAndPass = (e) => {
+  const signInWithEmailAndPass = async (e) => {
     if (passValidate(password?.current.value) && emailValidate(email?.current.value)) {
       setLoadSignIn(true);
       e.preventDefault();
@@ -171,6 +173,63 @@ export default function SignIn() {
       !passValidate(password.current.value)
         ? password.current.setCustomValidity('Password Length must be greater than or equal to 6')
         : password.current.setCustomValidity('');
+    }
+
+    if (test) {
+      navigate('/');
+    }
+  };
+
+  const signInTest = async (e) => {
+    e.preventDefault();
+    if (user.buyer || user.artist) {
+      if (test) {
+        if (user.buyer)
+          try {
+            const res = await API.post('/api/auth/user/signin-test', {
+              email: email?.current.value,
+              password: password?.current.value
+            });
+            // .then((res) => {
+            //   console.log(res);
+            //   const newData = { ...res.data, usertype: 'buyer' };
+            //   localStorage.setItem('auth', JSON.stringify(newData));
+            //   navigate('/');
+            //   // e.preventDefault();
+            // });
+            console.log(res);
+            const newData = { ...res.data, usertype: 'buyer' };
+
+            localStorage.setItem('auth', JSON.stringify(newData));
+            navigate('/');
+          } catch (error) {
+            console.log(error);
+          }
+        else if (user.artist) {
+          try {
+            const res = await API.post('/api/auth/artist/signin-test', {
+              email: email?.current.value,
+              password: password?.current.value
+            });
+            // .then((res) => {
+            //   console.log(res);
+            //   const newData = { ...res.data, usertype: 'buyer' };
+            //   localStorage.setItem('auth', JSON.stringify(newData));
+            //   navigate('/');
+            //   // e.preventDefault();
+            // });
+            console.log(res);
+            const newData = { ...res.data, usertype: 'artist' };
+
+            localStorage.setItem('auth', JSON.stringify(newData));
+            navigate('/');
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+    } else {
+      Toaster(toaster, 'error', 'Select a user type');
     }
   };
 
@@ -246,7 +305,14 @@ export default function SignIn() {
                     <p className="text-sm">Admin</p>
                   </div> */}
                 </div>
-
+                <div className="mb-10">
+                  <Toggle
+                    checkedChildren="Test Login"
+                    unCheckedChildren="Real Login"
+                    onChange={(c) => setTest(c)}
+                    checked={test}
+                  />
+                </div>
                 <div className="mb-6">
                   <input
                     type="text"
@@ -286,11 +352,8 @@ export default function SignIn() {
                 </div>
                 <button
                   // onClick={signedIn}
-                  onClick={signInWithEmailAndPass}
-                  type="submit"
-                  className="flex justify-center text-center items-center px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light">
+                  onClick={(e) => (test ? signInTest(e) : signInWithEmailAndPass(e))}
+                  className="flex justify-center text-center items-center px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full">
                   {loadSignIn && <ClipLoader size={20} color="#fff" className="mr-4" />}
                   Sign in
                 </button>
@@ -301,10 +364,7 @@ export default function SignIn() {
 
                 <p
                   onClick={signInWithGoogle}
-                  className="px-7 py-3 border text-center border-slate-300 text-slate-400 font-medium text-sm leading-snug uppercase rounded-lg shadow-md focus:no-underline hover:text-slate-600 focus:text-slate-600 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out hover:no-underline w-full flex justify-center items-center mb-3"
-                  role="button"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light">
+                  className="px-7 py-3 border text-center border-slate-300 text-slate-400 font-medium text-sm leading-snug uppercase rounded-lg shadow-md focus:no-underline hover:text-slate-600 focus:text-slate-600 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out hover:no-underline w-full flex justify-center items-center mb-3">
                   {loadSignIn ? (
                     <ClipLoader size={20} color="#188796" className="mr-2" />
                   ) : (

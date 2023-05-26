@@ -20,7 +20,7 @@ const Home = () => {
 
   const getAllArtworks = async () => {
     setArtLoader(true);
-    await API.get('/api/artworks/all')
+    await API.get('/api/artworks/all/home')
       .then((res) => {
         setArtworks(res.data);
         console.log(res.data);

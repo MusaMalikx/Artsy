@@ -49,19 +49,24 @@ const AuctionItem = ({ data }) => {
   };
 
   const getHighBidInfo = async () => {
-    const res = await API.get(`/api/artworks/bidinfo/${artId}`, {
-      headers: {
-        token: 'Bearer ' + auth.token
-      }
-    });
-    if (res.data) {
-      setBidInfo({
-        currentBid: res.data.currentBid,
-        basePrice: res.data.basePrice,
-        currentBidder: res.data.currentBidder,
-        buyerInfo: res.data.buyerInfo
+    try {
+      const res = await API.get(`/api/artworks/bidinfo/${artId}`, {
+        headers: {
+          token: 'Bearer ' + auth.token
+        }
       });
-      res.data.buyerInfo.autoBid ? setDisableManualBid(res.data.buyerInfo.autoBid.status) : '';
+      // console.log(res);
+      if (res.data) {
+        setBidInfo({
+          currentBid: res.data.currentBid,
+          basePrice: res.data.basePrice,
+          currentBidder: res.data.currentBidder,
+          buyerInfo: res.data.buyerInfo
+        });
+        res.data.buyerInfo.autoBid ? setDisableManualBid(res.data.buyerInfo.autoBid.status) : '';
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
