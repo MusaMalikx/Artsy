@@ -102,7 +102,8 @@ const AuctionCard = ({ artwork, updateList }) => {
               <img
                 className="w-40 h-32 rounded-md cursor-pointer"
                 // src='https://www.loonapix.com/img/filter/list/1562708307.jpg'
-                src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+                // src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+                src={artwork.images[0]}
                 alt={artwork.title}
               />
             </div>
