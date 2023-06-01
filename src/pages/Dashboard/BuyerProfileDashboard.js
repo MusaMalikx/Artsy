@@ -204,7 +204,7 @@ export default function BuyerProfileDashboard() {
                         </span>
                         <span className="text-sm text-blueGray-400">Auctions Won</span>
                       </div>
-                      {auth.user._id !== currentUserID ? (
+                      {auth.user._id !== currentUserID && (
                         <>
                           <div
                             onClick={() => setOpenReport(true)}
@@ -216,8 +216,6 @@ export default function BuyerProfileDashboard() {
                           </div>
                           {<ProfileReport open={openReport} setOpen={setOpenReport} />}
                         </>
-                      ) : (
-                        ''
                       )}
                     </div>
                   </div>
@@ -294,23 +292,19 @@ export default function BuyerProfileDashboard() {
                 <div className="flex-1 bg-white rounded-lg shadow-all p-8">
                   <div className="flex justify-between">
                     <h4 className="text-xl text-gray-900 font-bold">Personal Info</h4>
-                    {auth.user._id === currentUserID ? (
+                    {auth.user._id === currentUserID && (
                       <button
                         onClick={handleUpdateInfoOpen}
                         className="focus:outline-none bg-primary rounded px-2 py-2 text-xs uppercase font-bold text-white active:bg-cyan-700">
                         Update
                       </button>
-                    ) : (
-                      ''
                     )}
-                    {openUpdateInfo ? (
+                    {openUpdateInfo && (
                       <UpdateInfo
                         updateData={fetchBuyerData}
                         user={profileInfo}
                         handleClose={handleUpdateInfoClose}
                       />
-                    ) : (
-                      ''
                     )}
                   </div>
                   <ul className="mt-2 text-gray-700">
@@ -325,36 +319,32 @@ export default function BuyerProfileDashboard() {
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">Mobile:</span>
                       <span
-                        className={`${
-                          profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                        }`}>
+                        className={`${profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                          }`}>
                         {profileInfo.phoneNumber}
                       </span>
                     </li>
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">CNIC:</span>
                       <span
-                        className={`${
-                          profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
-                        }`}>
+                        className={`${profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
+                          }`}>
                         {profileInfo.cnic}
                       </span>
                     </li>
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">Location:</span>
                       <span
-                        className={`${
-                          profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                        }`}>
+                        className={`${profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                          }`}>
                         {profileInfo.location}
                       </span>
                     </li>
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">Languages:</span>
                       <span
-                        className={`${
-                          profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                        }`}>
+                        className={`${profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                          }`}>
                         {profileInfo.languages}
                       </span>
                     </li>
@@ -368,7 +358,7 @@ export default function BuyerProfileDashboard() {
                       <p className="text-4xl font-bold">Won Auctions</p>
                     </div>
                     <div className="flex flex-wrap justify-center">
-                      <div className="w-full lg:w-9/12 px-4">
+                      <div className="w-full lg:w-9/12 px-4 flex overflow-x-scroll">
                         {wonArt.length > 0 ? (
                           wonArt.map((artwork) => (
                             <motion.div
@@ -461,8 +451,8 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
     } else {
       !nameValidate(name.current.value === '' ? user.buyerName : name.current.value)
         ? name.current.setCustomValidity(
-            'Name must contain only alphabets and length should be greater than or equal to 3'
-          )
+          'Name must contain only alphabets and length should be greater than or equal to 3'
+        )
         : name.current.setCustomValidity('');
       !phoneValidate(
         phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value

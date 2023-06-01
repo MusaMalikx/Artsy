@@ -16,12 +16,12 @@ import ThumnailCarousel from '../../components/Carousel/ThumnailCarousel';
 
 const AuctionItem = ({ data }) => {
   const { state } = useLocation();
+  console.log(state)
   // const { user, urls } = state;
   const us = useSelector(selectUser);
   const [openAutoBid, setOpenAutoBid] = useState(false);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [artistname, setArtistname] = useState('');
-
   const bid = useRef();
   const [disableManualBid, setDisableManualBid] = useState(false);
   const [bidInfo, setBidInfo] = useState({
@@ -246,22 +246,26 @@ const AuctionItem = ({ data }) => {
                   <span>{bidInfo.basePrice}</span>
                 </div>
               </div>
-              <div className="flex text-lg">
-                <p className="mr-1 font-mono">Highest Bid:</p>
-                <div className="font-bold text-green-800">
-                  <span className="mr-0.5">PKR</span>
-                  <span>{bidInfo.currentBid}</span>
-                </div>
-              </div>
-              <div className="flex text-lg">
-                <p className="mr-1 font-mono">Highest Bidder:</p>
-                <div className="font-bold text-green-800">
-                  <span className="mr-0.5">
-                    {bidInfo.currentBidder ? bidInfo.currentBidder : 'None'}
-                  </span>
-                </div>
-              </div>
-              {us.buyer && state.artwork.status !== 'closed' && (
+              {
+                state?.artwork?.status !== 'upcoming' && <>
+                  <div className="flex text-lg">
+                    <p className="mr-1 font-mono">Highest Bid:</p>
+                    <div className="font-bold text-green-800">
+                      <span className="mr-0.5">PKR</span>
+                      <span>{bidInfo.currentBid}</span>
+                    </div>
+                  </div>
+                  <div className="flex text-lg">
+                    <p className="mr-1 font-mono">Highest Bidder:</p>
+                    <div className="font-bold text-green-800">
+                      <span className="mr-0.5">
+                        {bidInfo.currentBidder ? bidInfo.currentBidder : 'None'}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              }
+              {us.buyer && state.artwork.status !== 'closed' && state?.artwork?.status !== 'upcoming' && (
                 <>
                   <form>
                     <div className="mb-4">
@@ -274,7 +278,7 @@ const AuctionItem = ({ data }) => {
                             : bidInfo.basePrice + 1
                         }
                         type="number"
-                        // value={quantity}
+                      // value={quantity}
                       />
                     </div>
 
@@ -283,9 +287,8 @@ const AuctionItem = ({ data }) => {
                         type="submit"
                         onClick={placeManualBid}
                         disabled={disableManualBid}
-                        className={`${
-                          disableManualBid ? 'opacity-50' : 'active:bg-cyan-800'
-                        } bg-primary focus:outline-none text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold`}>
+                        className={`${disableManualBid ? 'opacity-50' : 'active:bg-cyan-800'
+                          } bg-primary focus:outline-none text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold`}>
                         Place Bid
                       </button>
                       <p className="font-bold">OR</p>
@@ -306,10 +309,8 @@ const AuctionItem = ({ data }) => {
                         />
                       }
                     </div>
-                    {disableManualBid ? (
+                    {disableManualBid && (
                       <p className="mt-2 text-sm text-red-400">*Automated Bid Feature is Enabled</p>
-                    ) : (
-                      ''
                     )}
                   </form>
                 </>
