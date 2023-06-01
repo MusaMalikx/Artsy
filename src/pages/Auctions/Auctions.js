@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Loader, Nav, TreePicker } from 'rsuite';
+import { Loader, Nav, Pagination, TreePicker } from 'rsuite';
 import AuctionCard from '../../components/Auction/AuctionCard';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
@@ -8,31 +8,33 @@ import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import EmptyAuction from '../../components/Animation/EmptyAuctions';
 import AuctionCategoriesData from '../../constants/AuctionCategoriesData';
-import ReactPaginate from 'react-paginate';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Auctions = () => {
   const toaster = useToaster();
+  const params = useParams();
+  // console.log(params);
+  const navigate = useNavigate();
   const [artworks, setArtworks] = useState([]);
   const [artloader, setArtLoader] = useState(true);
-  const [active, setActive] = useState('live');
-  const [activePage, setActivePage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  // console.log(activePage, totalPages);
-  // console.log(active);
+  const [category, setCategory] = useState(null);
+  const [totalCount, setTotalCount] = useState();
   const data = useMemo(() => AuctionCategoriesData, []);
 
-  const getCategoryArtworks = async (value) => {
+  const getCategoryArtworks = useCallback(async () => {
     // console.log(value);
-    if (value !== null) {
+    if (category !== null) {
       setArtLoader(true);
-      const selectedCategory = value;
+      // const selectedCategory = value;
       await API.get(
-        `/api/artworks/all/category?category=${selectedCategory}&status=${active}&limit=20&page=${activePage}`
+        `/api/artworks/all/category?category=${category}&status=${params.status}&limit=20&page=${params.page}`
       )
         .then((res) => {
+          console.log(res);
           setArtworks(res.data.artworks);
-          setTotalPages(res.data.total);
+          setTotalCount(res.data.total);
           setArtLoader(false);
+          // navigate(`/auctions/${params?.status}/1`);
         })
         .catch((err) => {
           console.log(err);
@@ -40,15 +42,15 @@ const Auctions = () => {
           setArtLoader(false);
         });
     }
-  };
+  }, [category]);
 
   const getAllArtworks = useCallback(async () => {
     setArtLoader(true);
-    await API.get(`/api/artworks/all?status=${active}&limit=20&page=${activePage}`)
+    await API.get(`/api/artworks/all?status=${params.status}&limit=20&page=${params.page}`)
       .then((res) => {
         setArtworks(res.data.artworks);
-        setTotalPages(res.data.total);
-        console.log(res.data);
+        setTotalCount(res.data.total);
+        // console.log(res.data);
         setArtLoader(false);
       })
       .catch((err) => {
@@ -56,11 +58,15 @@ const Auctions = () => {
         Toaster(toaster, 'error', err.response.data.message);
         setArtLoader(false);
       });
-  }, [active, activePage]);
+  }, [params?.status, params?.page]);
 
   useEffect(() => {
     getAllArtworks();
   }, [getAllArtworks]);
+
+  useEffect(() => {
+    getCategoryArtworks();
+  }, [getCategoryArtworks]);
 
   return (
     <Layout title={'Auctions'}>
@@ -71,8 +77,8 @@ const Auctions = () => {
             className="text-center"
             justified
             appearance="tabs"
-            activeKey={active}
-            onSelect={setActive}
+            activeKey={params?.status}
+            onSelect={(e) => navigate(`/auctions/${e}/1`)}
             style={{ marginBottom: 50 }}>
             <Nav.Item className="text-center text-lg font-semibold" eventKey="live">
               Live
@@ -90,8 +96,11 @@ const Auctions = () => {
             data={data}
             style={{ width: 246 }}
             placeholder="Select Category"
-            onChange={getCategoryArtworks}
-            onClean={getAllArtworks}
+            onChange={setCategory}
+            onClean={() => {
+              setCategory(null);
+              getAllArtworks();
+            }}
           />
         </div>
         {artloader ? (
@@ -105,22 +114,26 @@ const Auctions = () => {
                 <AuctionCard updateList={getAllArtworks} key={artwork._id} artwork={artwork} />
               ))}
             </div>
-            <div className="mb-20 mt-10">
-              <ReactPaginate
-                breakLabel="..."
-                nextLabel="next >"
-                onPageChange={(e) => setActivePage(e.selected + 1)}
-                pageRangeDisplayed={5}
-                pageCount={totalPages}
-                previousLabel="< previous"
-                renderOnZeroPageCount={null}
-                onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
-                className="flex space-x-4 items-center justify-center text-lg"
-              />
+            <div className="mb-20 mt-10 flex justify-center">
+              {!category && (
+                <Pagination
+                  // prev
+                  last
+                  // next
+                  first
+                  size="lg"
+                  total={totalCount}
+                  limit={20}
+                  activePage={params?.page}
+                  onChangePage={(e) => navigate(`/auctions/${params?.status}/${e}`)}
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
+                  className=""
+                />
+              )}
             </div>
           </>
         ) : (
-          <EmptyAuction />
+          <EmptyAuction status={params?.status} />
         )}
       </div>
     </Layout>

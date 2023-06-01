@@ -1,7 +1,7 @@
 import { RiAuctionLine } from 'react-icons/ri';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/reducer/userReducer';
 import AuctionCardTimer from '../Common/Timer/AuctionCardTimer';
@@ -9,6 +9,8 @@ import AuctionCardTimer from '../Common/Timer/AuctionCardTimer';
 const AuctionCard = ({ artwork, updateList }) => {
   const navigate = useNavigate();
   const usr = useSelector(selectUser);
+  const params = useParams();
+  // console.log(params.page);
 
   const handleClick = () => {
     if (usr.admin) {
@@ -16,13 +18,16 @@ const AuctionCard = ({ artwork, updateList }) => {
         state: { user: artwork.user, urls: artwork.urls }
       });
     } else {
-      navigate(`/auctions/${artwork.id}`, { state: { user: artwork.user, urls: artwork.urls } });
+      navigate(`/auctions/${params.page}/${artwork.id}`, {
+        state: { user: artwork.user, urls: artwork.urls }
+      });
     }
   };
 
   const handleClickrealauctions = () => {
     if (usr.admin) navigate(`/admin/view/auctions/${artwork._id}`, { state: { artwork } });
-    else navigate(`/auctions/${artwork._id}`, { state: { artwork } });
+    else
+      navigate(`/auctions/${params?.status}/${params.page}/${artwork._id}`, { state: { artwork } });
   };
 
   return (
@@ -108,19 +113,36 @@ const AuctionCard = ({ artwork, updateList }) => {
               />
             </div>
           </div>
-          <AuctionCardTimer
-            updateList={updateList}
-            endDate={artwork.enddate}
-            startDate={artwork.startdate}
-            artwork={artwork}
-          />
+          {artwork?.status === 'closed' ? (
+            <div className="mt-10 flex justify-center uppercase tracking-widest text-red-400 font-extrabold">
+              Auction Closed
+            </div>
+          ) : artwork?.status === 'upcoming' ? (
+            <div className="mt-10 flex justify-center uppercase tracking-widest text-emerald-400 font-extrabold">
+              Coming Soon
+            </div>
+          ) : (
+            artwork?.status === 'live' && (
+              <AuctionCardTimer
+                updateList={updateList}
+                endDate={artwork.enddate}
+                startDate={artwork.startdate}
+                artwork={artwork}
+              />
+            )
+          )}
           <hr />
           <div className="uppercase">
             <p className="font-semibold tracking-wide text-black text-xl text-center w-full text-ellipsis d-block overflow-hidden whitespace-nowrap">
               {artwork.title}
             </p>
             <p className="text-center">
-              current Bid: <span className="font-bold">PKR {artwork.currentbid}</span>
+              {artwork?.status === 'closed'
+                ? 'Closing Bid: '
+                : artwork?.status === 'upcoming'
+                ? 'Upcoming Bid Base: '
+                : artwork?.status === 'live' && 'Current Bid: '}
+              <span className="font-bold">PKR {artwork.currentbid}</span>
             </p>
           </div>
         </div>

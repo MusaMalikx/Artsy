@@ -203,11 +203,28 @@ const AuctionItem = ({ data }) => {
                   {state.artwork.title}
                 </p>
                 <p className="text-xl font-mono text-green-600">
-                  <AuctionItemTimer
+                  {state?.artwork?.status === 'closed' ? (
+                    <div className="mt-10 flex justify-center uppercase tracking-widest text-red-400 font-extrabold">
+                      Auction Closed
+                    </div>
+                  ) : state?.artwork?.status === 'upcoming' ? (
+                    <div className="mt-10 flex justify-center uppercase tracking-widest text-emerald-400 font-extrabold">
+                      Coming Soon
+                    </div>
+                  ) : (
+                    state?.artwork?.status === 'live' && (
+                      <AuctionItemTimer
+                        endDate={state.artwork.enddate}
+                        startDate={state.artwork.startdate}
+                        artwork={artworkObj}
+                      />
+                    )
+                  )}
+                  {/* <AuctionItemTimer
                     endDate={state.artwork.enddate}
                     startDate={state.artwork.startdate}
                     artwork={artworkObj}
-                  />
+                  /> */}
                 </p>
               </div>
               <p className="text-base ">
