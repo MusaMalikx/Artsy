@@ -86,6 +86,7 @@ export default function ArtistProfileDashboard() {
   const fetchAverageRating = async () => {
     const res = await API.get(`/api/artists/rating/average/${currentUserID}`);
     if (res.status === 200) {
+      console.log(res);
       setRating({
         total: res.data.totalRatings,
         average: res.data.averageRating
@@ -256,7 +257,7 @@ export default function ArtistProfileDashboard() {
                     <div className="bg-gray-100 w-fit mr-3 text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
                       Artist
                     </div>
-                    {user.emailVerified ? (
+                    {user?.emailVerified ? (
                       <Whisper
                         className="p-0"
                         placement="right"
@@ -353,36 +354,32 @@ export default function ArtistProfileDashboard() {
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Mobile:</span>
                     <span
-                      className={`${
-                        profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                      }`}>
+                      className={`${profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                       {profileInfo.phoneNumber}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">CNIC:</span>
                     <span
-                      className={`${
-                        profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
-                      }`}>
+                      className={`${profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
+                        }`}>
                       {profileInfo.cnic}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Location:</span>
                     <span
-                      className={`${
-                        profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                      }`}>
+                      className={`${profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                       {profileInfo.location}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Languages:</span>
                     <span
-                      className={`${
-                        profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                      }`}>
+                      className={`${profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                       {profileInfo.languages}
                     </span>
                   </li>
@@ -395,7 +392,7 @@ export default function ArtistProfileDashboard() {
                       <p className="text-4xl font-bold">All Auctions</p>
                     </div>
                     <div className="flex flex-wrap justify-center">
-                      <div className="w-full lg:w-9/12 px-4">
+                      <div className="w-full lg:w-9/12 px-4 flex overflow-x-scroll">
                         {profileInfo.artworks.length > 0 ? (
                           profileInfo.artworks.map((artwork) => (
                             <motion.div
@@ -485,8 +482,8 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
     } else {
       !nameValidate(name.current.value === '' ? user.artistName : name.current.value)
         ? name.current.setCustomValidity(
-            'Name must contain only alphabets and length should be greater than or equal to 3'
-          )
+          'Name must contain only alphabets and length should be greater than or equal to 3'
+        )
         : name.current.setCustomValidity('');
       !phoneValidate(
         phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value

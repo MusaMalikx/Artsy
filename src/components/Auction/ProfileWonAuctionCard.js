@@ -1,3 +1,4 @@
+import moment from 'moment/moment';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -5,15 +6,17 @@ export default function ProfileWonAuctionCard({ artwork }) {
   const navigate = useNavigate();
   const handleClick = (e) => {
     e.preventDefault();
-    navigate(`/auctions/${artwork._id}`, { state: { artwork } });
+    navigate(`/auctions/${artwork?.status}/1/${artwork._id}`, { state: { artwork } });
   };
+  // console.log(artwork.enddate)
   return (
-    <div className="py-6 flex justify-center hover:scale-105 transition-all">
-      <div className="flex lg:flex-row flex-col w-full items-center bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="py-6 flex justify-center hover:scale-95 transition-all mr-3">
+      <div className="flex lg:flex-row flex-col w-[600px] items-center bg-white shadow-all rounded-lg overflow-hidden">
         <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
           <img
             className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
-            src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+            // src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+            src={artwork.images[0]}
             alt={artwork.title}
           />
         </div>
@@ -29,7 +32,8 @@ export default function ProfileWonAuctionCard({ artwork }) {
           </div>
           <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
             <p className="text-md mb-0 font-mono text-red-700 sm:text-xl text-base font-bold">
-              {artwork.enddate.split(',')[0]}
+              {/* {moment(artwork?.endpoint.split(',')[0])} */}
+              {moment(artwork.enddate).format('DD/MM/YYYY hh:mm A')}
             </p>
             <button
               onClick={handleClick}

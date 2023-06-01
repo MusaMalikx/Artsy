@@ -110,7 +110,7 @@ const AuctionCategoriesData = [
   },
   {
     label: 'Fabric Products',
-    value: 'fabric products',
+    value: 'fabric-products',
     children: [
       {
         label: 'Shoes',

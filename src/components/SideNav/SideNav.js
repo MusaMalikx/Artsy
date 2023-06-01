@@ -37,7 +37,7 @@ const SideNav = () => {
                 Home
               </Nav.Item>
               <Nav.Item
-                onClick={() => navigate('/auctions')}
+                onClick={() => navigate('/auctions/live/1')}
                 eventKey="2"
                 icon={<Icon as={RiAuctionFill} />}>
                 Auctions

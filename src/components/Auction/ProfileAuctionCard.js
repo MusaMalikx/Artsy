@@ -7,17 +7,18 @@ import AuctionItemTimer from '../Common/Timer/AuctionItemTimer';
 export default function ProfileAuctionCard({ artwork }) {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/auctions/${artwork._id}`, { state: { artwork } });
+    navigate(`/auctions/${artwork?.status}/1/${artwork._id}`, { state: { artwork } });
   };
   const artworkObj = { id: artwork._id, status: artwork.status, title: artwork.title };
 
   return (
-    <div className="py-6 flex justify-center hover:scale-105 transition-all">
-      <div className="flex lg:flex-row flex-col w-full items-center bg-white shadow-all rounded-lg overflow-hidden">
+    <div className="py-6 flex justify-center hover:scale-95 mr-3 transition-all">
+      <div className="flex lg:flex-row flex-col w-[600px] items-center bg-white shadow-all rounded-lg overflow-hidden">
         <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
           <img
             className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
-            src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+            // src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+            src={artwork.images[0]}
             alt={artwork.title}
           />
         </div>

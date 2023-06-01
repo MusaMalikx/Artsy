@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import Lottie from 'react-lottie-player';
 import auctionLoading from '../../assets/json/auctionLoading';
-const EmptyAuctions = () => {
+
+const EmptyAuctions = ({ status }) => {
   const [animate, setAnimate] = useState(true);
   useEffect(() => {
     const interval = setTimeout(() => {
@@ -19,7 +20,7 @@ const EmptyAuctions = () => {
         <Lottie play={animate} animationData={auctionLoading} loop />
       </div>
       <div className="text-center w-full">
-        <p className="text-lg text-red-500 font-semibold">No artwork auction is live now!</p>
+        <p className="text-lg text-red-500 font-semibold">No artwork auction is {status} now!</p>
         <p className=" text-center">
           Stay in contact with us. We will let you know when there is an artwork auction live.
         </p>

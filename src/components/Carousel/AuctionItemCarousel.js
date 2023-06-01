@@ -18,7 +18,8 @@ const AuctionItemCarousel = ({ images }) => {
             <div className="h-66 w-[500px]" key={images.indexOf(img)}>
               <img
                 className="object-cover object-center w-full h-full"
-                src={`http://localhost:8080/api/artworks/image?filename=${img}`}
+                // src={`http://localhost:8080/api/artworks/image?filename=${img}`}
+                src={img}
               />
             </div>
           );

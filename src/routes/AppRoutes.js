@@ -100,8 +100,8 @@ const AppRoutes = () => {
               <>
                 <Route path="chat" element={<Chat data={data} />} />
                 <Route path="search" element={<Search />} />
-                <Route path="auctions" element={<Auctions />} />
-                <Route path="auctions/:id" element={<AuctionItem data={data} />} />
+                <Route path="auctions/:status/:page" element={<Auctions />} />
+                <Route path="auctions/:status/:page/:id" element={<AuctionItem data={data} />} />
               </>
             )}
             {user.artist && (
