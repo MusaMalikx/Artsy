@@ -12,11 +12,11 @@ import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
 //import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
 import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
 // import AuctionCard from '../../components/Auction/AuctionCard';
-import ThumnailCarousel from '../../components/Carousel/ThumnailCarousel';
+import AuctionCard from '../../components/Auction/AuctionCard';
 
-const AuctionItem = ({ data }) => {
+const AuctionItem = () => {
   const { state } = useLocation();
-  console.log(state)
+  // console.log(state)
   // const { user, urls } = state;
   const us = useSelector(selectUser);
   const [openAutoBid, setOpenAutoBid] = useState(false);
@@ -34,6 +34,8 @@ const AuctionItem = ({ data }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const artId = location.pathname.split('/')[2];
+  const [recommendations, setRecommendations] = useState();
+
   let artworkObj;
   if (state.artwork) {
     artworkObj = {
@@ -47,6 +49,17 @@ const AuctionItem = ({ data }) => {
     e.preventDefault();
     setOpenAutoBid(true);
   };
+
+  const getRecommendations = async () => {
+    try {
+      const res = await API.get(`/api/artworks/recommend?artistId=${state.artwork.artistId}`);
+      // console.log(res);
+      setRecommendations(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   const getHighBidInfo = async () => {
     try {
@@ -116,8 +129,10 @@ const AuctionItem = ({ data }) => {
           Toaster(toaster, 'error', err.response.data.message);
         });
       getHighBidInfo();
+      getRecommendations();
     }
   }, []);
+
   return (
     <Layout title={'Auctions'}>
       <HeaderLayout title="Auction Item" />
@@ -320,12 +335,29 @@ const AuctionItem = ({ data }) => {
         </div>
       )}
 
-      <div className="mx-5 py-10  border-gray-400 border rounded-lg mb-20 md:my-20">
-        <div className="flex justify-center items-center mb-10">
-          <p className="font-semibold uppercase text-3xl">Similar Auctions Items</p>
+      <div className='mx-5 p-10 border-gray-400 border space-x-3 rounded-lg mb-20 md:my-20'>
+        <div className="flex justify-center items-center mb-20">
+          <h2 className="font-semibold uppercase text-3xl">Similar Auctions Items</h2>
         </div>
-        <div className="">
-          <ThumnailCarousel data={data} />
+        <div className="flex overflow-x-scroll">
+          {
+            recommendations?.length > 0 ?
+              recommendations?.map((recommend, i) => (
+                recommend.artwork?.length > 0 &&
+                <div key={i} className="border-l-2 border-dashed pl-4">
+                  <h5>By {recommend.name}</h5>
+                  {/* <ThumnailCarousel data={recommend.artwork} /> */}
+                  <div className='flex space-x-3'>
+                    {recommend.artwork.map((artwork) => (
+                      <div key={artwork?._id} className=''>
+                        <AuctionCard artwork={artwork} />
+                      </div>
+                    ))
+                    }
+                  </div>
+                </div>
+              )) : <h3>No Auctions Recommended</h3>
+          }
         </div>
       </div>
       {/* <div>

@@ -98,6 +98,11 @@ export default function NewAuction() {
                   };
 
                   console.log(res);
+
+                  // for (let pair of formData.entries()) {
+                  //   console.log(pair[0], pair[1]);
+                  // }
+
                   await API.post('/api/artworks/add', formData, config)
                     .then((res) => {
                       setTimeout(() => {
@@ -219,7 +224,7 @@ export default function NewAuction() {
 
           <button
             onClick={AddArtwork}
-            className="mx-auto my-5 w-4/12 flex justify-center text-center items-center px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out ">
+            className="mx-auto my-5 flex justify-center text-center items-center px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out ">
             {startLoader && <ClipLoader size={20} color="#fff" className="mr-2" />}
             List Artwork
           </button>
