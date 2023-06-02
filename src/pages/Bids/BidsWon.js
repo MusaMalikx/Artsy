@@ -9,7 +9,8 @@ import { useToaster } from 'rsuite';
 import Toaster from '../../components/Common/Toaster';
 import { v4 as uuid } from 'uuid';
 import { sendNotification } from '../../helpers/notifications';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 const BidsWon = () => {
   const [paymentRelease, setPaymentRelease] = useState(false);
@@ -18,17 +19,20 @@ const BidsWon = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [wonArt, setWonArt] = useState([]);
   const toaster = useToaster();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleClick = (e, artwork) => {
-    e.preventDefault();
-    if (artwork.paymentStatus === 'paid')
-      navigate(`/auctions/${artwork._id}`, { state: { artwork } });
-  };
+  // const handleClick = (e, artwork) => {
+  //   e.preventDefault();
+  //   console.log(artwork)
+  //   // if (artwork?.paymentStatus === 'paid')
+  //   navigate(`/auctions/${artwork.status}/1/${artwork._id}`, { state: { artwork } });
+  // };
   const getArtworks = async () => {
     const res = await API.get(`/api/users/find/artworks/won/${auth.user._id}`);
     setWonArt(res.data);
   };
+
+  // console.log("won", wonArt)
 
   useEffect(() => {
     getArtworks();
@@ -86,18 +90,19 @@ const BidsWon = () => {
               return (
                 <>
                   <div
-                    onClick={(e) => handleClick(e, art)}
-                    className="py-6 cursor-pointer flex justify-center hover:scale-105 transition-all">
+                    // onClick={(e) => handleClick(e, art)}
+                    className="py-6 flex justify-center hover:scale-105 transition-all">
                     <div className="flex lg:flex-row flex-col w-full items-center bg-white shadow-lg rounded-lg overflow-hidden">
                       <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
                         <img
                           className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
-                          src={`http://localhost:8080/api/artworks/image?filename=${art.images[0]}`}
+                          // src={`http://localhost:8080/api/artworks/image?filename=${art.images[0]}`}
+                          src={art.images[0]}
                           alt={art.title}
                         />
                       </div>
-                      <div className="w-full h-full hover:bg-slate-100 p-4 text-left flex flex-col justify-between">
-                        <div className="flex  w-full sm:justify-around sm:flex-row flex-col gap-2 md:gap-0 justify-center items-center sm:items-start lg:justify-between text-center">
+                      <div className="w-full h-full hover:bg-slate-100 p-4 text-left flex flex-col sm:flex-row justify-between">
+                        <div className="flex  w-full sm:justify-around flex-col gap-2 md:gap-0 justify-center items-center sm:items-start lg:justify-between text-center">
                           <h1 className="text-gray-700 font-bold sm:text-xl text-base capitalize ">
                             {art.title}
                           </h1>
@@ -105,37 +110,37 @@ const BidsWon = () => {
                             Your Bid :{' '}
                             <span className="font-bold text-green-500 "> PKR {art.currentbid}</span>
                           </h1>
-                        </div>
-                        <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
                           <h1 className="font-bold sm:text-xl text-base text-gray-700">
                             Won :{' '}
                             <span className="font-bold text-blue-500 ">
                               {' '}
-                              {art.enddate.split(',')[0]}
+                              {/* {art.enddate.split(',')[0]} */}
+                              {moment(art.enddate).format("DD/mm/yyyy hh:mm A")}
                             </span>
                           </h1>
-                          <p className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
-                            {art.paymentStatus === 'payment' ? (
-                              <button
-                                className="hide py-2 px-10 mx-2 rounded text-white bg-primary border active:bg-emerald-500"
-                                onClick={() => {
-                                  setPaymentRelease(true);
-                                  setSelectedArtwork(art);
-                                }}>
-                                Payment
-                              </button>
-                            ) : art.paymentStatus === 'claim' ? (
-                              <button
-                                onClick={() => claimArtwork(art)}
-                                className="hide py-2 px-10 mx-2 rounded text-white bg-primary border active:bg-emerald-500">
-                                Claim
-                              </button>
-                            ) : (
-                              <button className="hide py-2 px-10 mx-2 rounded text-white bg-red-500 border ">
-                                Paid
-                              </button>
-                            )}
-                          </p>
+                        </div>
+                        <div className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
+                          {/* <button className="hide py-2 px-10 mx-2 my-4 rounded text-white bg-emerald-600 border active:bg-emerald-500" onClick={(e) => handleClick(e, art)}>view</button> */}
+                          {art.paymentStatus === 'payment' ? (
+                            <button
+                              className="hide py-2 px-10 mx-2 rounded text-white bg-primary border active:bg-emerald-500"
+                              onClick={() => {
+                                setPaymentRelease(true);
+                                setSelectedArtwork(art);
+                              }}>
+                              Payment
+                            </button>
+                          ) : art.paymentStatus === 'claim' ? (
+                            <button
+                              onClick={() => claimArtwork(art)}
+                              className="hide py-2 px-10 mx-2 rounded text-white bg-primary border active:bg-emerald-500">
+                              Claim
+                            </button>
+                          ) : (
+                            <button className="hide py-2 px-10 mx-2 rounded text-white bg-red-500 border cursor-not-allowed">
+                              Paid
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

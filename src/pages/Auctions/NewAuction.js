@@ -104,6 +104,7 @@ export default function NewAuction() {
                         setStartLoader(false);
                       }, 2000);
                       console.log(res);
+                      navigate(`/artist/profile/${auth.user._id}`);
                       Toaster(toaster, 'success', 'Artwork Successfully Added');
                     })
                     .catch((err) => {
@@ -111,7 +112,6 @@ export default function NewAuction() {
                       console.log(err);
                       Toaster(toaster, 'error', err.response.data.message);
                     });
-                  navigate(`/artist/profile/${auth.user._id}`);
                 })
                 .catch((err) => {
                   setStartLoader(false);
