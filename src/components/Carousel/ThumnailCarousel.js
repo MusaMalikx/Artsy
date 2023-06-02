@@ -4,7 +4,7 @@ import AuctionCard from '../Auction/AuctionCard';
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 4,
+    items: 3,
     paritialVisibilityGutter: 60
   },
   tablet: {
@@ -21,13 +21,18 @@ const responsive = {
 
 const ThumnailCarousel = ({ data }) => {
   return (
-    <Carousel ssr partialVisbile itemClass="image-item" responsive={responsive}>
-      {data?.map((photo) => (
-        <div key={photo.id} className="px-4">
-          <AuctionCard artwork={photo} />
-        </div>
-      ))}
-    </Carousel>
+    <>
+      {
+        data?.length > 0 &&
+        <Carousel ssr partialVisbile itemClass="image-item" responsive={responsive}>
+          {data?.map((photo) => (
+            photo.status === "live" && <div key={photo.id} className="px-4">
+              <AuctionCard artwork={photo} />
+            </div>
+          ))}
+        </Carousel>
+      }
+    </>
   );
 };
 

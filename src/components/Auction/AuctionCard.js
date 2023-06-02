@@ -34,7 +34,7 @@ const AuctionCard = ({ artwork, updateList }) => {
     <div className="pt-5">
       {artwork.urls ? (
         <div
-          className="mx-auto hover:scale-105 hover:shadow-all transition-all p-5 mb-10 border rounded-md"
+          className="mx-auto hover:scale-95 w-64 hover:shadow-all transition-all p-5 mb-10 border rounded-md"
           onClick={handleClick}>
           <div className="flex space-x-4">
             <div className="space-y-2">
@@ -91,7 +91,7 @@ const AuctionCard = ({ artwork, updateList }) => {
         </div>
       ) : (
         <div
-          className="mx-auto hover:scale-105 hover:shadow-all transition-all p-5 mb-10 border rounded-md"
+          className="hover:scale-95 w-64 mx-3 hover:shadow-all transition-all p-5 border rounded-md"
           onClick={handleClickrealauctions}>
           <div className="flex space-x-4">
             <div className="space-y-2">
@@ -140,8 +140,8 @@ const AuctionCard = ({ artwork, updateList }) => {
               {artwork?.status === 'closed'
                 ? 'Closing Bid: '
                 : artwork?.status === 'upcoming'
-                ? 'Upcoming Bid Base: '
-                : artwork?.status === 'live' && 'Current Bid: '}
+                  ? 'Upcoming Bid Base: '
+                  : artwork?.status === 'live' && 'Current Bid: '}
               <span className="font-bold">PKR {artwork.currentbid}</span>
             </p>
           </div>
