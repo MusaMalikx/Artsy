@@ -15,9 +15,10 @@ import {
 import firebaseApp from '../../utils/firebase';
 import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
-import { useToaster } from 'rsuite';
+import { Toggle, useToaster } from 'rsuite';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/features/reducer/userReducer';
+import { useState } from 'react';
 
 const AdminSignIn = () => {
   const [text] = useTypewriter({
@@ -31,6 +32,7 @@ const AdminSignIn = () => {
   const password = useRef();
   const toaster = useToaster();
   const dispatch = useDispatch();
+  const [test, setTest] = useState(false);
 
   const signInWithEmailAndPass = (e) => {
     if (passValidate(password.current.value) && emailValidate(email.current.value)) {
@@ -111,6 +113,25 @@ const AdminSignIn = () => {
         }
       });
   };
+
+  const signInTest = async (e) => {
+    e.preventDefault();
+    if (test)
+      try {
+        const res = await API.post('/api/auth/admin/signin-test', {
+          email: email.current.value,
+          password: password.current.value
+        });
+        console.log(res);
+        const newData = { ...res.data, usertype: 'admin' };
+        localStorage.setItem('auth', JSON.stringify(newData));
+        dispatch(setUser({ admin: true }));
+        navigate('/admin/dashboard');
+      } catch (err) {
+        console.log(err);
+      }
+  };
+
   return (
     <RegistrationLayout title="Admin">
       <div>
@@ -140,6 +161,14 @@ const AdminSignIn = () => {
                   <p className="text-xs text-center text-gray-500 uppercase">or</p>
                   <span className="border-b w-1/3"></span>
                 </div>
+                <div className="my-5">
+                  <Toggle
+                    checkedChildren="Test Login"
+                    unCheckedChildren="Real Login"
+                    onChange={(c) => setTest(c)}
+                    checked={test}
+                  />
+                </div>
                 <div className="my-6">
                   <input
                     type="text"
@@ -168,7 +197,7 @@ const AdminSignIn = () => {
                 <div className="mt-8">
                   <button
                     type="submit"
-                    onClick={signInWithEmailAndPass}
+                    onClick={(e) => (test ? signInTest(e) : signInWithEmailAndPass(e))}
                     className="inline-block px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full">
                     Sign in
                   </button>

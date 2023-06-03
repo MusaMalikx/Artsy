@@ -18,7 +18,7 @@ const Navigation = ({ bool }) => {
         />
         <Pop
           icon={<GrView size={25} />}
-          onClick={() => navigate('/admin/view/auctions')}
+          onClick={() => navigate('/admin/view/auctions/live/1')}
           name="View Listed Auctions"
           bool={bool}
         />

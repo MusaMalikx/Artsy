@@ -79,8 +79,14 @@ const AppRoutes = () => {
                 <Route path="admin/chat" element={<AdminChat data={data} />} />
                 <Route path="admin/users" element={<AdminUsers data={data} />} />
                 <Route path="admin/view/reports" element={<Reports />} />
-                <Route path="admin/view/auctions" element={<AuctionsList data={data} />} />
-                <Route path="admin/view/auctions/:id" element={<AuctionListItem data={data} />} />
+                <Route
+                  path="admin/view/auctions/:status/:page"
+                  element={<AuctionsList data={data} />}
+                />
+                <Route
+                  path="admin/view/auctions/:status/:page/:id"
+                  element={<AuctionListItem data={data} />}
+                />
                 <Route path="admin/buyer/profile/:buyerId" element={<AdminBuyerProfile />} />
                 <Route path="admin/artist/profile/:artistId" element={<AdminArtistProfile />} />
               </>

@@ -115,7 +115,7 @@ const BidsWon = () => {
                             <span className="font-bold text-blue-500 ">
                               {' '}
                               {/* {art.enddate.split(',')[0]} */}
-                              {moment(art.enddate).format("DD/mm/yyyy hh:mm A")}
+                              {moment(art.enddate).format('DD/mm/yyyy hh:mm A')}
                             </span>
                           </h1>
                         </div>

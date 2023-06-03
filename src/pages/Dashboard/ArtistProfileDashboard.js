@@ -354,32 +354,36 @@ export default function ArtistProfileDashboard() {
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Mobile:</span>
                     <span
-                      className={`${profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                        }`}>
+                      className={`${
+                        profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                      }`}>
                       {profileInfo.phoneNumber}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">CNIC:</span>
                     <span
-                      className={`${profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
-                        }`}>
+                      className={`${
+                        profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
+                      }`}>
                       {profileInfo.cnic}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Location:</span>
                     <span
-                      className={`${profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                        }`}>
+                      className={`${
+                        profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                      }`}>
                       {profileInfo.location}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Languages:</span>
                     <span
-                      className={`${profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                        }`}>
+                      className={`${
+                        profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                      }`}>
                       {profileInfo.languages}
                     </span>
                   </li>
@@ -482,8 +486,8 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
     } else {
       !nameValidate(name.current.value === '' ? user.artistName : name.current.value)
         ? name.current.setCustomValidity(
-          'Name must contain only alphabets and length should be greater than or equal to 3'
-        )
+            'Name must contain only alphabets and length should be greater than or equal to 3'
+          )
         : name.current.setCustomValidity('');
       !phoneValidate(
         phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value
