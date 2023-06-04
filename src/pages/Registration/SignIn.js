@@ -18,13 +18,13 @@ import { selectUser, setUser } from '../../redux/features/reducer/userReducer';
 import Toaster from '../../components/Common/Toaster';
 import { Toggle, useToaster } from 'rsuite';
 import { ClipLoader } from 'react-spinners';
-//import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";    for redux part
 
+/*
+This component renders the sign-in page for buyers and artists to access the artwork auction website. 
+It provides the necessary functionality and UI elements for users to log in and access their respective accounts.
+*/
 export default function SignIn() {
-  const [
-    text
-    //, helper
-  ] = useTypewriter({
+  const [text] = useTypewriter({
     words: ['Welcome to Artsy!', 'Good to see you again!', "Let's quickly Sign you In!"],
     loop: true,
     delaySpeed: 3000
@@ -38,21 +38,13 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [loadSignIn, setLoadSignIn] = useState(false);
   const [test, setTest] = useState(false);
-  // console.log(test);
 
+  //API call for signin in via email and password
   const signInWithGoogle = () => {
-    //dispatch(loginStart());        for redux part
     setLoadSignIn(true);
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-
-        // The signed-in user info.
-        // const data = result.user;
-
         if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
@@ -64,11 +56,8 @@ export default function SignIn() {
             const newData = { ...res.data, usertype: 'buyer' };
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
           });
         } else if (user.artist) {
-          //await API.get('/').then((res) => console.log(res.data));
           await API.post('/api/auth/artist/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
@@ -79,20 +68,14 @@ export default function SignIn() {
             const newData = { ...res.data, usertype: 'artist' };
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            // navigate("/");
           });
         } else {
           Toaster(toaster, 'error', 'Select a user type');
           setLoadSignIn(false);
         }
-
-        // console.log(token, data);
       })
       .catch((error) => {
         setLoadSignIn(false);
-        //dispatch(loginFailure());          for redux part
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         const credential = GoogleAuthProvider.credentialFromError(error);
@@ -111,6 +94,7 @@ export default function SignIn() {
       });
   };
 
+  //API call for signin via SSO (Single Sign on), Google auth
   const signInWithEmailAndPass = async (e) => {
     if (passValidate(password?.current.value) && emailValidate(email?.current.value)) {
       setLoadSignIn(true);
@@ -118,8 +102,6 @@ export default function SignIn() {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email.current.value, password.current.value)
         .then(async (userCredential) => {
-          // Signed in
-          // const data = userCredential.user;
           if (user.buyer) {
             await API.post('/api/auth/user/signin', {
               email: userCredential.user.email
@@ -128,8 +110,6 @@ export default function SignIn() {
               const newData = { ...res.data, usertype: 'buyer' };
               localStorage.setItem('auth', JSON.stringify(newData));
               navigate('/');
-              //dispatch(loginSuccess(res.data));    for redux part
-              //navigate("/");
             });
           } else if (user.artist) {
             await API.post('/api/auth/artist/signin', {
@@ -139,8 +119,6 @@ export default function SignIn() {
               const newData = { ...res.data, usertype: 'artist' };
               localStorage.setItem('auth', JSON.stringify(newData));
               navigate('/');
-              //dispatch(loginSuccess(res.data));    for redux part
-              //navigate("/");
             });
           } else {
             Toaster(toaster, 'error', 'Select a user type');
@@ -180,6 +158,7 @@ export default function SignIn() {
     }
   };
 
+  //A test function for signing in
   const signInTest = async (e) => {
     e.preventDefault();
     if (user.buyer || user.artist) {
@@ -190,13 +169,6 @@ export default function SignIn() {
               email: email?.current.value,
               password: password?.current.value
             });
-            // .then((res) => {
-            //   console.log(res);
-            //   const newData = { ...res.data, usertype: 'buyer' };
-            //   localStorage.setItem('auth', JSON.stringify(newData));
-            //   navigate('/');
-            //   // e.preventDefault();
-            // });
             console.log(res);
             const newData = { ...res.data, usertype: 'buyer' };
 
@@ -211,13 +183,6 @@ export default function SignIn() {
               email: email?.current.value,
               password: password?.current.value
             });
-            // .then((res) => {
-            //   console.log(res);
-            //   const newData = { ...res.data, usertype: 'buyer' };
-            //   localStorage.setItem('auth', JSON.stringify(newData));
-            //   navigate('/');
-            //   // e.preventDefault();
-            // });
             console.log(res);
             const newData = { ...res.data, usertype: 'artist' };
 
@@ -232,19 +197,6 @@ export default function SignIn() {
       Toaster(toaster, 'error', 'Select a user type');
     }
   };
-
-  // const signedIn = () => {
-  //   if (user.buyer) {
-  //     // setSignedIn(true);
-  //     navigate('/');
-  //   } else if (user.artist) {
-  //     // setSignedIn(true);
-  //     navigate('/');
-  //   } else if (user.admin) {
-  //     navigate('/admin/dashboard');
-  //     // setSignedIn(true);
-  //   }
-  // };
 
   return (
     <RegistrationLayout title={'Sign in'}>
@@ -296,14 +248,6 @@ export default function SignIn() {
                     <FaUserEdit className="w-full" />
                     <p className="text-sm">Artist</p>
                   </div>
-                  {/* <div
-                    className={`border ${
-                      user.admin && 'text-primary border-primary'
-                    } hover:text-primary hover:border-primary w-16 h-16 flex flex-col  cursor-pointer text-center rounded-full pt-4`}
-                    onClick={() => dispatch(setUser({ admin: true }))}>
-                    <FaUserTie className="w-full" />
-                    <p className="text-sm">Admin</p>
-                  </div> */}
                 </div>
                 <div className="mb-10">
                   <Toggle
@@ -351,7 +295,6 @@ export default function SignIn() {
                   </p>
                 </div>
                 <button
-                  // onClick={signedIn}
                   onClick={(e) => (test ? signInTest(e) : signInWithEmailAndPass(e))}
                   className="flex justify-center text-center items-center px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out w-full">
                   {loadSignIn && <ClipLoader size={20} color="#fff" className="mr-4" />}

@@ -1,5 +1,8 @@
 import React from 'react';
 
+/*
+Render a analytical graph 
+*/
 const Info = () => {
   return (
     <div>

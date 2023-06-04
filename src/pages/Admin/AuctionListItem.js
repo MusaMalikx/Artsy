@@ -14,7 +14,6 @@ import AuctionCard from '../../components/Auction/AuctionCard';
 
 const AuctionListItem = () => {
   const { state } = useLocation();
-  // const { user, urls } = state;
   const us = useSelector(selectUser);
   const [openAutoBid, setOpenAutoBid] = useState(false);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));

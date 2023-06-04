@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Lottie from 'react-lottie-player';
 import listLoading from '../../assets/json/listLoading';
+
+/*
+Component for display animations in case of empty list
+*/
 const EmptyList = () => {
   const [animate, setAnimate] = useState(true);
   useEffect(() => {

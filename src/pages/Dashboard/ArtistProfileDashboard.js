@@ -27,6 +27,11 @@ import {
   textValidate
 } from '../../helpers/credential-validators';
 
+/*
+This React component represents the artist profile dashboard, which displays relevant information and controls for managing an artist's profile. 
+It allows artists to view and update their profile details, upload new artwork, manage their portfolio, and interact with buyers. 
+This component serves as the central hub for artists to manage and showcase their work.
+*/
 export default function ArtistProfileDashboard() {
   const navigate = useNavigate();
   const [user] = useAuthState(getAuth());
@@ -54,6 +59,7 @@ export default function ArtistProfileDashboard() {
   const handleUpdateInfoOpen = () => setOpenUpdateInfo(true);
   const handleUpdateInfoClose = () => setOpenUpdateInfo(false);
 
+  //API call for fetching artist data
   const fetchArtistData = async () => {
     const res = await API.get(`/api/artworks/artist/${currentUserID}`);
     if (res.data) {
@@ -71,8 +77,7 @@ export default function ArtistProfileDashboard() {
     }
   };
 
-  // /${artistId}?status=${status}`
-
+  //API call for fetching live artworks count
   const fetchCountLive = async () => {
     await API.get(`/api/artworks/artist/status/${currentUserID}?status=live`)
       .then((res) => {
@@ -83,6 +88,7 @@ export default function ArtistProfileDashboard() {
       });
   };
 
+  //API call for fetching artist ratings
   const fetchAverageRating = async () => {
     const res = await API.get(`/api/artists/rating/average/${currentUserID}`);
     if (res.status === 200) {
@@ -99,6 +105,8 @@ export default function ArtistProfileDashboard() {
     fetchAverageRating();
     fetchCountLive();
   }, []);
+
+  //API call for Signing artist out of website
   const logoutuser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -155,13 +163,6 @@ export default function ArtistProfileDashboard() {
                           }
                         />
                       </div>
-                      {/* <img
-                        referrerPolicy="no-referrer"
-                        alt="..."
-                        src={profileInfo.profileImage}
-                        // src="https://media.licdn.com/dms/image/C4D03AQE2uqmIgyKi1Q/profile-displayphoto-shrink_800_800/0/1651353340052?e=1677110400&v=beta&t=316TXpRJ03xuXyNku3fHxaoMVroBMNYKmL2fuR90zXg"
-                        className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
-                      /> */}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -169,11 +170,6 @@ export default function ArtistProfileDashboard() {
                       <div className="text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           <div className="flex text-yellow-500">
-                            {/* <AiFillStar />
-                            <AiFillStar />
-                            <AiFillStar />
-                            <AiFillStar />
-                            <AiOutlineStar /> */}
                             <Rate value={rating.average} readOnly size="xs" />
                           </div>
                         </span>
@@ -224,8 +220,6 @@ export default function ArtistProfileDashboard() {
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                           {profileInfo.artworks.length}
                         </span>
-                        {/* <span className="text-sm text-blueGray-400">Auctions Live</span> */}
-                        {/* Later display correct live auctions and closed auctions for now API is only sending back all auctions */}
                         <span className="text-sm text-blueGray-400">All Auctions</span>
                       </div>
                       <div className="mr-4 p-3 text-center">
@@ -269,7 +263,6 @@ export default function ArtistProfileDashboard() {
                             <div>Your Account has been verified</div>
                           </Popover>
                         }>
-                        {/* <Button>Hover</Button> */}
                         <IconButton
                           className="hide"
                           icon={<GoVerified className="text-green-500 text-xl" />}
@@ -297,14 +290,6 @@ export default function ArtistProfileDashboard() {
                         />
                       </Whisper>
                     )}
-                    {/* <Whisper
-                      placement="bottomStart"
-                      controlId="control-id-with-dropdown"
-                      trigger="click"
-                      ref={ref}
-                      speaker={<VerifyPopover onSelect={handleSelectMenu} />}>
-                      <Button>File</Button>
-                    </Whisper> */}
                   </div>
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 capitalize">
                     {profileInfo.artistName}
@@ -427,6 +412,9 @@ const renderIconButton = (props, ref) => {
   return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
 };
 
+/*
+Renders a dropdown menu to display option add artwork, listed auctions, buyer proposals, accepted bids
+*/
 const Drop = () => {
   const navigate = useNavigate();
   return (
@@ -443,6 +431,11 @@ const Drop = () => {
   );
 };
 
+/*
+This component handles the functionality for updating user profile information. 
+It allows users to modify their personal details such as name, email, and other relevant information. 
+The updated data is then saved to the database, ensuring accurate and up-to-date user profiles.
+*/
 const UpdateInfo = ({ handleClose, user, updateData }) => {
   const name = useRef();
   const phonenumber = useRef();
@@ -452,6 +445,7 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
 
+  //API call to update profile information
   const updateInformation = async (e) => {
     if (
       nameValidate(name.current.value === '' ? user.artistName : name.current.value) &&

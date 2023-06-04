@@ -2,6 +2,10 @@ import React from 'react';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useState } from 'react';
 
+/*
+ This component handles the upload and display of artwork images.
+ It provides functionality for users to upload and showcase their artwork within the application.
+*/
 export default function ArtworkImageUploader({ setImageList }) {
   const [isUploaded, setIsUploaded] = useState([]);
 
@@ -24,22 +28,7 @@ export default function ArtworkImageUploader({ setImageList }) {
     }
   };
 
-  // const updateImg = (event, index) => {
-  //   const reader = new FileReader();
-  //   reader.addEventListener('load', () => {
-  //     const uploaded_image = reader.result;
-  //     setIsUploaded((prev) => {
-  //       if (prev.indexOf(uploaded_image) === -1) {
-  //         let newList = [...prev];
-  //         newList[index] = uploaded_image;
-  //         return newList;
-  //       }
-  //       return prev;
-  //     });
-  //   });
-  //   reader.readAsDataURL(event.target.files[0]);
-  // };
-
+  //Function to render default image logo
   const displayDefaultUpload = () => {
     return (
       <div className="border w-32 h-32">
@@ -60,20 +49,18 @@ export default function ArtworkImageUploader({ setImageList }) {
     );
   };
 
+  //Function to render uploaded image
   const displayUploadedImages = () => {
     return (
       <>
         {isUploaded.map((pic, i) => {
           return (
             <div key={i} className="border w-32 h-32 my-2 mx-2">
-              <label
-                // htmlFor={`img-${isUploaded.indexOf(pic)}`}
-                className=" flex text-lg text-blue-500 justify-center items-center h-full ">
+              <label className=" flex text-lg text-blue-500 justify-center items-center h-full ">
                 <img className="w-32 h-32" src={pic} alt="" />
               </label>
               <input
                 id={`img-${isUploaded.indexOf(pic)}`}
-                // onChange={(event) => updateImg(event, isUploaded.indexOf(pic))}
                 className="hidden"
                 type="file"
                 accept="image/jpeg, image/png, image/jpg"

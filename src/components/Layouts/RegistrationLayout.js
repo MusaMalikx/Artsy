@@ -6,6 +6,9 @@ const variants = {
   exit: { opacity: 0, x: 0, y: 20 }
 };
 
+/*
+Motion layout for the Registration page
+*/
 const RegistrationLayout = ({ children, title }) => {
   document.title = title + ' | Artsy';
 

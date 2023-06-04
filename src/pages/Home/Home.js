@@ -9,6 +9,10 @@ import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import EmptyAuctions from '../../components/Animation/EmptyAuctions';
 
+/*
+This React component renders the home page for the Artsy auction platform. 
+The component provides a visually appealing and user-friendly interface for users to browse and engage with the auction platform.
+*/
 const Home = () => {
   const [artloader, setArtLoader] = useState(true);
   const toaster = useToaster();
@@ -18,6 +22,7 @@ const Home = () => {
     getAllArtworks();
   }, []);
 
+  //API call for getting all artworks to display in home page
   const getAllArtworks = async () => {
     setArtLoader(true);
     await API.get('/api/artworks/all/home')
@@ -33,12 +38,8 @@ const Home = () => {
       });
   };
 
-  //console.log(JSON.parse(localStorage.getItem('auth')).token);
   return (
     <Layout title="Home">
-      {/* <div className="flex flex-col justify-center items-center min-h-screen my-auto text-2xl space-y-2">
-        Artsy Homepage
-      </div> */}
       <div className="">
         <img src={displayBanner} className="max-h-96 w-full" alt="banner" />
       </div>

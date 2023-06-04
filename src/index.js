@@ -12,10 +12,17 @@ import 'react-multi-carousel/lib/styles.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+/*
+Root entry point of the React application.
+Enables strict mode for enhanced debugging and error detection.
+Uses the Redux Provider to provide the Redux store to the entire app.
+Incorporates page transitions with AnimatePresence for smoother UI transitions.
+Uses BrowserRouter for client-side routing and renders the main AppRoutes component.
+*/
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AnimatePresence>
+      <AnimatePresence mode="wait" initial={true}>
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
@@ -24,7 +31,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

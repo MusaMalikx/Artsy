@@ -13,6 +13,10 @@ import { selectUser } from '../../redux/features/reducer/userReducer';
 import Wallet from '../Modals/Payment/Wallet';
 import { BiWallet } from 'react-icons/bi';
 
+/*
+This side navigation bar component provides easy navigation for users to access different sections of the application.
+It is designed to be responsive and user-friendly, ensuring a smooth browsing experience.
+*/
 const SideNav = () => {
   const user = useSelector(selectUser);
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -22,7 +26,6 @@ const SideNav = () => {
   const [openNotification, setNotificationOpen] = useState(false);
   const handleNotificationOpen = () => setNotificationOpen(true);
   const handleNotificationClose = () => setNotificationOpen(false);
-  // console.log(user);
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [activeKey, setActiveKey] = useState('1');

@@ -60,6 +60,7 @@ export const data = {
 //   maintainAspectRatio: false // Don't maintain w/h ratio
 // };
 
+//Component to renders different graphs on admin page
 const Graphs = () => {
   return (
     <div className="">

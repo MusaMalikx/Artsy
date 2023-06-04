@@ -6,8 +6,12 @@ import Toaster from '../../Common/Toaster';
 import { descriptionValidate, categoryValidate } from '../../../helpers/proposal-validators';
 import API from '../../../api/server';
 import { useLocation } from 'react-router-dom';
-// import { auth } from '../../../utils/firebase';
 
+/*
+This React component handles the reporting functionality.
+It provides the necessary UI elements and logic to capture user reports.
+The reports are then processed and dealt with according to the application's authenticity.
+*/
 export default function ProfileReport({ open, setOpen }) {
   const handleClose = () => {
     setCategoriesCheckbox([]);
@@ -20,6 +24,7 @@ export default function ProfileReport({ open, setOpen }) {
   const [categoriesCheckbox, setCategoriesCheckbox] = useState([]);
   const auth = JSON.parse(localStorage.getItem('auth'));
 
+  //API call for submitting a user report
   const submitReport = async (e) => {
     let url = '';
     let body = {};
@@ -44,7 +49,6 @@ export default function ProfileReport({ open, setOpen }) {
       categoryValidate(categoriesCheckbox.length)
     ) {
       e.preventDefault();
-      //Write Axios Code here
       await API.post(url, body, {
         headers: {
           token: 'Bearer ' + auth.token
@@ -72,7 +76,6 @@ export default function ProfileReport({ open, setOpen }) {
   };
 
   const handleChange = (value, checked) => {
-    // console.log(`${value} is ${checked}`);
     // Case 1 : The user checks the box
     if (checked) {
       setCategoriesCheckbox((prev) => [...prev, value]);

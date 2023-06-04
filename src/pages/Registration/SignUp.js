@@ -25,11 +25,13 @@ import {
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 
+/*
+Sign up page component for buyers and artists to register on the Artwork Auction website. 
+Provides a user-friendly interface and form inputs for capturing necessary information.
+Implements validation and authentication logic to ensure secure and smooth registration process.
+*/
 export default function SignUp() {
-  const [
-    text
-    //, helper
-  ] = useTypewriter({
+  const [text] = useTypewriter({
     words: ['Welcome to Artsy!', 'Good to see you again!', "Let's create a new account!"],
     loop: true,
     delaySpeed: 3000
@@ -40,25 +42,14 @@ export default function SignUp() {
   const toaster = useToaster();
   const [acceptTerms, setAcceptTerms] = useState(false);
 
-  // const [user, setUser] = useState({
-  //   buyer: true,
-  //   artist: false
-  // });
-
   const email = useRef();
   const password = useRef();
   const name = useRef();
   const phonenumber = useRef();
   const cnicfield = useRef();
   const [loadSignUp, setLoadSignUp] = useState(false);
-  // const clearInputs = () => {
-  //   setEmail('');
-  //   setPassword('');
-  //   setName('');
-  //   setPhonenumber('');
-  //   setCnicfield('');
-  // };
 
+  //API call for registering user in via email and password
   const signUpwithEmail = async (e) => {
     if (
       emailValidate(email.current.value) &&
@@ -97,7 +88,6 @@ export default function SignUp() {
               createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
                 .then(async (userCredential) => {
                   // Signed in
-                  // const data = userCredential.user;
                   if (user.buyer) {
                     await API.post('/api/auth/user/signup', {
                       email: userCredential.user.email,
@@ -129,11 +119,9 @@ export default function SignUp() {
                     Toaster(toaster, 'success', 'Account Creation Succcessful!');
                     Toaster(toaster, 'error', 'Select a user type');
                   }
-                  // ...
                 })
                 .catch((error) => {
                   setLoadSignUp(false);
-                  // const errorCode = error.code;
                   const errorMessage = error.message;
                   console.log(errorMessage);
                   if (errorMessage === 'Firebase: Error (auth/email-already-in-use).') {
@@ -194,19 +182,13 @@ export default function SignUp() {
     }
   };
 
+  //API call for registering users in via SSO (Single Sign On) via Google Auth
   const signInWithGoogle = () => {
     setLoadSignUp(true);
-    //dispatch(loginStart());        for redux part
 
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-
-        // // The signed-in user info.
-        // const data = result.user;
         if (user.buyer) {
           await API.post('/api/auth/user/google', {
             displayName: result.user.displayName,
@@ -218,11 +200,8 @@ export default function SignUp() {
             const newData = { ...res.data, usertype: 'buyer' };
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
           });
         } else if (user.artist) {
-          //await API.get('/').then((res) => console.log(res.data));
           await API.post('/api/auth/artist/google', {
             displayName: result.user.displayName,
             firebaseid: result.user.uid,
@@ -233,18 +212,14 @@ export default function SignUp() {
             const newData = { ...res.data, usertype: 'artist' };
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
-            //dispatch(loginSuccess(res.data));    for redux part
-            //navigate("/");
           });
         } else {
           setLoadSignUp(false);
           Toaster(toaster, 'error', 'Select a user type');
         }
-        // console.log(token, data);
       })
       .catch((error) => {
         setLoadSignUp(false);
-        //dispatch(loginFailure());          for redux part
         const errorCode = error.code;
         const errorMessage = error.message;
         const credential = GoogleAuthProvider.credentialFromError(error);

@@ -4,6 +4,11 @@ import Layout from '../../components/Layouts/ArticleLayout';
 import SearchBar from '../../components/Search/SearchBar';
 import AuctionCard from '../../components/Auction/AuctionCard';
 
+/*
+This React component is responsible for rendering the Search page of the Artsy. 
+It provides a user interface for users to search and explore artworks available for auction. 
+The component handles the search functionality and displays the search results to the users.
+*/
 const Search = () => {
   const [artworks, setArtworks] = useState([]);
   console.log(artworks);

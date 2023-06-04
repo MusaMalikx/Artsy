@@ -3,6 +3,9 @@ import { BsWhatsapp, BsTwitter } from 'react-icons/bs';
 import { AiOutlineInstagram } from 'react-icons/ai';
 import { FaFacebookF } from 'react-icons/fa';
 
+/*
+Renders the footer section of the website
+*/
 const Footer = () => {
   return (
     <footer className="relative bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-cyan-200 via-primary to-cyan-200 pt-20 pb-6">

@@ -26,6 +26,11 @@ import { useToaster } from 'rsuite';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/features/reducer/userReducer';
 
+/*
+Component for the admin sign-up page.
+Allows administrators to securely register using a secrect key and access the admin dashboard.
+Handles authentication and user input validation.
+*/
 const AdminSignUp = () => {
   const [text] = useTypewriter({
     words: ['Welcome to Artsy!', 'Good to see you again!', "Let's create a new account!"],
@@ -50,6 +55,7 @@ const AdminSignUp = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  //The is function facilities registering admin using email and password
   const signUpWithEmail = async (e) => {
     if (
       emailValidate(email.current.value) &&
@@ -85,6 +91,7 @@ const AdminSignUp = () => {
     }
   };
 
+  //API call for registering admin in via email and password
   const signUpwithEmailandPassword = async () => {
     console.log('Admin code', admincode.current.value);
     await API.post('/api/auth/admin/check', {
@@ -109,11 +116,9 @@ const AdminSignUp = () => {
                 console.log(res);
                 handleClose();
                 Toaster(toaster, 'success', 'Account Created Successfully');
-                //navigate('/admin/signin');
               });
             })
             .catch((error) => {
-              // const errorCode = error.code;
               const errorMessage = error.message;
               console.log(errorMessage);
               if (errorMessage === 'Firebase: Error (auth/email-already-in-use).') {
@@ -161,6 +166,7 @@ const AdminSignUp = () => {
       });
   };
 
+  //API call for registering admin in via SSO (Single Sign On) via Google Auth
   const signUpwithGoogle = async () => {
     console.log('Code for google:', admincode.current.value);
     await API.post('/api/auth/admin/check', {
@@ -175,9 +181,6 @@ const AdminSignUp = () => {
         const auth = getAuth(firebaseApp);
         signInWithPopup(auth, new GoogleAuthProvider())
           .then(async (result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            // const credential = GoogleAuthProvider.credentialFromResult(result);
-            // const token = credential.accessToken;
             await API.post('/api/auth/admin/google/signup', {
               displayName: result.user.displayName,
               firebaseid: result.user.uid,
@@ -189,13 +192,9 @@ const AdminSignUp = () => {
               localStorage.setItem('auth', JSON.stringify(newData));
               dispatch(setUser({ admin: true }));
               navigate('/admin/dashboard');
-              // navigate('/');
             });
-
-            // console.log(token, data);
           })
           .catch((error) => {
-            //dispatch(loginFailure());          for redux part
             const errorCode = error.code;
             const errorMessage = error.message;
             const credential = GoogleAuthProvider.credentialFromError(error);

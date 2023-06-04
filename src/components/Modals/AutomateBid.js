@@ -3,6 +3,10 @@ import { Modal, useToaster } from 'rsuite';
 import API from '../../api/server';
 import Toaster from '../Common/Toaster';
 
+/*
+This component implements an automated bid pop-up feature that allows buyers to generate bids even when they are offline. 
+It provides a seamless experience by enabling bid generation and storage, ensuring a smooth bidding process for users.
+*/
 export default function AutomateBid({ open, setOpen, bidInfo, setBidInfo, artId }) {
   const handleClose = () => setOpen(false);
   const maxAmount = useRef();

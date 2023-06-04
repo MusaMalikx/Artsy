@@ -6,11 +6,16 @@ import API from '../../../api/server';
 import lottie from '../../../assets/json/payment-processing.json';
 import Toaster from '../../Common/Toaster';
 
+/*
+This component handles the release of payments from the user's wallet.
+It provides functionality for securely transferring funds to designated recipients.
+*/
 const PaymentRelease = ({ open, setOpen, setGiveReview, artwork, updateList }) => {
   const handleClose = () => setOpen(false);
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
 
+  //API call for releasing user payment
   const releasePayment = async () => {
     try {
       const res = await API.get(`/api/users/payment/release/artwork/${artwork._id}`, {

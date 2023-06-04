@@ -19,6 +19,9 @@ const responsive = {
   }
 };
 
+/*
+This component displays a carousel of thumbnail images for a gallery.
+*/
 const ThumnailCarousel = ({ data }) => {
   return (
     <>

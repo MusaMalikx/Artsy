@@ -8,12 +8,18 @@ import {
 } from '../../../helpers/proposal-validators';
 import Toaster from '../../Common/Toaster';
 
+/*
+This React component represents the Buyer Proposal for an on-demand auction.
+It handles the presentation and functionality related to proposing an artist for requested auction.
+*/
 export default function BuyerProposal({ isOpen, setIsOpen }) {
   const title = useRef();
   const amount = useRef();
   const description = useRef();
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
+
+  //API call for creating a new on demand proposal
   const createProposal = async () => {
     try {
       const res = await API.post(
@@ -38,6 +44,7 @@ export default function BuyerProposal({ isOpen, setIsOpen }) {
     }
   };
 
+  //API call for sending a proposal to artist for ondemand artwork
   const sendProposal = (e) => {
     if (
       titleValidate(title.current.value) &&

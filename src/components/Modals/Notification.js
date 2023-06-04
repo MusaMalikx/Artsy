@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, useToaster } from 'rsuite';
 import './style/Notification.css';
-// import NotificationDescription from './Description/NotificationDescription';
 import { BsPlusCircle } from 'react-icons/bs';
 import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
 import { db } from '../../utils/firebase';
@@ -13,13 +12,16 @@ import { sendNotification } from '../../helpers/notifications';
 import Lottie from 'react-lottie-player';
 import listLoading from '../../assets/json/emptyNotification';
 
+/*
+This React component renders a list of notifications for the user.
+It utilizes a notification data source to populate the list dynamically.
+*/
 export default function Notification({ isOpen, handleClose }) {
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [notifications, setNotifications] = useState([]);
   const toaster = useToaster();
 
-  // console.log(notifications);
-
+  //API call for getting user notifications from firebase
   const getNotifications = () => {
     onSnapshot(doc(db, 'notify', auth?.user.firebaseid), (doc) => {
       setNotifications(doc.data().notifications);
@@ -44,18 +46,8 @@ export default function Notification({ isOpen, handleClose }) {
     createNotificatons();
   }, []);
 
-  // useEffect(() => {
-  //   getNotifications();
-  // });
-
+  //Add a notification in the notification popup
   const addNotifications = async () => {
-    // await updateDoc(doc(db, 'notify', auth?.user.firebaseid), {
-    //   notifications: arrayUnion({
-    //     id: uuid(),
-    //     text: sentence(),
-    //     date: Timestamp.now()
-    //   })
-    // });
     await sendNotification(auth?.user.firebaseid, uuid(), sentence());
     Toaster(toaster, 'success', 'Notification has been sent');
     getNotifications();
@@ -97,6 +89,7 @@ export default function Notification({ isOpen, handleClose }) {
   );
 }
 
+//Renders an animation no notification is received
 const EmptyNotifications = () => {
   return (
     <div className="w-full p-20 relative h-full flex flex-col justify-center items-center">
@@ -111,8 +104,8 @@ const EmptyNotifications = () => {
   );
 };
 
+//Renders a notification message
 const NotificationMessage = ({ notify }) => {
-  // console.log(notify);
   return (
     <div className="hover:shadow-xl hover:bg-slate-100 hover:scale-95 cursor-pointer transition-all ease-in-out py-2 px-5 mb-1">
       <p className="font-extralight text-sm text-slate-500 text-justify">{notify.text}</p>

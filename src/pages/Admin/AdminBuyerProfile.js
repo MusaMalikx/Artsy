@@ -28,13 +28,16 @@ import {
 } from '../../helpers/credential-validators';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 
+/*
+This component displays the profile of an buyer specifically for admin users.
+It contain additional functionalities and information relevant to admin tasks.
+*/
 export default function AdminBuyerProfile() {
   const toaster = useToaster();
   const [user] = useAuthState(getAuth());
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [wonArt, setWonArt] = useState([]);
-  // const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [profileInfo, setProfileInfo] = useState({
@@ -60,6 +63,7 @@ export default function AdminBuyerProfile() {
       });
   };
 
+  //API call for fetching buyer data
   const fetchBuyerData = async () => {
     const res = await API.get(`/api/users/find/${currentUserID}`);
     if (res.data) {
@@ -79,6 +83,8 @@ export default function AdminBuyerProfile() {
     fetchBuyerData();
     getWonArtworks();
   }, []);
+
+  //API call for signing user out of website
   const logoutuser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -209,7 +215,6 @@ export default function AdminBuyerProfile() {
                             <div>Your Account has been verified</div>
                           </Popover>
                         }>
-                        {/* <Button>Hover</Button> */}
                         <IconButton
                           className="hide"
                           icon={<GoVerified className="text-green-500 text-xl" />}
@@ -361,6 +366,7 @@ const renderIconButton = (props, ref) => (
   <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle className="hide" />
 );
 
+//A dropdown menu to with options such as add artwork, listed auctions, buyer proposals, accepted bids
 const Drop = () => {
   const navigate = useNavigate();
   const [openField, setOpenField] = useState(false);
@@ -380,6 +386,11 @@ const Drop = () => {
   );
 };
 
+/*
+This component handles the functionality for updating user profile information. 
+It allows users to modify their personal details such as name, email, and other relevant information. 
+The updated data is then saved to the database, ensuring accurate and up-to-date user profiles.
+*/
 const UpdateInfo = ({ handleClose, user, updateData }) => {
   const name = useRef();
   const phonenumber = useRef();
@@ -389,6 +400,7 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
 
+  //API call to update profile information
   const updateInformation = async (e) => {
     if (
       nameValidate(name.current.value === '' ? user.buyerName : name.current.value) &&

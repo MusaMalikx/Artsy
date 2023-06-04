@@ -9,15 +9,15 @@ import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
-//import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
 import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
-// import AuctionCard from '../../components/Auction/AuctionCard';
 import AuctionCard from '../../components/Auction/AuctionCard';
 
+/*
+This component renders the detailed information of an auction item, providing an overview of its specifications, and bidding options. 
+It allows users to view and interact with the auction item's details, facilitating a smooth and informative user experience.
+*/
 const AuctionItem = () => {
   const { state } = useLocation();
-  // console.log(state)
-  // const { user, urls } = state;
   const us = useSelector(selectUser);
   const [openAutoBid, setOpenAutoBid] = useState(false);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
@@ -33,7 +33,7 @@ const AuctionItem = () => {
   const toaster = useToaster();
   const navigate = useNavigate();
   const location = useLocation();
-  const artId = location.pathname.split('/')[2];
+  const artId = location.pathname.split('/')[4];
   const [recommendations, setRecommendations] = useState();
 
   let artworkObj;
@@ -50,16 +50,17 @@ const AuctionItem = () => {
     setOpenAutoBid(true);
   };
 
+  //API call for getting new recommendations of artworks
   const getRecommendations = async () => {
     try {
       const res = await API.get(`/api/artworks/recommend?artistId=${state.artwork.artistId}`);
-      // console.log(res);
       setRecommendations(res.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  //API call for getting highest bid information
   const getHighBidInfo = async () => {
     try {
       const res = await API.get(`/api/artworks/bidinfo/${artId}`, {
@@ -67,7 +68,6 @@ const AuctionItem = () => {
           token: 'Bearer ' + auth.token
         }
       });
-      // console.log(res);
       if (res.data) {
         setBidInfo({
           currentBid: res.data.currentBid,
@@ -82,6 +82,7 @@ const AuctionItem = () => {
     }
   };
 
+  //API call for placing a manual bid
   const placeManualBid = async (e) => {
     if (state.artwork) {
       const newBid = parseFloat(bid.current.value);
@@ -118,6 +119,7 @@ const AuctionItem = () => {
   };
 
   useEffect(() => {
+    //API getting artist of the artwork
     if (state.artwork) {
       API.get(`/api/artworks/madeby?id=${state.artwork.artistId}`)
         .then((res) => {
@@ -149,11 +151,7 @@ const AuctionItem = () => {
                 <p className="font-mono mr-auto text-gray-600 text-4xl font-bold uppercase">
                   {state.user.name}
                 </p>
-                <p className="text-xl font-mono text-green-600">
-                  {/* <AuctionItemTimer enddate={state.artwowrk.enddate} /> */}
-                  {/* this section was for sample artwork/data from unsplash so state.artwork will throw error */}
-                  21:21:00
-                </p>
+                <p className="text-xl font-mono text-green-600">21:21:00</p>
               </div>
               <p className="text-base ">
                 Made by <span className="font-bold underline cursor-pointer">Chris Johnson</span>{' '}
@@ -199,7 +197,6 @@ const AuctionItem = () => {
                       className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold">
                       Automated Bid
                     </button>
-                    {/* {<AutomateBid open={openAutoBid} setOpen={setOpenAutoBid} />} */}
                   </div>
                 </>
               )}
@@ -234,11 +231,6 @@ const AuctionItem = () => {
                       />
                     )
                   )}
-                  {/* <AuctionItemTimer
-                    endDate={state.artwork.enddate}
-                    startDate={state.artwork.startdate}
-                    artwork={artworkObj}
-                  /> */}
                 </p>
               </div>
               <p className="text-base ">
@@ -350,7 +342,6 @@ const AuctionItem = () => {
                 recommend.artwork?.length > 0 && (
                   <div key={i} className="border-l-2 border-dashed pl-4">
                     <h5>By {recommend.name}</h5>
-                    {/* <ThumnailCarousel data={recommend.artwork} /> */}
                     <div className="flex space-x-3">
                       {recommend.artwork.map((artwork) => (
                         <div key={artwork?._id} className="">
@@ -366,10 +357,6 @@ const AuctionItem = () => {
           )}
         </div>
       </div>
-      {/* <div>
-      </div> */}
-
-      {/* <SimilarAuctions data={data} /> */}
     </Layout>
   );
 };

@@ -4,9 +4,16 @@ import EmptyProposal from '../../components/Animation/EmptyProposal';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import ProposalCard from '../../components/Proposal/BuyerProposalCard';
+
+/*
+This component renders the buyer-generated proposal and is intended to be displayed to the artist. 
+It contains all the necessary information and details provided by the buyer for the proposal.
+*/
 export default function BuyerProposal() {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [proposalList, setProposalList] = useState([]);
+
+  //API call for getting all buyer generated proposals
   const getProposals = async () => {
     const res = await API.get('/api/artists/proposal', {
       headers: {

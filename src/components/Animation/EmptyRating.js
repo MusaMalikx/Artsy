@@ -1,6 +1,10 @@
 import React from 'react';
 import Lottie from 'react-lottie-player';
 import listLoading from '../../assets/json/rating';
+
+/*
+Component for display animations in case of empty rating list
+*/
 const EmptyRating = () => {
   return (
     <div className="w-full p-20 pt-0 h-full flex flex-col justify-center items-center">

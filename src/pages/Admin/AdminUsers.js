@@ -1,7 +1,6 @@
 import AdminLayout from '../../components/Layouts/AdminLayout';
 import { FaGoogle } from 'react-icons/fa';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
-// import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { BsViewList } from 'react-icons/bs';
 import ReactJdenticon from 'react-jdenticon';
 import { AiOutlineMail } from 'react-icons/ai';
@@ -11,11 +10,16 @@ import { useNavigate } from 'react-router-dom';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 
+/*
+This React component renders a list of users for admin to monitor. 
+The component provides a clear and concise way to display the users' information.
+*/
 const AdminUsers = () => {
   const [users, setUsers] = useState();
   const [artists, setArtists] = useState();
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
 
+  //API call for getting list of users
   const getUsers = async () => {
     try {
       const res = await API.get('/api/users');
@@ -24,6 +28,8 @@ const AdminUsers = () => {
       console.log(error);
     }
   };
+
+  //API call for getting list of artists
   const getArtists = async () => {
     try {
       const res = await API.get('/api/artists');
@@ -85,6 +91,9 @@ const AdminUsers = () => {
   );
 };
 
+/*
+This React component renders a single user entry in user table
+*/
 const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
   const navigate = useNavigate();
   const toaster = useToaster();
@@ -95,6 +104,7 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
     else if (status === 'Artist') navigate(`/admin/artist/profile/${user._id}`);
   };
 
+  //API call to delete a user
   const deleteUser = async () => {
     console.log(delLoading);
     setDelLoading(true);
@@ -147,11 +157,6 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
           className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-primary active:bg-cyan-700 hover:bg-cyan-700">
           <BsViewList />
         </button>
-        {/* <button
-          onClick={deleteUser}
-          className="text-lg text-white leading-none  py-1 px-2 rounded primary focus:outline-none bg-red-500 active:bg-red-700 hover:bg-red-700">
-          {delLoading ? <Loader /> : <RiDeleteBin6Fill />}
-        </button> */}
         <div className="invisible hidden" onClick={deleteUser} />
       </div>
     </div>

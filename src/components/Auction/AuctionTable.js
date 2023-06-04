@@ -10,6 +10,9 @@ import Toaster from '../Common/Toaster';
 import EmptyList from '../Animation/EmptyList';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 
+/*
+Renders a table to display a list of auctions with different fields such creation date, total bids, status, payment status
+*/
 const AuctionTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [artworks, setArtworks] = useState([]);
@@ -65,6 +68,9 @@ const AuctionTable = () => {
   );
 };
 
+/*
+Renders a table row to display a single auction in the auction table
+*/
 const AuctionTableItem = ({ data, updateList }) => {
   const endDate = data.enddate.split(',')[0];
   return (
@@ -108,6 +114,9 @@ const AuctionTableItem = ({ data, updateList }) => {
   );
 };
 
+/*
+Sort data in the table based on auction status
+*/
 const SortTable = ({ updateStatus }) => {
   const data = ['All', 'Live', 'Closed'].map((item) => ({ label: item, value: item }));
   return (
@@ -116,7 +125,6 @@ const SortTable = ({ updateStatus }) => {
         cleanable={false}
         defaultValue="All"
         onChange={(value) => {
-          //Make API calls based on values
           updateStatus(value);
           console.log(value);
         }}
@@ -128,6 +136,9 @@ const SortTable = ({ updateStatus }) => {
   );
 };
 
+/*
+Renders a dropdown list with options to view and delete auction
+*/
 const Drop = ({ artworkId, updateList }) => {
   const toaster = useToaster();
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -135,7 +146,6 @@ const Drop = ({ artworkId, updateList }) => {
   const [delLoading, setDelLoading] = useState(false);
 
   const handleViewArtworkClick = async () => {
-    // call your API here
     const res = await API.get(`/api/artworks/artwork/${artworkId}`);
     if (res.data) {
       const artwork = res.data[0];

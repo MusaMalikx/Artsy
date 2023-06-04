@@ -4,6 +4,9 @@ import { useState } from 'react';
 import Lottie from 'react-lottie-player';
 import auctionLoading from '../../assets/json/auctionLoading';
 
+/*
+Component for display animations in case of empty auction list
+*/
 const EmptyAuctions = ({ status }) => {
   const [animate, setAnimate] = useState(true);
   useEffect(() => {

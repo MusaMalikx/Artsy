@@ -19,12 +19,15 @@ import { useNavigate } from 'react-router-dom';
 import ArtworkImageUploader from '../../components/Common/ArtworkImageUploader';
 import AuctionCategoriesData from '../../constants/AuctionCategoriesData';
 
+/*
+Creating a new auction artwork component.
+This component handles the creation of a new artwork for auction.
+It includes form inputs for title, description, and image upload.
+*/
 export default function NewAuction() {
   const [category, setCategory] = useState();
-  // console.log(category);
   const toaster = useToaster();
   const auth = JSON.parse(localStorage.getItem('auth'));
-  // console.log(auth.token);
   const title = useRef();
   const baseprice = useRef();
   const [startdate, setStartDate] = useState('');
@@ -36,20 +39,8 @@ export default function NewAuction() {
   const navigate = useNavigate();
   const data = useMemo(() => AuctionCategoriesData, []);
 
+  //API for listing a new artwork with all credentials and images uploaded by user
   const AddArtwork = async (e) => {
-    // const startDate = new Date(startdate);
-    // const endDate = new Date(enddate);
-    // const currentDate = new Date();
-
-    // const startdatestring = startdate.toLocaleString();
-    // const startdateDate = new Date(startdatestring);
-
-    // console.log('startDate:- ', startDate);
-    // console.log('startdate:-', startdate);
-    // console.log('current date:- ', currentDate);
-    // console.log('start date:- ', startDate);
-    // console.log('difference:- ', startDate - currentDate);
-
     if (
       //Also Add check if files are selected or not , and max limit for pictures are 3 for now, change limit in backend in artworks.js in /add api
       titleValidate(title.current.value) &&
@@ -79,7 +70,6 @@ export default function NewAuction() {
               )
                 .then(async (res) => {
                   const formData = new FormData();
-                  // formData.append('productImage', images);
                   for (let i = 0; i < images.length && i < 9; i++) {
                     formData.append('productImage', images[i]);
                   }
@@ -96,13 +86,7 @@ export default function NewAuction() {
                       'Content-Type': 'multipart/form-data'
                     }
                   };
-
                   console.log(res);
-
-                  // for (let pair of formData.entries()) {
-                  //   console.log(pair[0], pair[1]);
-                  // }
-
                   await API.post('/api/artworks/add', formData, config)
                     .then((res) => {
                       setTimeout(() => {
@@ -214,14 +198,6 @@ export default function NewAuction() {
             className="focus:outline-none border px-2 py-3 rounded-lg focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
             placeholder="A distinct artwork depicting the last scenary before the sunset&#10;Material Used - Pastels&#10;Packing - Will be wrapped in bubble sheet "
             name="desc-artwork"></textarea>
-          {/* <input
-            type="file"
-            onChange={(e) => {
-              setImages(e.target.files);
-            }}
-            multiple
-          /> */}
-
           <button
             onClick={AddArtwork}
             className="mx-auto my-5 flex justify-center text-center items-center px-7 py-3 bg-primary text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-primary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out ">

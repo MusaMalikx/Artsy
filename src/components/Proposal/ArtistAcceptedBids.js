@@ -4,9 +4,16 @@ import API from '../../api/server';
 import { useState, useEffect } from 'react';
 import EmptyList from '../Animation/EmptyList';
 
+/*
+This React component renders the proposal of accepted bids for the artist in an on-demand auction.
+It plays a crucial role in displaying the relevant information to the users and facilitating the auction process.
+The component helps create a seamless experience for both artists and buyers.
+*/
 const ArtistAcceptedBids = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [proposalList, setProposalList] = useState([]);
+
+  //API call for getting proposal list
   const getProposals = async () => {
     await API.get('/api/artists/proposal/accepted', {
       headers: {
@@ -24,8 +31,6 @@ const ArtistAcceptedBids = () => {
   useEffect(() => {
     getProposals();
   }, []);
-
-  // console.log(proposalList);
 
   return (
     <div className="sm:px-6 w-full">
@@ -47,10 +52,6 @@ const ArtistAcceptedBids = () => {
               ) : (
                 <EmptyList />
               )}
-              {/* <ProposalTableItem />
-              <ProposalTableItem />
-              <ProposalTableItem />
-              <ProposalTableItem /> */}
             </div>
           </div>
         </div>
@@ -59,6 +60,9 @@ const ArtistAcceptedBids = () => {
   );
 };
 
+/*
+Renders single proposal item to be listed in the auction proposal table
+*/
 const ProposalTableItem = ({ proposal }) => {
   return (
     <tr

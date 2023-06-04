@@ -8,6 +8,11 @@ import EmptyList from '../Animation/EmptyList';
 import { sendNotification } from '../../helpers/notifications';
 import { v4 as uuid } from 'uuid';
 
+/*
+Component displaying the table for accepted proposals in the on-demand auction.
+Provides a clear overview of the accepted proposals and their relevant details.
+Helps in efficiently managing and tracking the progress of the auction process.
+*/
 const ProposalAcceptedTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [proposalList, setProposalList] = useState([]);
@@ -41,7 +46,6 @@ const ProposalAcceptedTable = () => {
         );
         if (res.data) {
           setDeletePropsalList([]);
-          // getProposals();
           setIsDelete(true);
           Toaster(toaster, 'success', 'Successfully deleted!');
         }
@@ -106,6 +110,9 @@ const ProposalAcceptedTable = () => {
   );
 };
 
+/*
+Renders a single accepted proposal item to be listed in the accepted proposal table
+*/
 const ProposalTableItem = ({ proposal, alterDeleteList, proposalId, updateList }) => {
   const toaster = useToaster();
 
@@ -128,6 +135,7 @@ const ProposalTableItem = ({ proposal, alterDeleteList, proposalId, updateList }
     }
   };
 
+  //API call for releasing a payment
   const releasePayment = async (e) => {
     e.preventDefault();
     if (proposal.paid === false) {

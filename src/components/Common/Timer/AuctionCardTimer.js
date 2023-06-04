@@ -5,6 +5,12 @@ import { Loader, useToaster } from 'rsuite';
 import { v4 as uuid } from 'uuid';
 import { sendNotification } from '../../../helpers/notifications';
 
+/*
+The AuctionCardTimer component displays a countdown timer 
+indicating the remaining time for an auction. It receives
+the end time of the auction as a prop and updates the timer
+accordingly.
+*/
 const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
   const toaster = useToaster();
   const [isStop, setIsStop] = useState(false);
@@ -16,6 +22,7 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
   });
   const [loader, setLoader] = useState(true);
 
+  //API call for notifying users regarding updated auction status
   const notifyUsers = async () => {
     const res = await API.get(`/api/artworks/bidderlist/${artwork._id}`);
     if (res && artwork.status.localeCompare('closed') !== 0) {
@@ -49,6 +56,7 @@ const AuctionCardTimer = ({ endDate, startDate, artwork, updateList }) => {
     }
   };
 
+  //API call for updating status of auction
   const updateStatus = async () => {
     if (timer.start !== 'close') {
       await API.put(`/api/artworks/status/${artwork._id}`, { status: 'closed' })

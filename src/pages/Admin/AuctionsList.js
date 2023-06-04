@@ -10,7 +10,12 @@ import EmptyAuction from '../../components/Animation/EmptyAuctions';
 import AuctionCategoriesData from '../../constants/AuctionCategoriesData';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const Auctions = () => {
+/*
+This React component renders a list of auctions for the admin portal. 
+It provides functionality for the admin to manage and monitor ongoing auctions. 
+The component handles the display and interaction with the auction data.
+*/
+const AuctionsList = () => {
   const toaster = useToaster();
   const params = useParams();
   // console.log(params);
@@ -140,4 +145,4 @@ const Auctions = () => {
   );
 };
 
-export default Auctions;
+export default AuctionsList;

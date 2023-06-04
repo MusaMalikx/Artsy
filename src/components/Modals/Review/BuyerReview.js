@@ -6,6 +6,11 @@ import API from '../../../api/server';
 import EmptyRating from '../../Animation/EmptyRating';
 import ReviewDescription from '../Description/ReviewDescription';
 
+/*
+This React component displays the detailed buyer review for an artwork. 
+It provides valuable insights and feedback from buyers, helping to inform potential customers about the quality and satisfaction level of the artwork. 
+By incorporating this component into the application, users can make more informed decisions based on the buyer reviews.
+*/
 export default function BuyerReview({ open, setOpen, artistId }) {
   const handleClose = () => setOpen(false);
   const [ratingList, setRatingList] = useState([]);

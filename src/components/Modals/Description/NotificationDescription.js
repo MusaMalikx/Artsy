@@ -1,5 +1,8 @@
 import React from 'react';
 
+/* 
+Component responsible for displaying the description of a notification
+*/
 export default function NotificationDescription() {
   return (
     <div className="hover:shadow-xl hover:bg-slate-100 hover:scale-95 cursor-pointer">

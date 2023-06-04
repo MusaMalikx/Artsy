@@ -28,6 +28,10 @@ import {
 } from '../../helpers/credential-validators';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 
+/*
+This component displays the profile of an artist specifically for admin users.
+It contain additional functionalities and information relevant to admin tasks.
+*/
 export default function AdminArtistProfile() {
   const navigate = useNavigate();
   const [user] = useAuthState(getAuth());
@@ -54,6 +58,7 @@ export default function AdminArtistProfile() {
   const handleUpdateInfoOpen = () => setOpenUpdateInfo(true);
   const handleUpdateInfoClose = () => setOpenUpdateInfo(false);
 
+  //API call for fetching artist data
   const fetchArtistData = async () => {
     const res = await API.get(`/api/artworks/artist/${currentUserID}`);
     if (res.data) {
@@ -71,6 +76,7 @@ export default function AdminArtistProfile() {
     }
   };
 
+  //API call for fetching rating given to artist
   const fetchAverageRating = async () => {
     const res = await API.get(`/api/artists/rating/average/${currentUserID}`);
     if (res.status === 200) {
@@ -85,6 +91,8 @@ export default function AdminArtistProfile() {
     fetchArtistData();
     fetchAverageRating();
   }, []);
+
+  //API call for signing user out of website
   const logoutuser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -242,7 +250,6 @@ export default function AdminArtistProfile() {
                             <div>Your Account has been verified</div>
                           </Popover>
                         }>
-                        {/* <Button>Hover</Button> */}
                         <IconButton
                           className="hide"
                           icon={<GoVerified className="text-green-500 text-xl" />}
@@ -319,36 +326,32 @@ export default function AdminArtistProfile() {
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Mobile:</span>
                     <span
-                      className={`${
-                        profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                      }`}>
+                      className={`${profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                       {profileInfo.phoneNumber}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">CNIC:</span>
                     <span
-                      className={`${
-                        profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
-                      }`}>
+                      className={`${profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
+                        }`}>
                       {profileInfo.cnic}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Location:</span>
                     <span
-                      className={`${
-                        profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                      }`}>
+                      className={`${profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                       {profileInfo.location}
                     </span>
                   </li>
                   <li className="flex border-b py-2">
                     <span className="font-bold w-24">Languages:</span>
                     <span
-                      className={`${
-                        profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                      }`}>
+                      className={`${profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                       {profileInfo.languages}
                     </span>
                   </li>
@@ -392,6 +395,7 @@ const renderIconButton = (props, ref) => {
   return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle />;
 };
 
+//A dropdown menu to with options such as add artwork, listed auctions, buyer proposals, accepted bids
 const Drop = () => {
   const navigate = useNavigate();
   return (
@@ -408,6 +412,11 @@ const Drop = () => {
   );
 };
 
+/*
+This component handles the functionality for updating user profile information. 
+It allows users to modify their personal details such as name, email, and other relevant information. 
+The updated data is then saved to the database, ensuring accurate and up-to-date user profiles.
+*/
 const UpdateInfo = ({ handleClose, user, updateData }) => {
   const name = useRef();
   const phonenumber = useRef();
@@ -417,6 +426,7 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
 
+  //API call to update profile information
   const updateInformation = async (e) => {
     if (
       nameValidate(name.current.value === '' ? user.artistName : name.current.value) &&
@@ -451,8 +461,8 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
     } else {
       !nameValidate(name.current.value === '' ? user.artistName : name.current.value)
         ? name.current.setCustomValidity(
-            'Name must contain only alphabets and length should be greater than or equal to 3'
-          )
+          'Name must contain only alphabets and length should be greater than or equal to 3'
+        )
         : name.current.setCustomValidity('');
       !phoneValidate(
         phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value
