@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactJdenticon from 'react-jdenticon';
 import { Rate } from 'rsuite';
+
+/* 
+Component responsible for displaying the description of a review
+*/
 export default function ReviewDescription({ rating }) {
   return (
     <div className="flex my-3 mr-3 md:flex-row flex-col justify-center items-center gap-2 p-4 border bg-white shadow-md hover:shodow-lg rounded-2xl">

@@ -7,6 +7,10 @@ import Stats from '../../components/Dashboard/Admin/Stats';
 import AdminLayout from '../../components/Layouts/AdminLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 
+/*
+This component renders the admin dashboard interface, providing access to various administrative features and functionalities.
+The layout and design are optimized for ease of use and efficient administration tasks.
+*/
 const AdminDashboard = () => {
   return (
     <AdminLayout title="Auctions" bool>

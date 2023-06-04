@@ -9,15 +9,15 @@ import API from '../../api/server';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
-//import SimilarAuctions from '../../components/Carousel/SimilarAuctions';
 import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
-// import AuctionCard from '../../components/Auction/AuctionCard';
 import AuctionCard from '../../components/Auction/AuctionCard';
 
+/*
+This component renders the detailed information of an auction item, providing an overview of its specifications, and bidding options. 
+It allows users to view and interact with the auction item's details, facilitating a smooth and informative user experience.
+*/
 const AuctionItem = () => {
   const { state } = useLocation();
-  // console.log(state)
-  // const { user, urls } = state;
   const us = useSelector(selectUser);
   const [openAutoBid, setOpenAutoBid] = useState(false);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
@@ -33,7 +33,7 @@ const AuctionItem = () => {
   const toaster = useToaster();
   const navigate = useNavigate();
   const location = useLocation();
-  const artId = location.pathname.split('/')[2];
+  const artId = location.pathname.split('/')[4];
   const [recommendations, setRecommendations] = useState();
 
   let artworkObj;
@@ -50,17 +50,17 @@ const AuctionItem = () => {
     setOpenAutoBid(true);
   };
 
+  //API call for getting new recommendations of artworks
   const getRecommendations = async () => {
     try {
       const res = await API.get(`/api/artworks/recommend?artistId=${state.artwork.artistId}`);
-      // console.log(res);
       setRecommendations(res.data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-
+  //API call for getting highest bid information
   const getHighBidInfo = async () => {
     try {
       const res = await API.get(`/api/artworks/bidinfo/${artId}`, {
@@ -68,7 +68,6 @@ const AuctionItem = () => {
           token: 'Bearer ' + auth.token
         }
       });
-      // console.log(res);
       if (res.data) {
         setBidInfo({
           currentBid: res.data.currentBid,
@@ -83,6 +82,7 @@ const AuctionItem = () => {
     }
   };
 
+  //API call for placing a manual bid
   const placeManualBid = async (e) => {
     if (state.artwork) {
       const newBid = parseFloat(bid.current.value);
@@ -119,6 +119,7 @@ const AuctionItem = () => {
   };
 
   useEffect(() => {
+    //API getting artist of the artwork
     if (state.artwork) {
       API.get(`/api/artworks/madeby?id=${state.artwork.artistId}`)
         .then((res) => {
@@ -150,11 +151,7 @@ const AuctionItem = () => {
                 <p className="font-mono mr-auto text-gray-600 text-4xl font-bold uppercase">
                   {state.user.name}
                 </p>
-                <p className="text-xl font-mono text-green-600">
-                  {/* <AuctionItemTimer enddate={state.artwowrk.enddate} /> */}
-                  {/* this section was for sample artwork/data from unsplash so state.artwork will throw error */}
-                  21:21:00
-                </p>
+                <p className="text-xl font-mono text-green-600">21:21:00</p>
               </div>
               <p className="text-base ">
                 Made by <span className="font-bold underline cursor-pointer">Chris Johnson</span>{' '}
@@ -200,7 +197,6 @@ const AuctionItem = () => {
                       className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold">
                       Automated Bid
                     </button>
-                    {/* {<AutomateBid open={openAutoBid} setOpen={setOpenAutoBid} />} */}
                   </div>
                 </>
               )}
@@ -235,11 +231,6 @@ const AuctionItem = () => {
                       />
                     )
                   )}
-                  {/* <AuctionItemTimer
-                    endDate={state.artwork.enddate}
-                    startDate={state.artwork.startdate}
-                    artwork={artworkObj}
-                  /> */}
                 </p>
               </div>
               <p className="text-base ">
@@ -261,8 +252,8 @@ const AuctionItem = () => {
                   <span>{bidInfo.basePrice}</span>
                 </div>
               </div>
-              {
-                state?.artwork?.status !== 'upcoming' && <>
+              {state?.artwork?.status !== 'upcoming' && (
+                <>
                   <div className="flex text-lg">
                     <p className="mr-1 font-mono">Highest Bid:</p>
                     <div className="font-bold text-green-800">
@@ -279,91 +270,93 @@ const AuctionItem = () => {
                     </div>
                   </div>
                 </>
-              }
-              {us.buyer && state.artwork.status !== 'closed' && state?.artwork?.status !== 'upcoming' && (
-                <>
-                  <form>
-                    <div className="mb-4">
-                      <input
-                        className="text-xl w-96 py-2 outline-gray-400 px-auto rounded border focus:ring-0 focus:border-primary focus:border-2"
-                        ref={bid}
-                        min={
-                          bidInfo.currentBid > bidInfo.basePrice
-                            ? bidInfo.currentBid + 1
-                            : bidInfo.basePrice + 1
-                        }
-                        type="number"
-                      // value={quantity}
-                      />
-                    </div>
-
-                    <div className="flex items-center gap-6">
-                      <button
-                        type="submit"
-                        onClick={placeManualBid}
-                        disabled={disableManualBid}
-                        className={`${disableManualBid ? 'opacity-50' : 'active:bg-cyan-800'
-                          } bg-primary focus:outline-none text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold`}>
-                        Place Bid
-                      </button>
-                      <p className="font-bold">OR</p>
-                      <button
-                        onClick={placeAutoBid}
-                        className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold">
-                        Automated Bid
-                      </button>
-                      {
-                        <AutomateBid
-                          open={openAutoBid}
-                          setOpen={setOpenAutoBid}
-                          bidInfo={bidInfo}
-                          artId={artId}
-                          setBidInfo={() => {
-                            getHighBidInfo();
-                          }}
-                        />
-                      }
-                    </div>
-                    {disableManualBid && (
-                      <p className="mt-2 text-sm text-red-400">*Automated Bid Feature is Enabled</p>
-                    )}
-                  </form>
-                </>
               )}
+              {us.buyer &&
+                state.artwork.status !== 'closed' &&
+                state?.artwork?.status !== 'upcoming' && (
+                  <>
+                    <form>
+                      <div className="mb-4">
+                        <input
+                          className="text-xl w-96 py-2 outline-gray-400 px-auto rounded border focus:ring-0 focus:border-primary focus:border-2"
+                          ref={bid}
+                          min={
+                            bidInfo.currentBid > bidInfo.basePrice
+                              ? bidInfo.currentBid + 1
+                              : bidInfo.basePrice + 1
+                          }
+                          type="number"
+                          // value={quantity}
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-6">
+                        <button
+                          type="submit"
+                          onClick={placeManualBid}
+                          disabled={disableManualBid}
+                          className={`${
+                            disableManualBid ? 'opacity-50' : 'active:bg-cyan-800'
+                          } bg-primary focus:outline-none text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold`}>
+                          Place Bid
+                        </button>
+                        <p className="font-bold">OR</p>
+                        <button
+                          onClick={placeAutoBid}
+                          className="bg-primary focus:outline-none active:bg-cyan-800 text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold">
+                          Automated Bid
+                        </button>
+                        {
+                          <AutomateBid
+                            open={openAutoBid}
+                            setOpen={setOpenAutoBid}
+                            bidInfo={bidInfo}
+                            artId={artId}
+                            setBidInfo={() => {
+                              getHighBidInfo();
+                            }}
+                          />
+                        }
+                      </div>
+                      {disableManualBid && (
+                        <p className="mt-2 text-sm text-red-400">
+                          *Automated Bid Feature is Enabled
+                        </p>
+                      )}
+                    </form>
+                  </>
+                )}
             </div>
           </div>
         </div>
       )}
 
-      <div className='mx-5 p-10 border-gray-400 border space-x-3 rounded-lg mb-20 md:my-20'>
+      <div className="mx-5 p-10 border-gray-400 border space-x-3 rounded-lg mb-20 md:my-20">
         <div className="flex justify-center items-center mb-20">
           <h2 className="font-semibold uppercase text-3xl">Similar Auctions Items</h2>
         </div>
         <div className="flex overflow-x-scroll">
-          {
-            recommendations?.length > 0 ?
-              recommendations?.map((recommend, i) => (
-                recommend.artwork?.length > 0 &&
-                <div key={i} className="border-l-2 border-dashed pl-4">
-                  <h5>By {recommend.name}</h5>
-                  {/* <ThumnailCarousel data={recommend.artwork} /> */}
-                  <div className='flex space-x-3'>
-                    {recommend.artwork.map((artwork) => (
-                      <div key={artwork?._id} className=''>
-                        <AuctionCard artwork={artwork} />
-                      </div>
-                    ))
-                    }
+          {recommendations?.length > 0 ? (
+            recommendations?.map(
+              (recommend, i) =>
+                recommend.artwork?.length > 0 && (
+                  <div key={i} className="border-l-2 border-dashed pl-4">
+                    <h5>By {recommend.name}</h5>
+                    <div className="flex space-x-3">
+                      {recommend.artwork.map((artwork) => (
+                        <div key={artwork?._id} className="">
+                          <AuctionCard artwork={artwork} />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )) : <h3>No Auctions Recommended</h3>
-          }
+                )
+            )
+          ) : (
+            <h3>No Auctions Recommended</h3>
+          )}
         </div>
       </div>
-      {/* <div>
-      </div> */}
-
-      {/* <SimilarAuctions data={data} /> */}
     </Layout>
   );
 };

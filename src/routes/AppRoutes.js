@@ -34,6 +34,11 @@ import ForgotPassword from '../pages/Auth/ForgotPassword';
 import AdminBuyerProfile from '../pages/Admin/AdminBuyerProfile';
 import AdminArtistProfile from '../pages/Admin/AdminArtistProfile';
 
+/*
+Component responsible for defining the routes and rendering the appropriate components based on the user's authentication status and role.
+Handles navigation and ensures that the correct components are displayed for different user types and their corresponding actions.
+Helps in organizing and managing the flow of the application by defining the routes and their associated components.
+*/
 const AppRoutes = () => {
   const [data, setPhotosResponse] = useState(null);
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
@@ -108,7 +113,6 @@ const AppRoutes = () => {
               <>
                 <Route path="add/artwork" element={<NewAuction />} />
                 <Route path="artist/auctions" element={<ArtistAuctionList />} />
-                {/* <Route path="artist/profile" element={<ArtistProfileDashboard />} /> */}
                 <Route path="view/buyer/proposal" element={<BuyerProposal data={data} />} />
                 <Route path="view/artist/accepted/bids" element={<ArtistAcceptedBids />} />
               </>
@@ -118,7 +122,6 @@ const AppRoutes = () => {
                 <Route path="bids" element={<Bids data={data} />} />
                 <Route path="bids/won" element={<BidsWon data={data} />} />
                 <Route path="view/buyer/proposal" element={<BuyerProposal />} />
-                {/* <Route path="buyer/profile" element={<BuyerProfileDashboard data={data} />} /> */}
                 <Route path="view/buyer/created/proposal" element={<BuyerCreatedProposal />} />
                 <Route path="view/artist/proposal/:proposalId" element={<ArtistProposal />} />
                 <Route path="view/buyer/accepted/proposal" element={<BuyerAcceptedProposal />} />

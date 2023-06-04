@@ -5,6 +5,10 @@ import { Drawer, useToaster } from 'rsuite';
 import API from '../../../api/server';
 import Toaster from '../../Common/Toaster';
 
+/*
+This React component represents the Artist Proposal drawer used in on-demand auctions. 
+It provides functionality for managing and displaying proposals submitted by buyers.
+*/
 export default function ArtistDrawer({ setOpen, proposalInfo }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -12,6 +16,7 @@ export default function ArtistDrawer({ setOpen, proposalInfo }) {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
 
+  //API call for accepting a ondemand proposal
   const acceptProposal = async (e) => {
     e.preventDefault();
     try {
@@ -50,17 +55,6 @@ export default function ArtistDrawer({ setOpen, proposalInfo }) {
               <div className="shadow-all object-cover align-middle border-none bg-white">
                 <ReactJdenticon size="200" value={proposalInfo.email} />
               </div>
-              {/* <div className=" rounded-full relative w-40 h-40 overflow-hidden">
-                <img
-                  className=" w-full h-full object-cover "
-                  src={
-                    proposalInfo.artistImage !== ''
-                      ? proposalInfo.artistImage
-                      : 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg'
-                  }
-                  alt="Profile Image"
-                />
-              </div> */}
               <div className="font-bold text-center justify-between w-full">
                 <p className="text-green-500 capitalize text-xl">{proposalInfo.artistName}</p>
                 <p className="font-light">Karachi, Sindh, Pakistan</p>

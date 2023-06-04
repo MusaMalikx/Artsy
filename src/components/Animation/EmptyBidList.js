@@ -3,6 +3,10 @@ import React from 'react';
 import BidList from '../../assets/json/BidList.json';
 import { useState } from 'react';
 import { useEffect } from 'react';
+
+/*
+Component for display animations in case of empty bid list
+*/
 const EmptyBidList = () => {
   const [animate, setAnimate] = useState(true);
   useEffect(() => {

@@ -10,7 +10,6 @@ import ProfileReport from '../../components/Modals/Report/ProfileReport';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/features/reducer/userReducer';
 import { Button, Dropdown, IconButton, Popover, Whisper } from 'rsuite';
-//import BuyerReview from '../../components/Modals/Review/BuyerReview';
 import ProfileWonAuctionCard from '../../components/Auction/ProfileWonAuctionCard';
 import { getAuth, signOut } from 'firebase/auth';
 import Toaster from '../../components/Common/Toaster';
@@ -27,18 +26,20 @@ import {
   cnicValidate,
   textValidate
 } from '../../helpers/credential-validators';
-// import unVerifiedMessage from '../../constants/UnVerifiedMessage';
 
+/*
+This component represents the buyers profile dashboard, which displays relevant information and controls for managing an buyer's profile. 
+It allows artists to view and update their profile details, view bids, manage their portfolio, and interact with artists. 
+This component serves as the central hub for buyers to manage and showcase their won artworks.
+*/
 export default function BuyerProfileDashboard() {
   const toaster = useToaster();
   const [user] = useAuthState(getAuth());
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [wonArt, setWonArt] = useState([]);
-  // const [openReview, setOpenReview] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
-  // console.log('auth')
   const [profileInfo, setProfileInfo] = useState({
     buyerName: 'Unknown',
     profileImage:
@@ -52,6 +53,7 @@ export default function BuyerProfileDashboard() {
   const handleUpdateInfoOpen = () => setOpenUpdateInfo(true);
   const handleUpdateInfoClose = () => setOpenUpdateInfo(false);
 
+  //API call for fetching buyer's won auctions
   const getWonArtworks = async () => {
     await API.get(`/api/users/find/artworks/won/${auth.user._id}`)
       .then((res) => {
@@ -62,6 +64,7 @@ export default function BuyerProfileDashboard() {
       });
   };
 
+  //API call for fetching buyer data
   const fetchBuyerData = async () => {
     const res = await API.get(`/api/users/find/${currentUserID}`);
     if (res.data) {
@@ -81,6 +84,8 @@ export default function BuyerProfileDashboard() {
     fetchBuyerData();
     getWonArtworks();
   }, []);
+
+  //API call for Signing buyer out of website
   const logoutuser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -137,39 +142,10 @@ export default function BuyerProfileDashboard() {
                           }
                         />
                       </div>
-                      {/* <img
-                        src={profileInfo.profileImage}
-                        className="shadow-xl rounded-full h-36 w-36 md:h-auto md:w-48 object-cover align-middle border-none absolute -m-20 -ml-24 md:-mt-24 max-w-200-px"
-                        alt="profile"
-                        srcSet=""
-                      /> */}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                     <div className="py-6 px-3 mt-32 sm:mt-0 flex justify-between">
-                      {/* <div className="text-center">
-                        <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          <div className="flex text-yellow-500">
-                            <AiFillStar />
-                            <AiFillStar />
-                            <AiFillStar />
-                            <AiFillStar />
-                            <AiOutlineStar />
-                          </div>
-                        </span>
-                        <span className="text-sm text-blueGray-400 block">12 Reviews</span>
-                        <span className="text-sm text-blueGray-400">
-                          <div className="mt-2 flex w-full justify-center">
-                            <button
-                              className="bg-primary active:bg-cyan-700 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
-                              type="button"
-                              onClick={() => setOpenReview(true)}>
-                              View
-                            </button>
-                            {<BuyerReview open={openReview} setOpen={setOpenReview} />}
-                          </div>
-                        </span>
-                      </div>*/}
                       <div className="flex justify-end items-end w-full">
                         <button
                           className="bg-primary active:bg-cyan-700 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
@@ -265,14 +241,6 @@ export default function BuyerProfileDashboard() {
                         />
                       </Whisper>
                     )}
-                    {/* <Whisper
-                      placement="bottomStart"
-                      controlId="control-id-with-dropdown"
-                      trigger="click"
-                      ref={ref}
-                      speaker={<VerifyPopover onSelect={handleSelectMenu} />}>
-                      <Button>File</Button>
-                    </Whisper> */}
                   </div>
                   <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700">
                     {profileInfo.buyerName}
@@ -319,32 +287,36 @@ export default function BuyerProfileDashboard() {
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">Mobile:</span>
                       <span
-                        className={`${profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                          }`}>
+                        className={`${
+                          profileInfo.phoneNumber === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                         {profileInfo.phoneNumber}
                       </span>
                     </li>
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">CNIC:</span>
                       <span
-                        className={`${profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
-                          }`}>
+                        className={`${
+                          profileInfo.cnic === 'Not Verified' ? 'text-red-700' : 'text-green-700'
+                        }`}>
                         {profileInfo.cnic}
                       </span>
                     </li>
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">Location:</span>
                       <span
-                        className={`${profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                          }`}>
+                        className={`${
+                          profileInfo.location === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                         {profileInfo.location}
                       </span>
                     </li>
                     <li className="flex border-b py-2">
                       <span className="font-bold w-24">Languages:</span>
                       <span
-                        className={`${profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
-                          }`}>
+                        className={`${
+                          profileInfo.languages === 'Unknown' ? 'text-red-700' : 'text-gray-700'
+                        }`}>
                         {profileInfo.languages}
                       </span>
                     </li>
@@ -389,6 +361,9 @@ const renderIconButton = (props, ref) => {
   return <IconButton {...props} ref={ref} icon={<BsThreeDotsVertical />} circle className="hide" />;
 };
 
+/*
+Renders a dropdown menu to display option bids, bids won, add proposals, created proposals, accepted proposals
+*/
 const Drop = () => {
   const navigate = useNavigate();
   const [openField, setOpenField] = useState(false);
@@ -408,6 +383,11 @@ const Drop = () => {
   );
 };
 
+/*
+This component handles the functionality for updating user profile information. 
+It allows users to modify their personal details such as name, email, and other relevant information. 
+The updated data is then saved to the database, ensuring accurate and up-to-date user profiles.
+*/
 const UpdateInfo = ({ handleClose, user, updateData }) => {
   const name = useRef();
   const phonenumber = useRef();
@@ -417,6 +397,7 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const toaster = useToaster();
 
+  //API call to update profile information
   const updateInformation = async (e) => {
     if (
       nameValidate(name.current.value === '' ? user.buyerName : name.current.value) &&
@@ -451,8 +432,8 @@ const UpdateInfo = ({ handleClose, user, updateData }) => {
     } else {
       !nameValidate(name.current.value === '' ? user.buyerName : name.current.value)
         ? name.current.setCustomValidity(
-          'Name must contain only alphabets and length should be greater than or equal to 3'
-        )
+            'Name must contain only alphabets and length should be greater than or equal to 3'
+          )
         : name.current.setCustomValidity('');
       !phoneValidate(
         phonenumber.current.value === '' ? user.phoneNumber : phonenumber.current.value

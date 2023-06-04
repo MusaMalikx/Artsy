@@ -9,9 +9,13 @@ import { useToaster } from 'rsuite';
 import Toaster from '../../components/Common/Toaster';
 import { v4 as uuid } from 'uuid';
 import { sendNotification } from '../../helpers/notifications';
-// import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
+/*
+Display a list of auctions won by the user.
+Each item in the list represents a single auction won.
+Provides visibility and quick access to the user's successful bids.
+*/
 const BidsWon = () => {
   const [paymentRelease, setPaymentRelease] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState({});
@@ -19,20 +23,12 @@ const BidsWon = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [wonArt, setWonArt] = useState([]);
   const toaster = useToaster();
-  // const navigate = useNavigate();
 
-  // const handleClick = (e, artwork) => {
-  //   e.preventDefault();
-  //   console.log(artwork)
-  //   // if (artwork?.paymentStatus === 'paid')
-  //   navigate(`/auctions/${artwork.status}/1/${artwork._id}`, { state: { artwork } });
-  // };
+  //API call for getting all the won artworks
   const getArtworks = async () => {
     const res = await API.get(`/api/users/find/artworks/won/${auth.user._id}`);
     setWonArt(res.data);
   };
-
-  // console.log("won", wonArt)
 
   useEffect(() => {
     getArtworks();
@@ -42,6 +38,8 @@ const BidsWon = () => {
     setPaymentRelease(false);
     setGiveReview(true);
   };
+
+  //API call for claiming a won artwork
   const claimArtwork = async (artwork) => {
     try {
       const res = await API.post(
@@ -59,6 +57,7 @@ const BidsWon = () => {
       if (res.status !== 200) {
         Toaster(toaster, 'error', 'Error Occured');
       } else {
+        //Making an API call for sending a notification of
         await sendNotification(
           artwork.artistFid,
           uuid(),
@@ -89,14 +88,11 @@ const BidsWon = () => {
             wonArt.map((art) => {
               return (
                 <>
-                  <div
-                    // onClick={(e) => handleClick(e, art)}
-                    className="py-6 flex justify-center hover:scale-105 transition-all">
+                  <div className="py-6 flex justify-center hover:scale-105 transition-all">
                     <div className="flex lg:flex-row flex-col w-full items-center bg-white shadow-lg rounded-lg overflow-hidden">
                       <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
                         <img
                           className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
-                          // src={`http://localhost:8080/api/artworks/image?filename=${art.images[0]}`}
                           src={art.images[0]}
                           alt={art.title}
                         />
@@ -114,13 +110,11 @@ const BidsWon = () => {
                             Won :{' '}
                             <span className="font-bold text-blue-500 ">
                               {' '}
-                              {/* {art.enddate.split(',')[0]} */}
-                              {moment(art.enddate).format("DD/mm/yyyy hh:mm A")}
+                              {moment(art.enddate).format('DD/mm/yyyy hh:mm A')}
                             </span>
                           </h1>
                         </div>
                         <div className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
-                          {/* <button className="hide py-2 px-10 mx-2 my-4 rounded text-white bg-emerald-600 border active:bg-emerald-500" onClick={(e) => handleClick(e, art)}>view</button> */}
                           {art.paymentStatus === 'payment' ? (
                             <button
                               className="hide py-2 px-10 mx-2 rounded text-white bg-primary border active:bg-emerald-500"

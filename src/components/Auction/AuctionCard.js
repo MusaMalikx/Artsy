@@ -6,12 +6,13 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/reducer/userReducer';
 import AuctionCardTimer from '../Common/Timer/AuctionCardTimer';
 
+/*
+This component renders a card for displaying auction listings
+*/
 const AuctionCard = ({ artwork, updateList }) => {
   const navigate = useNavigate();
   const usr = useSelector(selectUser);
   const params = useParams();
-  // console.log(params.page);
-
   const handleClick = () => {
     if (usr.admin) {
       navigate(`/admin/view/auctions/${artwork.id}`, {
@@ -49,7 +50,6 @@ const AuctionCard = ({ artwork, updateList }) => {
             <div>
               <img
                 className="w-40 h-32 rounded-md cursor-pointer"
-                // src='https://www.loonapix.com/img/filter/list/1562708307.jpg'
                 src={artwork.urls.thumb}
                 alt={artwork.user.username}
               />
@@ -106,8 +106,6 @@ const AuctionCard = ({ artwork, updateList }) => {
             <div>
               <img
                 className="w-40 h-32 rounded-md cursor-pointer"
-                // src='https://www.loonapix.com/img/filter/list/1562708307.jpg'
-                // src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
                 src={artwork.images[0]}
                 alt={artwork.title}
               />
@@ -140,8 +138,8 @@ const AuctionCard = ({ artwork, updateList }) => {
               {artwork?.status === 'closed'
                 ? 'Closing Bid: '
                 : artwork?.status === 'upcoming'
-                  ? 'Upcoming Bid Base: '
-                  : artwork?.status === 'live' && 'Current Bid: '}
+                ? 'Upcoming Bid Base: '
+                : artwork?.status === 'live' && 'Current Bid: '}
               <span className="font-bold">PKR {artwork.currentbid}</span>
             </p>
           </div>

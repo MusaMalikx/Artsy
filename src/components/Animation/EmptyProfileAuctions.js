@@ -3,6 +3,10 @@ import Lottie from 'react-lottie-player';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import profileAuctionListing from '../../assets/json/profileAuctionListing';
+
+/*
+Component for display animations in case of empty profile auctions
+*/
 const EmptyProfileAuctions = () => {
   const [animate, setAnimate] = useState(true);
   useEffect(() => {

@@ -9,6 +9,10 @@ import {
 } from '../../../helpers/proposal-validators';
 import Toaster from '../../Common/Toaster';
 
+/*
+This React component represents the ArtistProposal for an on-demand auction.
+It handles the presentation and functionality related to proposing an buyer for auction.
+*/
 export default function ArtistProposal({
   isOpen,
   setIsOpen,
@@ -41,6 +45,7 @@ export default function ArtistProposal({
     }
   }, [isBidPlaced]);
 
+  //API call for placing bid on proposal
   const placeBidProposal = async () => {
     try {
       const res = await API.post(
@@ -67,6 +72,7 @@ export default function ArtistProposal({
     }
   };
 
+  //API call for sending proposal to buyer
   const sendProposal = (e) => {
     if (
       titleValidate(title.current.value) &&
@@ -160,6 +166,7 @@ export default function ArtistProposal({
         </Modal>
       ) : (
         //Bid is already placed by artist then show his details NEED to ADD proposal status Later
+
         <Modal size={'sm'} open={isOpen} onClose={() => setIsOpen(false)}>
           <Modal.Header>
             <Modal.Title>

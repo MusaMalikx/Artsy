@@ -5,6 +5,13 @@ import { Loader, useToaster } from 'rsuite';
 import { v4 as uuid } from 'uuid';
 import { sendNotification } from '../../../helpers/notifications';
 
+/**
+
+AuctionItemTimer component displays the remaining time for an auction item.
+It receives the end time of the auction as a prop and calculates the remaining time
+to display a countdown. This component updates dynamically and provides a visual
+representation of the time left for bidding on an auction item.
+*/
 const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
   const toaster = useToaster();
   const [timer, setTimer] = useState('00:00:00');
@@ -44,6 +51,7 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
     }
   };
 
+  //API call for closing an auction
   const updateStatusClosed = async () => {
     if (timer.localeCompare('Auction Closed') !== 0 && status !== 'closed') {
       await API.put(`/api/artworks/status/${artwork.id}`, { status: 'closed' })
@@ -57,6 +65,7 @@ const AuctionItemTimer = ({ endDate, startDate, artwork }) => {
     }
   };
 
+  //API call for making an auction live
   const updateStatusLive = async () => {
     if (status === 'comming soon') {
       await API.put(`/api/artworks/status/${artwork.id}`, { status: 'live' })

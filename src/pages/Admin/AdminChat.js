@@ -24,6 +24,10 @@ import { ClipLoader } from 'react-spinners';
 import { v4 as uuid } from 'uuid';
 import { format } from 'timeago.js';
 
+/*
+This React component represents a chat interface for communication between the admin with the artist, and buyer. 
+It facilitates seamless interaction and coordination among the involved parties, allowing them to exchange messages, share updates, and address any queries or concerns efficiently.
+*/
 const Chat = () => {
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [conversations, setConversations] = useState([]);
@@ -43,6 +47,7 @@ const Chat = () => {
   }, [auth?.user.firebaseid]);
 
   useEffect(() => {
+    //API call for getting user chats
     const getMessages = () => {
       onSnapshot(doc(db, 'chats', clickedUser?.cid), (doc) => {
         setMessages(doc.data().messages);
@@ -53,8 +58,7 @@ const Chat = () => {
   }, [clickedUser?.cid]);
 
   const handleSend = async () => {
-    // console.log(newMessage);
-
+    //API call sending new message
     await updateDoc(doc(db, 'chats', clickedUser?.cid), {
       messages: arrayUnion({
         id: uuid(),
@@ -63,7 +67,7 @@ const Chat = () => {
         date: Timestamp.now()
       })
     });
-
+    //API call for display user last sent message
     await updateDoc(doc(db, 'userChats', auth?.user.firebaseid), {
       [clickedUser?.cid + '.lastMessage']: {
         text: newMessage
@@ -177,6 +181,9 @@ const Chat = () => {
   );
 };
 
+/*
+This React component is responsible a single chat box entry
+*/
 const ChatItem = ({ chat }) => {
   return (
     <div
@@ -195,6 +202,10 @@ const ChatItem = ({ chat }) => {
     </div>
   );
 };
+
+/*
+This React component is responsible for rendering a popup message to select user to begin a chat. 
+*/
 
 const Messages = ({ messages, user, clickedUser }) => {
   useEffect(() => {
@@ -222,6 +233,9 @@ const Messages = ({ messages, user, clickedUser }) => {
   );
 };
 
+/*
+This React component is responsible for rendering a message in the chatbox. 
+*/
 const Message = ({ own, message, email, clickedUser }) => {
   return (
     <>
@@ -252,6 +266,10 @@ const Message = ({ own, message, email, clickedUser }) => {
   );
 };
 
+/*
+This React component is responsible for rendering a user selection feature and displaying previous chat conversations. 
+It efficiently handles the user interface and provides a seamless experience for users to navigate through their chat history.
+*/
 const ConversationsModal = ({ open, setOpen, auth }) => {
   const toaster = useToaster();
   const [select, setSelect] = useState(null);
@@ -262,12 +280,10 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
   const handleClose = () => {
     setOpen(false);
   };
-
   const handleSelect = async (e) => {
     e.preventDefault();
     setLoader(true);
     if (select !== null) {
-      // const auth?.user.firebaseid = auth?.user.firebaseid;
       const combineId =
         auth?.user.firebaseid > select.firebaseid
           ? auth?.user.firebaseid + select.firebaseid
@@ -276,16 +292,13 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
       console.log('combine', combineId);
 
       try {
+        //API call for getting user chats
         const res = await getDoc(doc(db, 'chats', combineId));
-        // console.log('res', res.data());
-
         if (!res.exists()) {
           await setDoc(doc(db, 'chats', combineId), { messages: [] });
 
           const res1 = await getDoc(doc(db, 'userChats', auth?.user.firebaseid));
-          // console.log('res1', res1);
           const res2 = await getDoc(doc(db, 'userChats', select?.firebaseid));
-          // console.log('res2', res2);
 
           if (res1.exists()) {
             await updateDoc(doc(db, 'userChats', auth.user.firebaseid), {
@@ -308,7 +321,6 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
                 },
                 date: serverTimestamp()
               }
-              // [combineId]: { date: serverTimestamp() }
             });
           }
 
@@ -333,7 +345,6 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
                 },
                 date: serverTimestamp()
               }
-              // [combineId]: { date: serverTimestamp() }
             });
 
             handleClose();
@@ -344,24 +355,8 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
           console.log('res', res.data());
         }
 
-        // const createUserChats = async (auth?.user.firebaseid) => {
-        //   try {
-        //     const res = await getDoc(doc(db, 'userChats', auth?.user.firebaseid));
-        //     if (!res.exists()) {
-        //       await setDoc(doc(db, 'userChats', auth?.user.firebaseid));
-        //     }
-        //   } catch (error) {
-        //     console.log(error);
-        //   }
-        // };
-        // console.log(select);
-        // const res = await API.post('/api/conversations', conversation);
-        // console.log(res);
-        // setConversations((prev) => [...prev, res.data]);
         setSelect(null);
         setLoader(false);
-        // handleClose();
-        // Toaster(toaster, 'success', 'Conversation has been created');
       } catch (error) {
         console.log(error);
         setLoader(false);
@@ -370,6 +365,7 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
   };
 
   useEffect(() => {
+    //API call for getting buyers list
     const getUsers = async () => {
       try {
         const res = await API.get('/api/users');
@@ -378,6 +374,7 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
         console.log(error);
       }
     };
+    //API call for getting artist list
     const getArtists = async () => {
       try {
         const res = await API.get('/api/artists');

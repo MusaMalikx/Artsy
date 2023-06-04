@@ -4,6 +4,10 @@ import Toaster from '../../Common/Toaster';
 import { GoPrimitiveDot } from 'react-icons/go';
 import moment from 'moment';
 
+/*
+This component displays the detailed information of a user report.
+It provides insights and data for further analysis and action.
+*/
 export default function ReportDetail({ open, setOpen, report }) {
   const handleClose = () => setOpen(false);
   const toaster = useToaster();

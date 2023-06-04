@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 import AuctionItemTimer from '../Common/Timer/AuctionItemTimer';
 
+/* 
+Renders a card displaying auction details in the auction list on user profile. 
+*/
 export default function ProfileAuctionCard({ artwork }) {
   const navigate = useNavigate();
   const handleClick = () => {
@@ -17,7 +20,6 @@ export default function ProfileAuctionCard({ artwork }) {
         <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
           <img
             className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
-            // src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
             src={artwork.images[0]}
             alt={artwork.title}
           />

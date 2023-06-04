@@ -7,6 +7,9 @@ const variants = {
   exit: { opacity: 0, x: 0, y: 20 }
 };
 
+/*
+Motion layout for the admin portal
+*/
 const AdminLayout = ({ children, title, bool }) => {
   document.title = title + ' | Artsy';
 

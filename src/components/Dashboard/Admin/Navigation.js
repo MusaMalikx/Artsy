@@ -6,6 +6,9 @@ import { MdReportProblem } from 'react-icons/md';
 import { IconButton, Popover, Whisper } from 'rsuite';
 import { useNavigate } from 'react-router-dom';
 
+/*
+Render a navigation for the admin panel to redirect to different pages
+*/
 const Navigation = ({ bool }) => {
   const navigate = useNavigate();
   return (
@@ -43,6 +46,9 @@ const Navigation = ({ bool }) => {
   );
 };
 
+/*
+Renders a pop with Admin name
+*/
 const Pop = ({ icon, name, onClick, bool }) => {
   return (
     <Whisper

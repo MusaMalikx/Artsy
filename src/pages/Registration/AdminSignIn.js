@@ -19,6 +19,11 @@ import { useToaster } from 'rsuite';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/features/reducer/userReducer';
 
+/*
+Component for the admin sign-in page.
+Allows administrators to securely log in and access the admin dashboard.
+Handles authentication and user input validation.
+*/
 const AdminSignIn = () => {
   const [text] = useTypewriter({
     words: ['Welcome to Artsy!', 'Good to see you again!', "Let's quickly Sign you In!"],
@@ -32,6 +37,7 @@ const AdminSignIn = () => {
   const toaster = useToaster();
   const dispatch = useDispatch();
 
+  //API call for signin in via email and password
   const signInWithEmailAndPass = (e) => {
     if (passValidate(password.current.value) && emailValidate(email.current.value)) {
       e.preventDefault();
@@ -51,7 +57,6 @@ const AdminSignIn = () => {
           });
         })
         .catch((error) => {
-          // setLoadSignIn(false);
           const errorMessage = error.message;
           console.log(errorMessage);
           if (
@@ -76,13 +81,12 @@ const AdminSignIn = () => {
         : password.current.setCustomValidity('');
     }
   };
+
+  //API call for signin via SSO (Single Sign on), Google auth
   const signInwithGoogle = async () => {
     const auth = getAuth(firebaseApp);
     signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
         await API.post('/api/auth/admin/google/signin', {
           firebaseid: result.user.uid,
           email: result.user.email
@@ -92,10 +96,7 @@ const AdminSignIn = () => {
           localStorage.setItem('auth', JSON.stringify(newData));
           dispatch(setUser({ admin: true }));
           navigate('/admin/dashboard');
-          // navigate('/');
         });
-
-        // console.log(token, data);
       })
       .catch((error) => {
         const errorCode = error.code;

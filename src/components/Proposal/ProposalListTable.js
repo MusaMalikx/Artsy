@@ -7,6 +7,11 @@ import API from '../../api/server';
 import EmptyList from '../Animation/EmptyList';
 import Toaster from '../Common/Toaster';
 
+/*
+Component displaying the table for buyer generated proposals in the on-demand auction.
+Provides a clear overview of the generated proposals and their relevant details.
+Helps in efficiently managing and tracking the progress of the auction process.
+*/
 const ProposalTable = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [proposalList, setProposalList] = useState([]);
@@ -14,6 +19,7 @@ const ProposalTable = () => {
   const [isDeleted, setIsDelete] = useState(false);
   const toaster = useToaster();
 
+  //API call for getting generated proposal list
   const getProposals = async () => {
     const res = await API.get('/api/users/proposal', {
       headers: {
@@ -24,6 +30,8 @@ const ProposalTable = () => {
       setProposalList(res.data);
     }
   };
+
+  //API call for deleting a proposal from list
   const deleteProposals = async () => {
     try {
       if (deletePropsalList.length > 0) {
@@ -41,7 +49,6 @@ const ProposalTable = () => {
         if (res.data) {
           setDeletePropsalList([]);
           setIsDelete(true);
-          // getProposals();
           Toaster(toaster, 'success', 'Successfully deleted proposals!');
         }
       }
@@ -105,6 +112,9 @@ const ProposalTable = () => {
   );
 };
 
+/*
+Renders a single generated proposal item to be listed in the generated proposal table
+*/
 const ProposalTableItem = ({ proposal, alterDeleteList }) => {
   const navigate = useNavigate();
   return (

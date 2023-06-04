@@ -5,6 +5,10 @@ import { getAuth } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Loader } from 'rsuite';
 
+/*
+This React component handles email verification for user registered on website.
+It includes the necessary logic and UI components for verifying the email address.
+*/
 const Verification = () => {
   const [user] = useAuthState(getAuth());
   const [load, setLoader] = useState(false);
@@ -14,6 +18,7 @@ const Verification = () => {
     handleCodeInApp: true
   };
 
+  //API call for verifying an email address of a user
   const sendVerificationEmail = async () => {
     setLoader(true);
     try {

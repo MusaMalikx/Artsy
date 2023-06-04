@@ -8,6 +8,11 @@ import { BsViewList } from 'react-icons/bs';
 import API from '../../api/server';
 import moment from 'moment';
 
+/*
+This React component is responsible for rendering the user behaviour report in the admin portal. 
+It provides valuable insights and analytics on how users interact with the system, helping administrators make data-driven decisions. 
+The component plays a crucial role in enhancing the overall website experience.
+*/
 const Reports = () => {
   return (
     <AdminLayout title="Reports" bool>
@@ -20,11 +25,9 @@ const Reports = () => {
 };
 
 const ReportTable = () => {
-  // const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
   const [reports, setReports] = useState();
-  // console.log(reports);
-
   useEffect(() => {
+    //API call for getting user reports
     const getReports = async () => {
       try {
         const res = await API.get('/api/users/reports');
@@ -39,11 +42,6 @@ const ReportTable = () => {
   return (
     <div className="sm:px-6 w-full">
       <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-        {/* <div className="w-full text-right">
-          <button className="bg-red-500 text-white font-bold px-4 py-2 rounded uppercase active:bg-red-700 focus:outline-none ">
-            Delete
-          </button>
-        </div> */}
         <div className="mt-7 overflow-x-auto">
           <div className="w-[80rem] overflow-x-scroll mx-auto whitespace-nowrap">
             <div>
@@ -59,9 +57,6 @@ const ReportTable = () => {
               {reports?.map((report) => (
                 <ReportItem key={report._id} report={report} />
               ))}
-              {/* {rows.map((row, i) => (
-                <ReportItem key={i} />
-              ))} */}
             </div>
           </div>
         </div>
@@ -70,6 +65,7 @@ const ReportTable = () => {
   );
 };
 
+//Renders a single report item in the report table
 const ReportItem = ({ report }) => {
   const [openReport, setOpenReport] = useState(false);
   const viewReportDetail = (e) => {

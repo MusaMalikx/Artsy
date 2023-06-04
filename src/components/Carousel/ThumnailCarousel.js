@@ -19,19 +19,24 @@ const responsive = {
   }
 };
 
+/*
+This component displays a carousel of thumbnail images for a gallery.
+*/
 const ThumnailCarousel = ({ data }) => {
   return (
     <>
-      {
-        data?.length > 0 &&
+      {data?.length > 0 && (
         <Carousel ssr partialVisbile itemClass="image-item" responsive={responsive}>
-          {data?.map((photo) => (
-            photo.status === "live" && <div key={photo.id} className="px-4">
-              <AuctionCard artwork={photo} />
-            </div>
-          ))}
+          {data?.map(
+            (photo) =>
+              photo.status === 'live' && (
+                <div key={photo.id} className="px-4">
+                  <AuctionCard artwork={photo} />
+                </div>
+              )
+          )}
         </Carousel>
-      }
+      )}
     </>
   );
 };

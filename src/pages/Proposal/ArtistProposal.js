@@ -5,10 +5,16 @@ import EmptyProposal from '../../components/Animation/EmptyProposal';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import ArtistProposalCard from '../../components/Proposal/ArtistProposal';
+
+/*
+This component renders the ArtistProposal page, where buyers created proposals will be listed. 
+*/
 export default function ArtistProposal() {
   const location = useLocation();
   const proposalId = location.pathname.split('/')[4];
   const [proposalList, setProposalList] = useState([]);
+
+  //API call for getting artists proposals
   const getArtistProposals = async () => {
     const res = await API.get(`/api/users/proposal/artistbid/${proposalId}`);
     if (res.data) {

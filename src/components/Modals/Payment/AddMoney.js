@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { Button, Modal, useToaster } from 'rsuite';
-//import cardPng from '../../assets/images/card.png';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import {
@@ -14,6 +13,11 @@ import API from '../../../api/server';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../../redux/features/reducer/userReducer';
 
+/*
+This React component handles the functionality of adding money to the wallet. 
+It allows users to conveniently deposit funds into their accounts for future use in the application. 
+The component ensures a seamless and secure process for users to increase their wallet balance.
+*/
 const AddMoney = ({ open, handleClose, setNewAmount }) => {
   const holderName = useRef();
   const cardNumber = useRef();
@@ -34,6 +38,7 @@ const AddMoney = ({ open, handleClose, setNewAmount }) => {
     expiryMonth: ''
   });
 
+  //API call for adding money to wallet
   const addAmount = async (e) => {
     if (
       holderNameValidate(holderName.current.value) &&
@@ -116,7 +121,6 @@ const AddMoney = ({ open, handleClose, setNewAmount }) => {
   return (
     <Modal open={open} onClose={handleClose} size="xs">
       <form onClick={addAmount}>
-        {/* <img src={cardPng} alt="card" /> */}
         <Cards
           cvc={cardData.securityCode}
           expiry={`${cardData.expiryMonth}/${cardData.expiryYear}`}
@@ -137,7 +141,6 @@ const AddMoney = ({ open, handleClose, setNewAmount }) => {
                 className="border-[1px] border-gray-300 text-gray-900 text-sm focus:border-primary focus:ring-primary block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
                 placeholder="Card holder"
                 maxLength="22"
-                // x-model="cardholder"
                 onChange={(e) => {
                   setCardData((data) => {
                     return {
@@ -206,9 +209,7 @@ const AddMoney = ({ open, handleClose, setNewAmount }) => {
                   onFocus={(e) => setFocus(e.target.name)}
                   name=""
                   id=""
-                  className="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-white shadow-lg placeholder-gray-400 focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  // x-model="expired.month"
-                >
+                  className="form-select appearance-none block w-full px-5 py-2 border rounded-lg bg-white shadow-lg placeholder-gray-400 focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
                   <option value="" selected disabled>
                     MM
                   </option>
@@ -238,9 +239,7 @@ const AddMoney = ({ open, handleClose, setNewAmount }) => {
                   onFocus={(e) => setFocus(e.target.name)}
                   name=""
                   id=""
-                  className="form-select w-full appearance-none block pr-5 pl-3 py-2 border rounded-lg bg-white shadow-lg placeholder-gray-400 focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                  // x-model="expired.year"
-                >
+                  className="form-select w-full appearance-none block pr-5 pl-3 py-2 border rounded-lg bg-white shadow-lg placeholder-gray-400 focus:border-primary focus:ring-primary p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
                   <option value="" selected disabled>
                     YY
                   </option>

@@ -1,21 +1,30 @@
 import React from 'react';
 import { GrFormPrevious, GrFormNext } from 'react-icons/gr';
-//import AuctionCard from '../Auction/AuctionCard';
+
+/*
+ This component displays a list of similar auctions to provide recommendations to buyers.
+ It leverages data from the backend to fetch and render auctions that are similar in nature.
+ Buyers can use this component to discover related auctions and potentially find better deals.
+*/
 const SimilarAuctions = ({ data }) => {
   let defaultTransform = 0;
+
   const goNext = () => {
+    //Button to display new auctions in the carousel
     defaultTransform = defaultTransform - 398;
     var slider = document.getElementById('slider');
     if (Math.abs(defaultTransform) >= slider.scrollWidth / 1.7) defaultTransform = 0;
     slider.style.transform = 'translateX(' + defaultTransform + 'px)';
   };
 
+  //Button to display previous auctions in the carousel
   const goPrev = () => {
     var slider = document.getElementById('slider');
     if (Math.abs(defaultTransform) === 0) defaultTransform = 0;
     else defaultTransform = defaultTransform + 398;
     slider.style.transform = 'translateX(' + defaultTransform + 'px)';
   };
+
   return (
     <>
       <div className="mx-5 relative py-10 bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-gray-300 via-gray-100 to-gray-300 border-gray-400 border rounded-lg mb-20 md:my-20">
@@ -58,14 +67,6 @@ const SimilarAuctions = ({ data }) => {
                       </div>
                     </>
                   ))}
-
-                  {/* {data?.map((photo) => (
-                <>
-                  <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-                    <AuctionCard key={photo.id} artwork={photo} />
-                  </div>
-                </>
-              ))} */}
                 </div>
               </div>
             </div>

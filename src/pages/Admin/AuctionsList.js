@@ -8,6 +8,11 @@ import AdminLayout from '../../components/Layouts/AdminLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 import AuctionCategoriesData from '../../constants/AuctionCategoriesData';
 
+/*
+This React component renders a list of auctions for the admin portal. 
+It provides functionality for the admin to manage and monitor ongoing auctions. 
+The component handles the display and interaction with the auction data.
+*/
 const AuctionsList = () => {
   const toaster = useToaster();
   const [loader, setLoader] = useState(true);
@@ -18,6 +23,7 @@ const AuctionsList = () => {
     getAllArtworks();
   }, []);
 
+  //API call for filtering artwork of specific category
   const getCategoryArtworks = async (value) => {
     if (value !== null) {
       const selectedCategory = value;
@@ -31,7 +37,7 @@ const AuctionsList = () => {
         });
     }
   };
-
+  //API call for getting all artworks
   const getAllArtworks = async () => {
     await API.get('/api/artworks/all')
       .then((res) => {

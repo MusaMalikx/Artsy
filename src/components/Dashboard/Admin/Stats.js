@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import API from '../../../api/server';
 
+/*
+Renders different statistics in the admin portal
+*/
 const Stats = () => {
   const [stat, setStat] = useState();
 
@@ -30,6 +33,9 @@ const Stats = () => {
   );
 };
 
+/*
+Renders a single statistic item card
+*/
 const StatItem = ({ title, count }) => {
   return (
     <div className="w-full max-w-full sm:flex-none">

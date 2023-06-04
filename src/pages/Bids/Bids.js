@@ -6,6 +6,11 @@ import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
 import Layout from '../../components/Layouts/ArticleLayout';
 import HeaderLayout from '../../components/Layouts/HeaderLayout';
 
+/*
+Component for displaying the bids table.
+This component renders the table that shows the bids placed by users.
+It handles the display and interaction logic for the bids data.
+*/
 const Bids = () => {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [bidList, setBidList] = useState([]);
@@ -31,41 +36,16 @@ const Bids = () => {
           )}
         </div>
       </div>
-      {/* <div className="w-96 bg-primary text-white rounded-r-xl lg:rounded-r-none rounded-l-xl p-5 flex mx-auto my-10 flex-col">
-          <div className="flex-grow">
-            <p className="lg:text-4xl text-3xl font-black leading-9">Summary</p>
-            <div className="flex items-center justify-between pt-16">
-              <p className="text-base leading-none">Subtotal</p>
-              <p className="text-base leading-none">,000</p>
-            </div>
-            <div className="flex items-center justify-between pt-5">
-              <p className="text-base leading-none">Shipping</p>
-              <p className="text-base leading-none"></p>
-            </div>
-            <div className="flex items-center justify-between pt-5">
-              <p className="text-base leading-none">Tax</p>
-              <p className="text-base leading-none"></p>
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center pb-6 justify-between lg:pt-5 pt-20">
-              <p className="text-2xl leading-normal">Total</p>
-              <p className="text-2xl font-bold leading-normal text-right">,240</p>
-            </div>
-            <button className="text-base leading-none w-full rounded-xl py-5 bg-gray-800 border-gray-800 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-              Checkout
-            </button>
-          </div>
-        </div> */}
     </Layout>
   );
 };
 
+//This component renders a single bid item in the Bid List table
 const BidItem = ({ artwork }) => {
   const navigate = useNavigate();
   const artworkObj = { id: artwork._id, status: artwork.status, title: artwork.title };
   const handleClick = () => {
-    navigate(`/auctions/${artwork._id}`, { state: { artwork } });
+    navigate(`/auctions/1/${artwork.status}/${artwork._id}`, { state: { artwork } });
   };
   return (
     <div
@@ -75,7 +55,7 @@ const BidItem = ({ artwork }) => {
         <div className="lg:w-1/4 h-32 bg-center bg-cover lg:my-0 my-10 w-40">
           <img
             className="w-full lg:h-full h-40 bg-center bg-cover lg:rounded-md rounded-full"
-            src={`http://localhost:8080/api/artworks/image?filename=${artwork.images[0]}`}
+            src={artwork.images[0]}
             alt={artwork.title}
           />
         </div>

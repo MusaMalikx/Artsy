@@ -8,12 +8,16 @@ import Toaster from '../../Common/Toaster';
 import { useToaster } from 'rsuite';
 import ReactJdenticon from 'react-jdenticon';
 
+/*
+Renders a profile card for the Admin page
+*/
 const Profile = () => {
   const toaster = useToaster();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
 
+  //API call for making Admin logout of page
   const logoutuser = () => {
     const firebaseauth = getAuth();
     if (auth) {

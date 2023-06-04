@@ -6,6 +6,10 @@ import { Loader } from 'rsuite';
 import { emailValidate } from '../../helpers/credential-validators';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+/*
+This component handles the functionality to reset a user's password.
+It provides the necessary form and logic to facilitate the password reset process.
+*/
 const ForgotPassword = () => {
   const [load, setLoader] = useState(false);
   const email = useRef();
@@ -18,6 +22,7 @@ const ForgotPassword = () => {
     if (emailValidate(email.current.value)) {
       setLoader(true);
       try {
+        //Calling an API for sending password recovery email
         await sendPasswordResetEmail(getAuth(), email.current.value);
         console.log('reset email sent successfully');
         alert('Check Your Email Inbox');
@@ -46,7 +51,6 @@ const ForgotPassword = () => {
           <p className="mb-2 text-lg text-zinc-500">
             We get it, stuff happens. Just enter your email address below and we&apos;ll send you a
             link to reset your password!
-            {/* <span className="font-medium text-indigo-500">{user.email}</span>. */}
           </p>
           <div className="my-6">
             <input

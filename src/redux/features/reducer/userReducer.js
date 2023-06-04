@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+//Initial state of user
 const initialState = {
   user: {
     admin: false,
@@ -9,6 +10,7 @@ const initialState = {
   signedIn: false
 };
 
+//Creating a slice for login and logout of user from the system
 export const userReducer = createSlice({
   name: 'user',
   initialState,

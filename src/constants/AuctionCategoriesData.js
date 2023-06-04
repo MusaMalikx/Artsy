@@ -1,3 +1,4 @@
+//Below contains all the categories of the auction which is going to be listed on website
 const AuctionCategoriesData = [
   {
     label: 'Paintings',

@@ -3,6 +3,11 @@ import ReactJdenticon from 'react-jdenticon';
 import { useNavigate } from 'react-router-dom';
 import { Drawer } from 'rsuite';
 import ArtistProposal from '../../Modals/Proposal/ArtistProposal';
+
+/*
+This React component represents the Artist Proposal drawer used in on-demand auctions. 
+It provides functionality for managing and displaying proposals submitted by artists.
+*/
 export default function ProposalDrawer({ setOpen, proposal, updateProposalList, bidPlaced }) {
   const [openField, setOpenField] = useState(false);
   const [openBidPlaced, setOpenBidPlaced] = useState(false);
@@ -13,17 +18,6 @@ export default function ProposalDrawer({ setOpen, proposal, updateProposalList, 
         <Drawer.Body>
           <div className="w-full mt-16 rounded-lg flex justify-center flex-col align-middle  ">
             <div className="flex flex-col items-center gap-6">
-              {/* <div className=" rounded-full relative w-40 overflow-hidden">
-                <img
-                  className=" w-full h-full object-cover "
-                  src={
-                    proposal.buyerInfo.image !== ''
-                      ? proposal.buyerInfo.image
-                      : 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg'
-                  }
-                  alt=""
-                />
-              </div> */}
               <div className="shadow-all object-cover align-middle border-none bg-white">
                 <ReactJdenticon size="200" value={proposal.buyerInfo.email} />
               </div>

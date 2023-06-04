@@ -4,6 +4,10 @@ import { useState } from 'react';
 import ProposalDrawer from './Drawer/BuyerProposalDrawer';
 import ReactJdenticon from 'react-jdenticon';
 
+/*
+This component represents a card displaying information about an Buyer proposal for an on-demand auction. 
+It handles rendering the necessary details and interactions related to the proposal.
+*/
 export default function ProposalCard({ proposal, updateProposals }) {
   const auth = JSON.parse(localStorage.getItem('auth'));
   const [showDrawer, SetShowDrawer] = useState(false);
@@ -27,20 +31,10 @@ export default function ProposalCard({ proposal, updateProposals }) {
         onClick={openDrawer}
         className="border hover:scale-105 transition-all  my-5 p-5 hover:cursor-pointer hover:shadow-xl hover:bg-slate-100">
         <div className="flex lg:flex-row flex-col justify-center text-center lg:text-left items-center gap-6">
-          {/* <div className=" rounded-full relative w-24 h-24 overflow-hidden"> */}
           <div className="shadow-all object-cover align-middle border-none bg-white">
             <ReactJdenticon size="120" value={proposal.buyerInfo.email} />
           </div>
-          {/* <img
-              className=" w-full h-full object-cover "
-              src={
-                proposal.buyerInfo.image !== ''
-                  ? proposal.buyerInfo.image
-                  : 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg'
-              }
-              alt=""
-            /> */}
-          {/* </div> */}
+
           <div className="font-bold flex lg:flex-row flex-col justify-center items-center gap-4 lg:justify-between w-full">
             <div className="w-1/4">
               <p className="text-green-500 text-lg">{proposal.buyerInfo.name}</p>

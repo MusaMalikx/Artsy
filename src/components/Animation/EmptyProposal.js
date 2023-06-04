@@ -1,6 +1,10 @@
 import React from 'react';
 import Lottie from 'react-lottie-player';
 import proposalLoading from '../../assets/json/proposalLoading';
+
+/*
+Component for display animations in case of empty proposal list
+*/
 const EmptyProposal = () => {
   return (
     <div className="w-full p-20 pt-0 h-full flex flex-col justify-center items-center">

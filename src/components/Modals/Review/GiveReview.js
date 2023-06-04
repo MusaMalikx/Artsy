@@ -3,6 +3,10 @@ import { Modal, Rate, useToaster } from 'rsuite';
 import API from '../../../api/server';
 import Toaster from '../../Common/Toaster';
 
+/*
+Component for adding a review on artwork. Allows users to provide their feedback and comments on a specific artwork after winning an artwork.
+Provides a user-friendly interface for inputting review details and submitting them for further processing.
+*/
 const GiveReview = ({ open, setOpen, artwork }) => {
   const [message, setMessage] = useState('');
   const auth = JSON.parse(localStorage.getItem('auth'));
@@ -19,6 +23,7 @@ const GiveReview = ({ open, setOpen, artwork }) => {
 
   const handleClose = () => setOpen(false);
 
+  //API call for adding a new review
   const giveRating = async () => {
     if (message.length > 0) {
       try {

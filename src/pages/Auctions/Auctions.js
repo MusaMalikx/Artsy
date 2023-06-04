@@ -10,10 +10,13 @@ import EmptyAuction from '../../components/Animation/EmptyAuctions';
 import AuctionCategoriesData from '../../constants/AuctionCategoriesData';
 import { useNavigate, useParams } from 'react-router-dom';
 
+/*
+Component rendering a list of auctions.
+Iterates over the auction data and displays each auction item.
+*/
 const Auctions = () => {
   const toaster = useToaster();
   const params = useParams();
-  // console.log(params);
   const navigate = useNavigate();
   const [artworks, setArtworks] = useState([]);
   const [artloader, setArtLoader] = useState(true);
@@ -21,11 +24,10 @@ const Auctions = () => {
   const [totalCount, setTotalCount] = useState();
   const data = useMemo(() => AuctionCategoriesData, []);
 
+  //API to get auctions of a specfic category based on status alongside pagination
   const getCategoryArtworks = useCallback(async () => {
-    // console.log(value);
     if (category !== null) {
       setArtLoader(true);
-      // const selectedCategory = value;
       await API.get(
         `/api/artworks/all/category?category=${category}&status=${params.status}&limit=20&page=${params.page}`
       )
@@ -44,17 +46,16 @@ const Auctions = () => {
     }
   }, [category]);
 
+  //API to get auctions of a specfic category based on status alongside pagination
   const getAllArtworks = useCallback(async () => {
     setArtLoader(true);
     await API.get(`/api/artworks/all?status=${params.status}&limit=20&page=${params.page}`)
       .then((res) => {
         setArtworks(res.data.artworks);
         setTotalCount(res.data.total);
-        // console.log(res.data);
         setArtLoader(false);
       })
       .catch((err) => {
-        // console.log(err);
         Toaster(toaster, 'error', err.response.data.message);
         setArtLoader(false);
       });
