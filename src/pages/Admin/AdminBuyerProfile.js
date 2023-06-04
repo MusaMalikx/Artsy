@@ -197,7 +197,7 @@ export default function AdminBuyerProfile() {
                     <div className="bg-gray-100 w-fit mr-3 text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
                       Buyer
                     </div>
-                    {user.emailVerified ? (
+                    {user?.emailVerified ? (
                       <Whisper
                         className="p-0"
                         placement="right"

@@ -109,7 +109,7 @@ const Auctions = () => {
           </div>
         ) : artworks.length > 0 ? (
           <>
-              <div className="flex justify-center flex-wrap gap-5 px-5">
+            <div className="flex justify-center flex-wrap gap-5 px-5">
               {artworks.map((artwork) => (
                 <AuctionCard updateList={getAllArtworks} key={artwork._id} artwork={artwork} />
               ))}

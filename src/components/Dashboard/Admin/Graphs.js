@@ -63,7 +63,7 @@ export const data = {
 const Graphs = () => {
   return (
     <div className="">
-      <Chart type="bar" className="rounded-xl bg-white mt-10 p-3 shadow-lg" data={data} />
+      <Chart type="bar" className="rounded-xl bg-white mt-10 p-3 shadow-all" data={data} />
     </div>
   );
 };
