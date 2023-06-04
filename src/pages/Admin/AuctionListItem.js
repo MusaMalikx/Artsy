@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useToaster } from 'rsuite';
 import API from '../../api/server';
 import AuctionItemCarousel from '../../components/Carousel/AuctionItemCarousel';
-import ThumnailCarousel from '../../components/Carousel/ThumnailCarousel';
 import AuctionItemTimer from '../../components/Common/Timer/AuctionItemTimer';
 import Toaster from '../../components/Common/Toaster';
 import AdminLayout from '../../components/Layouts/AdminLayout';
@@ -13,7 +12,7 @@ import AutomateBid from '../../components/Modals/AutomateBid';
 import { selectUser } from '../../redux/features/reducer/userReducer';
 import AuctionCard from '../../components/Auction/AuctionCard';
 
-const AuctionListItem = ({ data }) => {
+const AuctionListItem = () => {
   const { state } = useLocation();
   const us = useSelector(selectUser);
   const [openAutoBid, setOpenAutoBid] = useState(false);
