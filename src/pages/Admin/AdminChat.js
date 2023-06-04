@@ -34,7 +34,7 @@ const Chat = () => {
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, 'userChats', auth?.user.firebaseid), (doc) => {
-      setConversations(Object.entries(doc.data()));
+      setConversations(doc.data() && Object.entries(doc.data()));
     });
 
     return () => {
@@ -102,7 +102,7 @@ const Chat = () => {
             <div className="pb-4 h-[76vh] overflow-y-scroll">
               {conversations
                 ?.sort((a, b) => b[1].date - a[1].date)
-                .map((c) => (
+                ?.map((c) => (
                   <div
                     key={c[0]}
                     onClick={() =>
