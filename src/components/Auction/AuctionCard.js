@@ -15,7 +15,7 @@ const AuctionCard = ({ artwork, updateList }) => {
   const params = useParams();
   const handleClick = () => {
     if (usr.admin) {
-      navigate(`/admin/view/auctions/${artwork.id}`, {
+      navigate(`/admin/view/auctions/${params.page}/${artwork.id}`, {
         state: { user: artwork.user, urls: artwork.urls }
       });
     } else {
@@ -26,7 +26,10 @@ const AuctionCard = ({ artwork, updateList }) => {
   };
 
   const handleClickrealauctions = () => {
-    if (usr.admin) navigate(`/admin/view/auctions/${artwork._id}`, { state: { artwork } });
+    if (usr.admin)
+      navigate(`/admin/view/auctions/${params?.status}/${params.page}/${artwork._id}`, {
+        state: { artwork }
+      });
     else
       navigate(`/auctions/${params?.status}/${params.page}/${artwork._id}`, { state: { artwork } });
   };
