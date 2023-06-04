@@ -22,7 +22,7 @@ Uses BrowserRouter for client-side routing and renders the main AppRoutes compon
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AnimatePresence exitBeforeEnter initial={true}>
+      <AnimatePresence mode="wait" initial={true}>
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>

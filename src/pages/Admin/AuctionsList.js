@@ -145,4 +145,4 @@ const AuctionsList = () => {
   );
 };
 
-export default Auctions;
+export default AuctionsList;
