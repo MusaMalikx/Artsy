@@ -82,6 +82,7 @@ export default function ArtistProfileDashboard() {
     await API.get(`/api/artworks/artist/status/${currentUserID}?status=live`)
       .then((res) => {
         setCountLive(res.data.count);
+        // console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -92,7 +93,7 @@ export default function ArtistProfileDashboard() {
   const fetchAverageRating = async () => {
     const res = await API.get(`/api/artists/rating/average/${currentUserID}`);
     if (res.status === 200) {
-      console.log(res);
+      // console.log(res);
       setRating({
         total: res.data.totalRatings,
         average: res.data.averageRating

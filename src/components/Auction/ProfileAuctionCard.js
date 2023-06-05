@@ -13,6 +13,7 @@ export default function ProfileAuctionCard({ artwork }) {
     navigate(`/auctions/${artwork?.status}/1/${artwork._id}`, { state: { artwork } });
   };
   const artworkObj = { id: artwork._id, status: artwork.status, title: artwork.title };
+  // console.log(artwork);
 
   return (
     <div className="py-6 flex justify-center hover:scale-95 mr-3 transition-all">
@@ -36,11 +37,21 @@ export default function ProfileAuctionCard({ artwork }) {
           </div>
           <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
             <p className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
-              <AuctionItemTimer
-                endDate={artwork.enddate}
-                startDate={artwork.startdate}
-                artwork={artworkObj}
-              />
+              {artwork.status === 'coming soon' ? (
+                <div className="flex justify-center uppercase tracking-widest text-emerald-400 font-extrabold">
+                  Coming Soon
+                </div>
+              ) : artwork.status === 'closed' ? (
+                <div className="flex justify-center uppercase tracking-widest text-red-400 font-extrabold">
+                  Auction Closed
+                </div>
+              ) : (
+                <AuctionItemTimer
+                  endDate={artwork.enddate}
+                  startDate={artwork.startdate}
+                  artwork={artworkObj}
+                />
+              )}
             </p>
             <button
               onClick={handleClick}
