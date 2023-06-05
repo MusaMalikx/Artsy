@@ -336,7 +336,9 @@ const AuctionItem = () => {
           <h2 className="font-semibold uppercase text-3xl">Similar Auctions Items</h2>
         </div>
         <div className="flex overflow-x-scroll">
-          {recommendations?.length > 0 ? (
+          {recommendations !== undefined &&
+          recommendations !== 'no recommendations' &&
+          recommendations?.length > 0 ? (
             recommendations?.map(
               (recommend, i) =>
                 recommend.artwork?.length > 0 && (
