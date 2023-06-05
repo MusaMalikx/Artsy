@@ -76,7 +76,7 @@ export default function ArtistDrawer({ setOpen, proposalInfo }) {
                 </span>{' '}
               </p>
               <p className="text-lg font-bold mt-6">Description</p>
-              <p className="text-justify">{proposalInfo.description}</p>
+              <p className="text-justify break-all">{proposalInfo.description}</p>
             </div>
             <button
               onClick={acceptProposal}

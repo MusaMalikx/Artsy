@@ -42,7 +42,7 @@ export default function ProposalDrawer({ setOpen, proposal, updateProposalList, 
                 </span>{' '}
               </p>
               <p className="text-lg font-bold mt-6"> {proposal.title}</p>
-              <p className="text-justify">{proposal.description}</p>
+              <p className="text-justify break-all">{proposal.description}</p>
             </div>
             {bidPlaced == true ? (
               <button

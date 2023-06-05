@@ -384,25 +384,26 @@ const ConversationsModal = ({ open, setOpen, auth }) => {
           <Modal.Title>Select a person to start conversation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {users?.map(
-            (user) =>
-              !user.isAdmin && (
-                <div
-                  key={user._id}
-                  onClick={() => setSelect(user)}
-                  className={`flex items-center border px-10 transition-all ease-in-out cursor-pointer py-5 hover:bg-primary/10 rounded ${
-                    select?._id === user._id ? 'border-primary' : 'border-white'
-                  }`}>
-                  <ReactJdenticon size="50" value={user?.email} />
-                  <div className="flex-grow ml-3">
-                    <h6>{user?.name}</h6>
-                    <div className="text-xs uppercase font-semibold text-gray-400">
-                      {auth.usertype === 'buyer' ? 'Artist' : 'buyer'}
+          {users.length > 0 &&
+            users?.map(
+              (user) =>
+                !user.isAdmin && (
+                  <div
+                    key={user._id}
+                    onClick={() => setSelect(user)}
+                    className={`flex items-center border px-10 transition-all ease-in-out cursor-pointer py-5 hover:bg-primary/10 rounded ${
+                      select?._id === user._id ? 'border-primary' : 'border-white'
+                    }`}>
+                    <ReactJdenticon size="50" value={user?.email} />
+                    <div className="flex-grow ml-3">
+                      <h6>{user?.name}</h6>
+                      <div className="text-xs uppercase font-semibold text-gray-400">
+                        {auth.usertype === 'buyer' ? 'Artist' : 'buyer'}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-          )}
+                )
+            )}
         </Modal.Body>
         <Modal.Footer>
           <button

@@ -30,7 +30,7 @@ export default function ProposalCard({ proposal, updateProposals }) {
       <div
         onClick={openDrawer}
         className="border hover:scale-105 transition-all  my-5 p-5 hover:cursor-pointer hover:shadow-xl hover:bg-slate-100">
-        <div className="flex lg:flex-row flex-col justify-center text-center lg:text-left items-center gap-6">
+        <div className="flex lg:flex-row flex-col justify-center text-center lg:text-left items-center gap-6 ">
           <div className="shadow-all object-cover align-middle border-none bg-white">
             <ReactJdenticon size="120" value={proposal.buyerInfo.email} />
           </div>
@@ -46,7 +46,7 @@ export default function ProposalCard({ proposal, updateProposals }) {
               <p className="text-lg">
                 Expected : <span className=" text-red-500 "> {proposal.expectedAmount}</span>{' '}
               </p>
-              <p className="lg:text-justify text-center font-light">
+              <p className="lg:text-justify text-center font-light break-all">
                 {proposal.description.slice(0, 250) + ' ...'}
               </p>
             </div>

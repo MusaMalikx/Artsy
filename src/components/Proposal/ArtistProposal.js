@@ -29,7 +29,7 @@ export default function ArtistProposalCard({ proposalInfo }) {
               <p className="text-lg">
                 Bid Amount : <span className=" text-red-500 "> Rs. {proposalInfo.bidAmount}</span>{' '}
               </p>
-              <p className="lg:text-justify text-center font-light">
+              <p className="lg:text-justify text-center font-light break-all">
                 {proposalInfo.description.slice(0, 250) + ' ...'}
               </p>
             </div>
