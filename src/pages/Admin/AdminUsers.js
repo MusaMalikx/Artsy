@@ -9,6 +9,7 @@ import API from '../../api/server';
 import { useNavigate } from 'react-router-dom';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
+import SearchBar from '../../components/Common/SearchBar';
 
 /*
 This React component renders a list of users for admin to monitor. 
@@ -16,14 +17,18 @@ The component provides a clear and concise way to display the users' information
 */
 const AdminUsers = () => {
   const [users, setUsers] = useState();
+  const [tempUsers, setTempUsers] = useState();
   const [artists, setArtists] = useState();
+  const [tempArtists, setTempArtists] = useState();
   const [auth] = useState(JSON.parse(localStorage.getItem('auth')));
+  // const [search, setSearch] = useState("")
 
   //API call for getting list of users
   const getUsers = async () => {
     try {
       const res = await API.get('/api/users');
       setUsers(res.data);
+      setTempUsers(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -34,8 +39,24 @@ const AdminUsers = () => {
     try {
       const res = await API.get('/api/artists');
       setArtists(res.data);
+      setTempArtists(res.data);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    console.log(e);
+    const search = e.target.value;
+    if (search === '') {
+      setUsers(tempUsers);
+      setArtists(tempArtists);
+    } else {
+      setUsers(tempUsers.filter((user) => user.name.toLowerCase().includes(search.toLowerCase())));
+      setArtists(
+        tempArtists.filter((user) => user.name.toLowerCase().includes(search.toLowerCase()))
+      );
+      // console.log(tempUsers.filter((user) => user.name.toLowerCase().includes(e.lowerCase())));
     }
   };
 
@@ -44,15 +65,21 @@ const AdminUsers = () => {
     getArtists();
   }, []);
 
+  // console.log(tempUsers);
+  console.log('users', users);
+
   return (
     <AdminLayout title="Users" bool>
       <HeaderLayout title="Users" />
       <div className="sm:px-6 w-full">
         <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-          <div className="mt-7 overflow-x-auto">
-            <div className="w-[80rem] overflow-x-scroll mx-auto whitespace-nowrap">
-              <div>
-                <div className="focus:outline-none grid grid-cols-10 h-16 rounded w-full p-5 justify-between uppercase font-bold">
+          <div className="overflow-x-auto">
+            <div className="sticky top-0">
+              <SearchBar handleSearch={handleSearch} placeholder="Search the user by name" />
+            </div>
+            <div className="w-[80rem] overflow-x-scroll mx-auto whitespace-nowrap h-[65vh]">
+              <div className="sticky top-0 z-20">
+                <div className="focus:outline-none grid bg-white shadow-all grid-cols-10 h-16 rounded w-full p-5 justify-between uppercase font-bold">
                   <div className="">Id</div>
                   <div className="col-span-3">Name</div>
                   <div className="col-span-4">Email</div>
