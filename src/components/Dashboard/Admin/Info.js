@@ -3,7 +3,7 @@ import React from 'react';
 /*
 Render a analytical graph 
 */
-const Info = () => {
+const Info = ({ stats }) => {
   return (
     <div>
       <div className="px-6 pt-6 2xl:container">
@@ -98,29 +98,16 @@ const Info = () => {
                 </defs>
               </svg>
               <div>
-                <h5 className="text-xl text-gray-600 text-center">Global Activities</h5>
+                <h5 className="text-xl text-gray-600 text-center">Artwork Activities</h5>
                 <div className="mt-2 flex justify-center gap-4">
-                  <h3 className="text-3xl font-bold text-gray-700">$23,988</h3>
-                  <div className="flex items-end gap-1 text-green-500">
-                    <svg
-                      className="w-3"
-                      viewBox="0 0 12 15"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6.00001 0L12 8H-3.05176e-05L6.00001 0Z" fill="currentColor" />
-                    </svg>
-                    <span>2%</span>
-                  </div>
+                  <h3 className="text-3xl font-bold text-gray-700">{stats?.artworks}</h3>
                 </div>
-                <span className="block text-center text-gray-500">
-                  Compared to last week $13,988
-                </span>
               </div>
               <table className="w-full text-gray-600">
                 <tbody>
                   <tr>
-                    <td className="py-2">Tailored ui</td>
-                    <td className="text-gray-500">896</td>
+                    <td className="py-2">Live Artworks</td>
+                    <td className="text-gray-500">{stats?.liveArtworks}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"
@@ -153,8 +140,8 @@ const Info = () => {
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-2">Customize</td>
-                    <td className="text-gray-500">1200</td>
+                    <td className="py-2">Closed Artworks</td>
+                    <td className="text-gray-500">{stats?.closedArtworks}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"
@@ -187,8 +174,8 @@ const Info = () => {
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-2">Other</td>
-                    <td className="text-gray-500">12</td>
+                    <td className="py-2">Coming Soon Artwoks</td>
+                    <td className="text-gray-500">{stats?.comingSoonArtworks}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"
@@ -226,10 +213,10 @@ const Info = () => {
           </div>
           <div>
             <div className="h-full py-6 px-6 rounded-xl shadow-lg bg-white">
-              <h5 className="text-xl text-gray-700">Downloads</h5>
+              <h5 className="text-xl text-gray-700">Proposals</h5>
               <div className="my-8">
-                <h1 className="text-5xl font-bold text-gray-800">64,5%</h1>
-                <span className="text-gray-500">Compared to last week $13,988</span>
+                <h1 className="text-5xl font-bold text-gray-800">{stats?.buyerProposals}</h1>
+                <span className="text-gray-500">Buyer Proposals</span>
               </div>
               <svg
                 className="w-full"
@@ -274,8 +261,8 @@ const Info = () => {
               <table className="mt-6 -mb-2 w-full text-gray-600">
                 <tbody>
                   <tr>
-                    <td className="py-2">From new users</td>
-                    <td className="text-gray-500">896</td>
+                    <td className="py-2">Accepted Proposals</td>
+                    <td className="text-gray-500">{stats?.acceptedProposals}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"
@@ -308,8 +295,8 @@ const Info = () => {
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-2">From old users</td>
-                    <td className="text-gray-500">1200</td>
+                    <td className="py-2">Not Accepted Proposals</td>
+                    <td className="text-gray-500">{stats?.notAcceptedProposals}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"
@@ -389,27 +376,16 @@ const Info = () => {
                 </defs>
               </svg>
               <div className="mt-6">
-                <h5 className="text-xl text-gray-700 text-center">Ask to customize</h5>
+                <h5 className="text-xl text-gray-700 text-center">Won Artworks</h5>
                 <div className="mt-2 flex justify-center gap-4">
-                  <h3 className="text-3xl font-bold text-gray-700">28</h3>
-                  <div className="flex items-end gap-1 text-green-500">
-                    <svg
-                      className="w-3"
-                      viewBox="0 0 12 15"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6.00001 0L12 8H-3.05176e-05L6.00001 0Z" fill="currentColor" />
-                    </svg>
-                    <span>2%</span>
-                  </div>
+                  <h3 className="text-3xl font-bold text-gray-700">{stats?.wonArtworks}</h3>
                 </div>
-                <span className="block text-center text-gray-500">Compared to last week 13</span>
               </div>
               <table className="mt-6 -mb-2 w-full text-gray-600">
                 <tbody>
                   <tr>
-                    <td className="py-2">Tailored ui</td>
-                    <td className="text-gray-500">896</td>
+                    <td className="py-2">Claim Won Artworks</td>
+                    <td className="text-gray-500">{stats?.claimWonArtworks}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"
@@ -442,8 +418,8 @@ const Info = () => {
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-2">Customize</td>
-                    <td className="text-gray-500">1200</td>
+                    <td className="py-2">Pending Won Artworks</td>
+                    <td className="text-gray-500">{stats?.pendingWonArtworks}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"
@@ -476,8 +452,8 @@ const Info = () => {
                     </td>
                   </tr>
                   <tr>
-                    <td className="py-2">Other</td>
-                    <td className="text-gray-500">12</td>
+                    <td className="py-2">Paid Won Artworks</td>
+                    <td className="text-gray-500">{stats?.paidWonArtworks}</td>
                     <td>
                       <svg
                         className="w-16 ml-auto"

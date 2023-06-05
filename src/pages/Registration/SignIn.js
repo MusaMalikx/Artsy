@@ -175,6 +175,7 @@ export default function SignIn() {
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
           } catch (error) {
+            Toaster(toaster, 'error', error.message);
             console.log(error);
           }
         else if (user.artist) {
@@ -189,6 +190,7 @@ export default function SignIn() {
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
           } catch (error) {
+            Toaster(toaster, 'error', error.message);
             console.log(error);
           }
         }

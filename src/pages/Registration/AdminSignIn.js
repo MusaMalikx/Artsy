@@ -129,6 +129,7 @@ const AdminSignIn = () => {
         dispatch(setUser({ admin: true }));
         navigate('/admin/dashboard');
       } catch (err) {
+        Toaster(toaster, 'error', err.message);
         console.log(err);
       }
   };

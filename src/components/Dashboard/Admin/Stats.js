@@ -1,26 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import API from '../../../api/server';
-
 /*
 Renders different statistics in the admin portal
 */
-const Stats = () => {
-  const [stat, setStat] = useState();
-
-  useEffect(() => {
-    const getCount = async () => {
-      await API.get('/api/users/count')
-        .then((res) => {
-          setStat(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-
-    getCount();
-  }, []);
-
+const Stats = ({ stat }) => {
   return (
     <div>
       <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">

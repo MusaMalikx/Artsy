@@ -33,25 +33,25 @@ export const data = {
   datasets: [
     {
       type: 'line',
-      label: 'Dataset 1',
+      label: 'Artworks',
       borderColor: 'rgb(255, 99, 132)',
       borderWidth: 2,
       fill: false,
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 }))
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 500 }))
     },
     {
       type: 'bar',
-      label: 'Dataset 2',
+      label: 'Users',
       backgroundColor: 'rgb(75, 192, 192)',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 500 })),
       borderColor: 'white',
       borderWidth: 2
     },
     {
       type: 'bar',
-      label: 'Dataset 3',
+      label: 'Artists',
       backgroundColor: 'rgb(53, 162, 235)',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 }))
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 500 }))
     }
   ]
 };
@@ -64,7 +64,13 @@ export const data = {
 const Graphs = () => {
   return (
     <div className="">
-      <Chart type="bar" className="rounded-xl bg-white mt-10 p-3 shadow-all" data={data} />
+      <Chart
+        width={700}
+        height={400}
+        type="bar"
+        className="rounded-xl bg-white mt-10 p-3 shadow-all"
+        data={data}
+      />
     </div>
   );
 };
