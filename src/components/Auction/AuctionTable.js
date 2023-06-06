@@ -9,6 +9,7 @@ import API from '../../api/server';
 import Toaster from '../Common/Toaster';
 import EmptyList from '../Animation/EmptyList';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
+import moment from 'moment/moment';
 
 /*
 Renders a table to display a list of auctions with different fields such creation date, total bids, status, payment status
@@ -73,15 +74,6 @@ Renders a table row to display a single auction in the auction table
 */
 const AuctionTableItem = ({ data, updateList }) => {
   const endDate = data.enddate.split(',')[0];
-
-  const formatDateToCustomFormat = (inputDate) => {
-    const date = new Date(inputDate);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = String(date.getFullYear());
-
-    return `${day}/${month}/${year}`;
-  };
   return (
     <>
       <div
@@ -96,7 +88,7 @@ const AuctionTableItem = ({ data, updateList }) => {
         <div className="flex items-center">
           <MdOutlineCreate />
           <p className="text-sm leading-none text-gray-600 ml-2 break-all overflow-hidden">
-            {formatDateToCustomFormat(endDate)}
+            {moment(endDate).format('LL')}
           </p>
         </div>
         <div className="flex items-center ml-2">
@@ -124,7 +116,7 @@ const AuctionTableItem = ({ data, updateList }) => {
           </p>
         </div>
         <div className="">
-          <Drop sttatus={data.status} artworkId={data._id} updateList={updateList} />
+          <Drop status={data.status} artworkId={data._id} updateList={updateList} />
         </div>
       </div>
     </>
@@ -166,7 +158,7 @@ const Drop = ({ status, artworkId, updateList }) => {
     const res = await API.get(`/api/artworks/artwork/${artworkId}`);
     if (res.data) {
       const artwork = res.data[0];
-      navigate(`/auctions/1/${status}/${artworkId}`, { state: { artwork } });
+      navigate(`/auctions/${status}/1/${artworkId}`, { state: { artwork } });
     }
   };
 
