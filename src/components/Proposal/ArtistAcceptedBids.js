@@ -3,6 +3,7 @@ import { FaMoneyBillWave, FaUserEdit } from 'react-icons/fa';
 import API from '../../api/server';
 import { useState, useEffect } from 'react';
 import EmptyList from '../Animation/EmptyList';
+import { useNavigate } from 'react-router-dom';
 
 /*
 This React component renders the proposal of accepted bids for the artist in an on-demand auction.
@@ -64,6 +65,7 @@ const ArtistAcceptedBids = () => {
 Renders single proposal item to be listed in the auction proposal table
 */
 const ProposalTableItem = ({ proposal }) => {
+  const navigate = useNavigate();
   return (
     <tr
       tabIndex="0"
@@ -88,6 +90,7 @@ const ProposalTableItem = ({ proposal }) => {
       </div>
       <div className="flex items-center">
         <button
+          onClick={() => navigate('/chat')}
           className={`text-sm text-white leading-none  py-3 px-5 rounded primary focus:outline-none bg-primary active:bg-cyan-700 hover:bg-cyan-700
           `}>
           chat

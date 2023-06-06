@@ -252,7 +252,7 @@ const AuctionItem = () => {
                   <span>{bidInfo.basePrice}</span>
                 </div>
               </div>
-              {state?.artwork?.status !== 'coming soon' && (
+              {state?.artwork?.status !== 'comming soon' && (
                 <>
                   <div className="flex text-lg">
                     <p className="mr-1 font-mono">Highest Bid:</p>
@@ -273,7 +273,7 @@ const AuctionItem = () => {
               )}
               {us.buyer &&
                 state.artwork.status !== 'closed' &&
-                state?.artwork?.status !== 'coming soon' && (
+                state?.artwork?.status !== 'comming soon' && (
                   <>
                     <form>
                       <div className="mb-4">

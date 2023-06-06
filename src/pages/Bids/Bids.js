@@ -45,7 +45,7 @@ const BidItem = ({ artwork }) => {
   const navigate = useNavigate();
   const artworkObj = { id: artwork._id, status: artwork.status, title: artwork.title };
   const handleClick = () => {
-    navigate(`/auctions/1/${artwork.status}/${artwork._id}`, { state: { artwork } });
+    navigate(`/auctions/${artwork.status}/1/${artwork._id}`, { state: { artwork } });
   };
   return (
     <div

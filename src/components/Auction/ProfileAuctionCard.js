@@ -37,7 +37,7 @@ export default function ProfileAuctionCard({ artwork }) {
           </div>
           <div className="flex sm:justify-around sm:flex-row flex-col justify-center items-center sm:items-start lg:justify-between gap-2 md:gap-0 mt-3 text-center">
             <p className="text-md mb-0 font-mono text-green-700 sm:text-xl text-base font-bold">
-              {artwork.status === 'coming soon' ? (
+              {artwork.status === 'comming soon' ? (
                 <div className="flex justify-center uppercase tracking-widest text-emerald-400 font-extrabold">
                   Coming Soon
                 </div>

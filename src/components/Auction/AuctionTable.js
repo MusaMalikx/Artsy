@@ -9,6 +9,7 @@ import API from '../../api/server';
 import Toaster from '../Common/Toaster';
 import EmptyList from '../Animation/EmptyList';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
+import moment from 'moment/moment';
 
 /*
 Renders a table to display a list of auctions with different fields such creation date, total bids, status, payment status
@@ -80,23 +81,31 @@ const AuctionTableItem = ({ data, updateList }) => {
         className="focus:outline-none grid grid-cols-7 border my-2 border-gray-100 rounded w-full justify-between p-5 transition-all">
         <div className="flex items-center col-span-2">
           <FaPaintBrush />
-          <p className="text-base ml-2  capitalize font-medium text-gray-700">{data.title}</p>
+          <p className="text-base ml-2 capitalize font-medium text-gray-700 break-words">
+            {data.title}
+          </p>
         </div>
         <div className="flex items-center">
           <MdOutlineCreate />
-          <p className="text-sm leading-none text-gray-600 ml-2">{endDate}</p>
+          <p className="text-sm leading-none text-gray-600 ml-2 break-all overflow-hidden">
+            {moment(endDate).format('LL')}
+          </p>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center ml-2">
           {<BsChatLeftDots />}
-          <p className="text-sm leading-none text-gray-600 ml-2">{data.totalBids}</p>
+          <p className="text-sm leading-none text-gray-600 ml-2 break-all overflow-hidden">
+            {data.totalBids}
+          </p>
         </div>
         <div className="flex items-center">
           {<AiOutlineExclamationCircle />}
-          <p className="text-sm capitalize leading-none text-gray-600 ml-2">{data.status}</p>
+          <p className="text-sm capitalize leading-none text-gray-600 ml-2 break-all">
+            {data.status}
+          </p>
         </div>
         <div className="flex items-center">
           {<MdPayment />}
-          <p className="text-sm capitalize leading-none text-gray-600 ml-2">
+          <p className="text-sm capitalize leading-none text-gray-600 ml-2 break-all">
             {data.paymentStatus === 'claim'
               ? 'Pending'
               : data.paymentStatus === 'payment'
@@ -107,7 +116,7 @@ const AuctionTableItem = ({ data, updateList }) => {
           </p>
         </div>
         <div className="">
-          <Drop artworkId={data._id} updateList={updateList} />
+          <Drop status={data.status} artworkId={data._id} updateList={updateList} />
         </div>
       </div>
     </>
@@ -139,7 +148,7 @@ const SortTable = ({ updateStatus }) => {
 /*
 Renders a dropdown list with options to view and delete auction
 */
-const Drop = ({ artworkId, updateList }) => {
+const Drop = ({ status, artworkId, updateList }) => {
   const toaster = useToaster();
   const auth = JSON.parse(localStorage.getItem('auth'));
   const navigate = useNavigate();
@@ -149,7 +158,7 @@ const Drop = ({ artworkId, updateList }) => {
     const res = await API.get(`/api/artworks/artwork/${artworkId}`);
     if (res.data) {
       const artwork = res.data[0];
-      navigate(`/auctions/${artworkId}`, { state: { artwork } });
+      navigate(`/auctions/${status}/1/${artworkId}`, { state: { artwork } });
     }
   };
 
