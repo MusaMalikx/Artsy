@@ -38,7 +38,7 @@ const Chat = () => {
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, 'userChats', auth?.user.firebaseid), (doc) => {
-      setConversations(Object.entries(doc.data()));
+      setConversations(doc.data() && Object.entries(doc.data()));
     });
 
     return () => {

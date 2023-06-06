@@ -118,7 +118,7 @@ const AuctionCard = ({ artwork, updateList }) => {
             <div className="mt-10 flex justify-center uppercase tracking-widest text-red-400 font-extrabold">
               Auction Closed
             </div>
-          ) : artwork?.status === 'coming soon' ? (
+          ) : artwork?.status === 'comming soon' ? (
             <div className="mt-10 flex justify-center uppercase tracking-widest text-emerald-400 font-extrabold">
               Coming Soon
             </div>

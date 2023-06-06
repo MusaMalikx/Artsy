@@ -64,6 +64,14 @@ export default function BuyerProfileDashboard() {
       });
   };
 
+  const [liveBidCount, setLiveBidCount] = useState(0);
+  const getBidList = async () => {
+    //API get live bid count
+    const res = await API.get(`/api/users/bid/list/${auth.user._id}`);
+    if (res.data.length > 0 && res.data[0] !== null) {
+      setLiveBidCount(res.data.filter((auc) => auc.status === 'live').length);
+    }
+  };
   //API call for fetching buyer data
   const fetchBuyerData = async () => {
     const res = await API.get(`/api/users/find/${currentUserID}`);
@@ -83,6 +91,7 @@ export default function BuyerProfileDashboard() {
   useEffect(() => {
     fetchBuyerData();
     getWonArtworks();
+    getBidList();
   }, []);
 
   //API call for Signing buyer out of website
@@ -170,7 +179,7 @@ export default function BuyerProfileDashboard() {
                       )}
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          0
+                          {liveBidCount}
                         </span>
                         <span className="text-sm text-blueGray-400">Live Bidding</span>
                       </div>

@@ -73,6 +73,15 @@ Renders a table row to display a single auction in the auction table
 */
 const AuctionTableItem = ({ data, updateList }) => {
   const endDate = data.enddate.split(',')[0];
+
+  const formatDateToCustomFormat = (inputDate) => {
+    const date = new Date(inputDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear());
+
+    return `${day}/${month}/${year}`;
+  };
   return (
     <>
       <div
@@ -80,23 +89,31 @@ const AuctionTableItem = ({ data, updateList }) => {
         className="focus:outline-none grid grid-cols-7 border my-2 border-gray-100 rounded w-full justify-between p-5 transition-all">
         <div className="flex items-center col-span-2">
           <FaPaintBrush />
-          <p className="text-base ml-2  capitalize font-medium text-gray-700">{data.title}</p>
+          <p className="text-base ml-2 capitalize font-medium text-gray-700 break-words">
+            {data.title}
+          </p>
         </div>
         <div className="flex items-center">
           <MdOutlineCreate />
-          <p className="text-sm leading-none text-gray-600 ml-2">{endDate}</p>
+          <p className="text-sm leading-none text-gray-600 ml-2 break-all overflow-hidden">
+            {formatDateToCustomFormat(endDate)}
+          </p>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center ml-2">
           {<BsChatLeftDots />}
-          <p className="text-sm leading-none text-gray-600 ml-2">{data.totalBids}</p>
+          <p className="text-sm leading-none text-gray-600 ml-2 break-all overflow-hidden">
+            {data.totalBids}
+          </p>
         </div>
         <div className="flex items-center">
           {<AiOutlineExclamationCircle />}
-          <p className="text-sm capitalize leading-none text-gray-600 ml-2">{data.status}</p>
+          <p className="text-sm capitalize leading-none text-gray-600 ml-2 break-all">
+            {data.status}
+          </p>
         </div>
         <div className="flex items-center">
           {<MdPayment />}
-          <p className="text-sm capitalize leading-none text-gray-600 ml-2">
+          <p className="text-sm capitalize leading-none text-gray-600 ml-2 break-all">
             {data.paymentStatus === 'claim'
               ? 'Pending'
               : data.paymentStatus === 'payment'
@@ -107,7 +124,7 @@ const AuctionTableItem = ({ data, updateList }) => {
           </p>
         </div>
         <div className="">
-          <Drop artworkId={data._id} updateList={updateList} />
+          <Drop sttatus={data.status} artworkId={data._id} updateList={updateList} />
         </div>
       </div>
     </>
@@ -139,7 +156,7 @@ const SortTable = ({ updateStatus }) => {
 /*
 Renders a dropdown list with options to view and delete auction
 */
-const Drop = ({ artworkId, updateList }) => {
+const Drop = ({ status, artworkId, updateList }) => {
   const toaster = useToaster();
   const auth = JSON.parse(localStorage.getItem('auth'));
   const navigate = useNavigate();
@@ -149,7 +166,7 @@ const Drop = ({ artworkId, updateList }) => {
     const res = await API.get(`/api/artworks/artwork/${artworkId}`);
     if (res.data) {
       const artwork = res.data[0];
-      navigate(`/auctions/${artworkId}`, { state: { artwork } });
+      navigate(`/auctions/1/${status}/${artworkId}`, { state: { artwork } });
     }
   };
 
