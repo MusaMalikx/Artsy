@@ -79,19 +79,19 @@ const ReportItem = ({ report }) => {
    `}>
       <div className="">
         <div className="bg-gray-100 w-fit text-xs font-bold px-2 py-1 rounded-sm flex flex-shrink-0 justify-center items-center relative">
-          {report.reportType}
+          {report.reportType === 'artist' ? 'Buyer' : 'Artist'}
         </div>
       </div>
       <div className="flex items-center space-x-2 col-span-3">
         <FaUserShield />
         <p className="text-base capitalize font-medium text-gray-700">
-          {report.reportType === 'artist' ? report.artist.name : report.buyer.name}
+          {report.reportType === 'artist' ? report.buyer.name : report.artist.name}
         </p>
       </div>
       <div className="flex items-center col-span-3">
         <FaUserSlash />
         <p className="text-sm leading-none text-gray-600 ml-2">
-          {report.reportType === 'artist' ? report.buyer.name : report.artist.name}
+          {report.reportType === 'artist' ? report.artist.name : report.buyer.name}
         </p>
       </div>
       <div className="flex items-center col-span-2">
