@@ -87,6 +87,8 @@ export default function SignIn() {
             error.response.data.message === 'Email already exists For an Artist!'
           ) {
             Toaster(toaster, 'error', 'Gmail account not found for user');
+          } else {
+            Toaster(toaster, 'error', error.response.data.message);
           }
         } else {
           Toaster(toaster, 'error', errorMessage);
@@ -138,6 +140,8 @@ export default function SignIn() {
           } else if (error.response) {
             if (error.response.data.message === 'User not found!') {
               Toaster(toaster, 'error', 'Incorrect Email or Password!');
+            } else {
+              Toaster(toaster, 'error', error.response.data.message);
             }
           } else {
             Toaster(toaster, 'error', errorMessage);
@@ -175,7 +179,15 @@ export default function SignIn() {
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
           } catch (error) {
-            Toaster(toaster, 'error', error.message);
+            if (error.response) {
+              if (error.response.data.message === 'User not found!') {
+                Toaster(toaster, 'error', 'Incorrect Email or Password!');
+              } else {
+                Toaster(toaster, 'error', error.response.data.message);
+              }
+            } else {
+              Toaster(toaster, 'error', error.message);
+            }
             console.log(error);
           }
         else if (user.artist) {
@@ -190,7 +202,15 @@ export default function SignIn() {
             localStorage.setItem('auth', JSON.stringify(newData));
             navigate('/');
           } catch (error) {
-            Toaster(toaster, 'error', error.message);
+            if (error.response) {
+              if (error.response.data.message === 'User not found!') {
+                Toaster(toaster, 'error', 'Incorrect Email or Password!');
+              } else {
+                Toaster(toaster, 'error', error.response.data.message);
+              }
+            } else {
+              Toaster(toaster, 'error', error.message);
+            }
             console.log(error);
           }
         }
