@@ -230,6 +230,8 @@ export default function SignUp() {
             error.response.data.message === 'Email already exists For an Artist!'
           ) {
             Toaster(toaster, 'error', 'Gmail account already exists for a user');
+          } else {
+            Toaster(toaster, 'error', error.response.data.message);
           }
         } else {
           Toaster(toaster, 'error', errorMessage);

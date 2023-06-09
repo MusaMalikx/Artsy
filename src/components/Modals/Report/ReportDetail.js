@@ -3,6 +3,7 @@ import { Modal, useToaster } from 'rsuite';
 import Toaster from '../../Common/Toaster';
 import { GoPrimitiveDot } from 'react-icons/go';
 import moment from 'moment';
+import API from '../../../api/server';
 
 /*
 This component displays the detailed information of a user report.
@@ -11,11 +12,35 @@ It provides insights and data for further analysis and action.
 export default function ReportDetail({ open, setOpen, report }) {
   const handleClose = () => setOpen(false);
   const toaster = useToaster();
-  const sendWarning = (e) => {
+  const sendWarning = async (e) => {
     e.preventDefault();
-    Toaster(toaster, 'warning', 'Warning sent to Musa Malik');
+    let url = '';
+    if (report.reportType === 'artist') {
+      url = `/api/artists/warn/${report.artist.id}`;
+    } else {
+      url = `/api/users/warn/${report.buyer.id}`;
+    }
+    await API.put(url)
+      .then((res) => {
+        handleClose();
+        Toaster(toaster, 'warning', `Warning Sent to ${res.data}`);
+      })
+      .catch((error) => {
+        handleClose();
+        if (error.response) {
+          if (
+            error.response.data.error === 'Artist Already Banned!' ||
+            error.response.data.error === 'Buyer Already Banned!'
+          ) {
+            Toaster(toaster, 'error', error.response.data.error);
+          }
+        } else {
+          Toaster(toaster, 'error', error);
+        }
+        console.log(error.response.data.error);
+      });
   };
-  console.log(report);
+
   return (
     <Modal onClose={handleClose} size="sm" open={open}>
       <Modal.Header>
@@ -33,13 +58,13 @@ export default function ReportDetail({ open, setOpen, report }) {
               <p className="text-base font-bold">
                 From{' '}
                 <span className=" text-green-500">
-                  {report.reportType === 'artist' ? report.artist.name : report.buyer.name}
+                  {report.reportType === 'artist' ? report.buyer.name : report.artist.name}
                 </span>
               </p>
               <p className="text-base font-bold">
                 To{' '}
                 <span className=" text-red-500">
-                  {report.reportType === 'artist' ? report.buyer.name : report.artist.name}
+                  {report.reportType === 'artist' ? report.artist.name : report.buyer.name}
                 </span>
               </p>
             </div>
