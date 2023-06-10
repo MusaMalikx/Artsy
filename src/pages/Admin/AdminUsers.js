@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Toaster from '../../components/Common/Toaster';
 import { useToaster } from 'rsuite';
 import SearchBar from '../../components/Common/SearchBar';
+import { MdOutlineWarning } from 'react-icons/md';
 
 /*
 This React component renders a list of users for admin to monitor. 
@@ -27,6 +28,7 @@ const AdminUsers = () => {
   const getUsers = async () => {
     try {
       const res = await API.get('/api/users');
+      // console.log(res.data);
       setUsers(res.data);
       setTempUsers(res.data);
     } catch (error) {
@@ -66,7 +68,7 @@ const AdminUsers = () => {
   }, []);
 
   // console.log(tempUsers);
-  console.log('users', users);
+  // console.log('users', users);
 
   return (
     <AdminLayout title="Users" bool>
@@ -81,9 +83,11 @@ const AdminUsers = () => {
               <div className="sticky top-0 z-20">
                 <div className="focus:outline-none grid bg-white shadow-all grid-cols-10 h-16 rounded w-full p-5 justify-between uppercase font-bold">
                   <div className="">Id</div>
-                  <div className="col-span-3">Name</div>
-                  <div className="col-span-4">Email</div>
+                  <div className="col-span-2">Name</div>
+                  <div className="col-span-3">Email</div>
                   <div className="">Google</div>
+                  <div className="">Warnings</div>
+                  <div className="">UnBan User</div>
                   <div className="">Action</div>
                 </div>
               </div>
@@ -94,6 +98,7 @@ const AdminUsers = () => {
                       <ProposaldivItem
                         key={user._id}
                         user={user}
+                        auth={auth}
                         status={user.isAdmin ? 'Admin' : 'Buyer'}
                         getUsers={getUsers}
                         getArtists={getArtists}
@@ -104,6 +109,7 @@ const AdminUsers = () => {
                   <ProposaldivItem
                     key={user._id}
                     user={user}
+                    auth={auth}
                     status="Artist"
                     getUsers={getUsers}
                     getArtists={getArtists}
@@ -121,10 +127,11 @@ const AdminUsers = () => {
 /*
 This React component renders a single user entry in user table
 */
-const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
+const ProposaldivItem = ({ user, status, getUsers, getArtists, auth }) => {
   const navigate = useNavigate();
   const toaster = useToaster();
   const [delLoading, setDelLoading] = useState(false);
+  // console.log(auth.token);
 
   const viewUser = () => {
     if (status === 'Buyer') navigate(`/admin/buyer/profile/${user._id}`);
@@ -152,6 +159,22 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
       });
   };
 
+  const unbanUser = async () => {
+    try {
+      const res = await API.put(
+        `/api/${status.toLowerCase() === 'artist' ? 'artists' : 'users'}/unban/${user._id}`,
+        {
+          headers: {
+            token: 'Bearer ' + auth.token
+          }
+        }
+      );
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       tabIndex="0"
@@ -162,13 +185,13 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
           {status}
         </div>
       </div>
-      <div className="flex items-center space-x-2 col-span-3">
+      <div className="flex items-center space-x-2 col-span-2">
         <div className="flex overflow-hidden shadow-all">
           <ReactJdenticon size="40" value={user?.email} />
         </div>
         <p className="text-base capitalize font-medium text-gray-700">{user?.name}</p>
       </div>
-      <div className="flex items-center col-span-4">
+      <div className="flex items-center col-span-3">
         {<AiOutlineMail />}
         <p className="text-sm leading-none text-gray-600 ml-2">{user?.email}</p>
       </div>
@@ -176,6 +199,23 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists }) => {
         <FaGoogle />
         <p className="text-sm capitalize leading-none text-gray-600 ml-2">
           {user?.fromGoogle ? 'true' : 'false'}
+        </p>
+      </div>
+      <div className="flex items-center">
+        <MdOutlineWarning />
+        <p className="text-sm capitalize leading-none text-gray-600 ml-2">{user?.warnings}</p>
+      </div>
+      <div className="flex items-center">
+        <p className="text-sm capitalize leading-none text-gray-600 ml-2">
+          {user?.warnings < 3
+            ? 'not banned'
+            : user?.warnings === 3 && (
+                <button
+                  onClick={unbanUser}
+                  className="text-white leading-none  py-2 px-3 rounded primary focus:outline-none bg-primary active:bg-cyan-700 hover:bg-cyan-700">
+                  unban
+                </button>
+              )}
         </p>
       </div>
       <div className="flex space-x-2 items-center">
