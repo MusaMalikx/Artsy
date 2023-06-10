@@ -161,15 +161,19 @@ const ProposaldivItem = ({ user, status, getUsers, getArtists, auth }) => {
 
   const unbanUser = async () => {
     try {
-      const res = await API.put(
+      await API.put(
         `/api/${status.toLowerCase() === 'artist' ? 'artists' : 'users'}/unban/${user._id}`,
+        null,
         {
           headers: {
             token: 'Bearer ' + auth.token
           }
         }
       );
-      console.log(res);
+      Toaster(toaster, 'success', 'User is unbanned');
+      getUsers();
+      getArtists();
+      // console.log(res);
     } catch (error) {
       console.log(error);
     }
