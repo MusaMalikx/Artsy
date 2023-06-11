@@ -30,7 +30,7 @@ const AuctionListItem = () => {
   const toaster = useToaster();
   const navigate = useNavigate();
   const location = useLocation();
-  const artId = location.pathname.split('/')[2];
+  const artId = location.pathname.split('/')[6];
   const [recommendations, setRecommendations] = useState();
   let artworkObj;
   if (state.artwork) {

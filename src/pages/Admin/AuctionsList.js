@@ -91,7 +91,7 @@ const AuctionsList = () => {
             <Nav.Item className="text-center text-lg font-semibold" eventKey="closed">
               Closed
             </Nav.Item>
-            <Nav.Item className="text-center text-lg font-semibold" eventKey="upcoming">
+            <Nav.Item className="text-center text-lg font-semibold" eventKey="comming soon">
               Upcoming
             </Nav.Item>
           </Nav>

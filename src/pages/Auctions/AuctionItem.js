@@ -34,7 +34,7 @@ const AuctionItem = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const artId = location.pathname.split('/')[4];
-  const [recommendations, setRecommendations] = useState();
+  const [recommendations, setRecommendations] = useState([]);
 
   let artworkObj;
   if (state.artwork) {
@@ -286,7 +286,7 @@ const AuctionItem = () => {
                               : bidInfo.basePrice + 1
                           }
                           type="number"
-                          // value={quantity}
+                        // value={quantity}
                         />
                       </div>
 
@@ -295,9 +295,8 @@ const AuctionItem = () => {
                           type="submit"
                           onClick={placeManualBid}
                           disabled={disableManualBid}
-                          className={`${
-                            disableManualBid ? 'opacity-50' : 'active:bg-cyan-800'
-                          } bg-primary focus:outline-none text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold`}>
+                          className={`${disableManualBid ? 'opacity-50' : 'active:bg-cyan-800'
+                            } bg-primary focus:outline-none text-white w-fit px-10 rounded-2xl py-1.5 font-extrabold`}>
                           Place Bid
                         </button>
                         <p className="font-bold">OR</p>
@@ -336,9 +335,7 @@ const AuctionItem = () => {
           <h2 className="font-semibold uppercase text-3xl">Similar Auctions Items</h2>
         </div>
         <div className="flex overflow-x-scroll">
-          {recommendations !== undefined &&
-          recommendations !== 'no recommendations' &&
-          recommendations?.length > 0 ? (
+          {recommendations?.length > 0 ? (
             recommendations?.map(
               (recommend, i) =>
                 recommend.artwork?.length > 0 && (

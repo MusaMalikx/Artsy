@@ -141,8 +141,8 @@ const AuctionCard = ({ artwork, updateList }) => {
               {artwork?.status === 'closed'
                 ? 'Closing Bid: '
                 : artwork?.status === 'upcoming'
-                ? 'Upcoming Bid Base: '
-                : artwork?.status === 'live' && 'Current Bid: '}
+                  ? 'Upcoming Bid Base: '
+                  : artwork?.status === 'live' && 'Current Bid: '}
               <span className="font-bold">PKR {artwork.currentbid}</span>
             </p>
           </div>
