@@ -259,7 +259,7 @@ export default function SignUp() {
         </div>
         <div className="px-6 pb-12 ">
           <div className="flex justify-center lg:pt-24 flex-wrap h-full g-6 text-gray-800">
-            <div className="md:w-7/12 lg:w-5/12 mb-12 md:mb-0 h-96 overflow-hidden relative">
+            <div className=" hidden lg:inline md:w-7/12 lg:w-5/12 mb-12 md:mb-0 h-96 overflow-hidden relative">
               <p className="text-5xl md:text-7xl font-extrabold whitespace-nowrap border-white text-white border-b-4 pb-2 absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 ">
                 SIGN UP
               </p>
@@ -270,7 +270,7 @@ export default function SignUp() {
                 alt="Phone"
               />
             </div>
-            <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
+            <div className="mt-10 lg:mt-0 md:w-8/12 lg:w-5/12 lg:ml-20 lg:border-0 border-2 px-20 py-10 lg:p-0 rounded-lg shadow-lg lg:rounded-none lg:shadow-none">
               <form>
                 <div className="mb-6 flex w-full justify-center gap-4">
                   <div

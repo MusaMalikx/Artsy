@@ -67,7 +67,7 @@ export default function BuyerProfileDashboard() {
   const [liveBidCount, setLiveBidCount] = useState(0);
   const getBidList = async () => {
     //API get live bid count
-    const res = await API.get(`/api/users/bid/list/${auth.user._id}`);
+    const res = await API.get(`/api/users/bid/list/${currentUserID}`);
     if (res.data.length > 0 && res.data[0] !== null) {
       setLiveBidCount(res.data.filter((auc) => auc.status === 'live').length);
     }
